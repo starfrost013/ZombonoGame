@@ -517,57 +517,38 @@ typedef struct
 // that happen constantly on the given entity.
 // An entity that has effects will be sent to the client
 // even if it has a zero index model.
-#define	EF_ROTATE			0x00000001		// rotate (bonus items)
-#define	EF_GIB				0x00000002		// leave a trail
-#define	EF_BLASTER			0x00000008		// redlight + trail
-#define	EF_ROCKET			0x00000010		// redlight + trail
-#define	EF_GRENADE			0x00000020
-#define	EF_HYPERBLASTER		0x00000040
-#define EF_COLOR_SHELL		0x00000100
-#define EF_POWERSCREEN		0x00000200
-#define	EF_ANIM01			0x00000400		// automatically cycle between frames 0 and 1 at 2 hz
-#define	EF_ANIM23			0x00000800		// automatically cycle between frames 2 and 3 at 2 hz
-#define EF_ANIM_ALL			0x00001000		// automatically cycle through all frames at 2hz
-#define EF_ANIM_ALLFAST		0x00002000		// automatically cycle through all frames at 10hz
-#define	EF_FLIES			0x00004000
-#define	EF_QUAD				0x00008000
-#define	EF_PENT				0x00010000
-#define	EF_TELEPORTER		0x00020000		// particle fountain
-#define EF_FLAG1			0x00040000
-#define EF_FLAG2			0x00080000
-#define EF_IONRIPPER		0x00100000
-#define EF_GREENGIB			0x00200000
-#define	EF_BLUEHYPERBLASTER 0x00400000
-#define EF_SPINNINGLIGHTS	0x00800000
-#define EF_PLASMA			0x01000000
-#define EF_TRAP				0x02000000
-
-#define EF_TRACKER			0x04000000
-#define	EF_DOUBLE			0x08000000
-#define	EF_SPHERETRANS		0x10000000
-#define EF_TAGTRAIL			0x20000000
-#define EF_HALF_DAMAGE		0x40000000
-#define EF_TRACKERTRAIL		0x80000000
+#define	EF_ROTATE			0x1		// rotate (bonus items)
+#define	EF_GIB				0x2		// leave a trail
+#define	EF_BLASTER			0x4		// redlight + trail
+#define	EF_ROCKET			0x8		// redlight + trail
+#define	EF_GRENADE			0x10
+#define	EF_HYPERBLASTER		0x20
+#define EF_COLOR_SHELL		0x40
+#define EF_POWERSCREEN		0x80
+#define	EF_ANIM01			0x100	// automatically cycle between frames 0 and 1 at 2 hz
+#define	EF_ANIM23			0x200	// automatically cycle between frames 2 and 3 at 2 hz
+#define EF_ANIM_ALL			0x400	// automatically cycle through all frames at 2hz
+#define EF_ANIM_ALLFAST		0x800	// automatically cycle through all frames at 10hz
+#define	EF_FLIES			0x1000
+#define	EF_QUAD				0x2000
+#define	EF_PENT				0x4000
+#define	EF_TELEPORTER		0x8000	// particle fountain
 
 // entity_state_t->renderfx flags
-#define	RF_MINLIGHT			1		// allways have some light (viewmodel)
-#define	RF_VIEWERMODEL		2		// don't draw through eyes, only mirrors
-#define	RF_WEAPONMODEL		4		// only draw through eyes
-#define	RF_FULLBRIGHT		8		// allways draw full intensity
-#define	RF_DEPTHHACK		16		// for view weapon Z crunching
-#define	RF_TRANSLUCENT		32
-#define	RF_FRAMELERP		64
-#define RF_BEAM				128
-#define	RF_CUSTOMSKIN		256		// skin is an index in image_precache
-#define	RF_GLOW				512		// pulse lighting for bonus items
-#define RF_SHELL_RED		1024
-#define	RF_SHELL_GREEN		2048
-#define RF_SHELL_BLUE		4096
-
-#define RF_IR_VISIBLE		0x00008000		// 32768
-#define	RF_SHELL_DOUBLE		0x00010000		// 65536
-#define	RF_SHELL_HALF_DAM	0x00020000
-#define RF_USE_DISGUISE		0x00040000
+#define	RF_MINLIGHT			0x1		// allways have some light (viewmodel)
+#define	RF_VIEWERMODEL		0x2		// don't draw through eyes, only mirrors
+#define	RF_WEAPONMODEL		0x4		// only draw through eyes
+#define	RF_FULLBRIGHT		0x8		// allways draw full intensity
+#define	RF_DEPTHHACK		0x10	// for view weapon Z crunching
+#define	RF_TRANSLUCENT		0x20
+#define	RF_FRAMELERP		0x40
+#define RF_BEAM				0x80
+#define	RF_CUSTOMSKIN		0x100	// skin is an index in image_precache
+#define	RF_GLOW				0x200	// pulse lighting for bonus items
+#define RF_SHELL_RED		0x400
+#define	RF_SHELL_GREEN		0x800
+#define RF_SHELL_BLUE		0x1000
+#define RF_USE_DISGUISE		0x2000
 
 // player_state_t->refdef flags
 #define	RDF_UNDERWATER		1		// warp the screen as apropriate
@@ -588,12 +569,9 @@ typedef struct
 #define	MZ_LOGIN			9
 #define	MZ_LOGOUT			10
 #define	MZ_RESPAWN			11
-#define	MZ_SSHOTGUN			13
-#define	MZ_HYPERBLASTER		14
-#define	MZ_ITEMRESPAWN		15
-#define MZ_IONRIPPER		16
-#define MZ_BLUEHYPERBLASTER 17
-#define MZ_PHALANX			18
+#define	MZ_SSHOTGUN			12
+#define	MZ_HYPERBLASTER		13
+#define	MZ_ITEMRESPAWN		14
 #define MZ_SILENCED			128		// bit flag ORed with one of the above numbers
 
 //
@@ -615,6 +593,7 @@ extern	vec3_t monster_flash_offset [];
 // and broadcast.
 typedef enum
 {
+	TE_GENERIC,
 	TE_GUNSHOT,
 	TE_BLOOD,
 	TE_BLASTER,
@@ -631,19 +610,17 @@ typedef enum
 	TE_SHIELD_SPARKS,
 	TE_BULLET_SPARKS,
 	TE_LASER_SPARKS,
-	TE_PARASITE_ATTACK,
 	TE_ROCKET_EXPLOSION_WATER,
 	TE_GRENADE_EXPLOSION_WATER,
-	TE_MEDIC_CABLE_ATTACK,
-	TE_BOSSTPORT,			// used as '22' in a map, so DON'T RENUMBER!!!
-	TE_GRAPPLE_CABLE,
-	TE_WELDING_SPARKS,
-	TE_GREENBLOOD,
-	TE_BLUEHYPERBLASTER,
-	TE_PLASMA_EXPLOSION,
-	TE_TUNNEL_SPARKS,
 	TE_TELEPORT,
 	TE_LIGHTNING,			// Tangfuslicator
+	// For some reason, this cl_newfx.c stuff was not exposed to tempentities/tempevents...see also TE_GENERIC
+	TE_FLAME,
+	TE_SMOKE,
+	TE_STEAM,
+	TE_FLASHLIGHT,
+	TE_FLASH,
+	
 } temp_event_t;
 
 #define SPLASH_UNKNOWN		0
@@ -822,23 +799,23 @@ typedef struct
 
 	// these fields do not need to be communicated bit-precise
 
-	vec3_t		viewangles;		// for fixed views
-	vec3_t		viewoffset;		// add to pmovestate->origin
-	vec3_t		kick_angles;	// add to view direction to get render angles
+	vec3_t			viewangles;		// for fixed views
+	vec3_t			viewoffset;		// add to pmovestate->origin
+	vec3_t			kick_angles;	// add to view direction to get render angles
 								// set by weapon kicks, pain effects, etc
 
-	vec3_t		gunangles;
-	vec3_t		gunoffset;
+	vec3_t			gunangles;
+	vec3_t			gunoffset;
 	int32_t 		gunindex;
 	int32_t 		gunframe;
 
-	float		blend[4];		// rgba full screen effect
+	float			blend[4];		// rgba full screen effect
 	
-	float		fov;			// horizontal field of view
+	float			fov;			// horizontal field of view
 
 	int32_t 		rdflags;		// refdef flags
 
-	int16_t stats[MAX_STATS];		// fast status bar updates
+	int16_t			stats[MAX_STATS];		// fast status bar updates
 } player_state_t;
 
 
