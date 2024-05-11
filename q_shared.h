@@ -643,6 +643,7 @@ typedef enum
 	TE_PLASMA_EXPLOSION,
 	TE_TUNNEL_SPARKS,
 	TE_TELEPORT,
+	TE_LIGHTNING,			// Tangfuslicator
 } temp_event_t;
 
 #define SPLASH_UNKNOWN		0
@@ -653,7 +654,6 @@ typedef enum
 #define	SPLASH_LAVA			5
 #define SPLASH_BLOOD		6
 
-
 // sound channels
 // channel 0 never willingly overrides
 // other channels (1-7) allways override a playing sound on that channel
@@ -662,6 +662,7 @@ typedef enum
 #define	CHAN_VOICE              2
 #define	CHAN_ITEM               3
 #define	CHAN_BODY               4
+
 // modifier flags
 #define	CHAN_NO_PHS_ADD			8	// send to all clients, not just ones in PHS (ATTN 0 will also do this)
 #define	CHAN_RELIABLE			16	// send by reliable message, not datagram

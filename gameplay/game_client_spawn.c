@@ -75,8 +75,8 @@ void GiveBaseWeaponForTeam(edict_t* client_edict)
 		Loadout_AddItem(client_edict, client->newweapon->pickup_name, client->newweapon->icon, loadout_entry_type_weapon, 1);
 		
 		// and the tangfuslicator...
-		//gitem_t* tangfuslicator = FindItem("Director - Tangfuslicator");
-		//Loadout_AddItem(client_edict, tangfuslicator->pickup_name, tangfuslicator->icon, loadout_entry_type_weapon, 1);
+		gitem_t* tangfuslicator = FindItem("Director - Tangfuslicator");
+		Loadout_AddItem(client_edict, tangfuslicator->pickup_name, tangfuslicator->icon, loadout_entry_type_weapon, 1);
 
 		ChangeWeapon(client_edict);
 
