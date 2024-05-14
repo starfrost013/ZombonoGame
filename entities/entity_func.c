@@ -1130,6 +1130,18 @@ void door_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *sur
 
 	if (level.time < self->touch_debounce_time)
 		return;
+
+	if (self->team > 0)
+	{
+		if (other->team == self->team)
+			return;
+	}
+	else if (self->allowed_teams > 0)
+	{
+		if (other->team & self->team)
+			return;
+	}
+
 	self->touch_debounce_time = level.time + 5.0;
 
 	gi.centerprintf (other, "%s", self->message);

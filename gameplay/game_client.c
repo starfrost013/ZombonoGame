@@ -201,7 +201,6 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 				continue;
 			other->touch(other, ent, NULL, NULL);
 		}
-
 	}
 
 	client->oldbuttons = client->buttons;

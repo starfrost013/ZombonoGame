@@ -623,7 +623,7 @@ bool Pickup_Armor (edict_t *ent, edict_t *other)
 	if (!loadout_ptr_new)
 		loadout_ptr_new = Loadout_AddItem(other, ent->item->pickup_name, ent->item->icon, loadout_entry_type_armor, 0); // amount is set later
 	if (!loadout_ptr_old)
-		loadout_ptr_old = Loadout_AddItem(other, other->item->pickup_name, other->item->icon, loadout_entry_type_armor, 0); // amount is set later
+		loadout_ptr_old = Loadout_AddItem(other, ent->item->pickup_name, ent->item->icon, loadout_entry_type_armor, 0); // amount is set later
 
 	// get info on new armor
 	newinfo = (gitem_armor_t *)ent->item->info;

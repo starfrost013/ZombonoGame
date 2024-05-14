@@ -604,6 +604,12 @@ TOGGLE			only valid for TRIGGER_SPAWN walls
 
 START_ON		only valid for TRIGGER_SPAWN walls
 				the wall will initially be present
+
+ANIMATED		slow animation
+
+ANIMATED_FAST	fast animation
+
+WALKTHROUGH		this wall is visible, but you can walk through it
 */
 
 void func_wall_use (edict_t *self, edict_t *other, edict_t *activator)
@@ -624,6 +630,38 @@ void func_wall_use (edict_t *self, edict_t *other, edict_t *activator)
 
 	if (!(self->spawnflags & 2))
 		self->use = NULL;
+}
+
+void func_wall_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* surf)
+{
+	if (!other->client)
+		return;
+
+	// failsafe - won't be triggered if it's walkthrough anyway
+	if (self->spawnflags & 32)
+		return;
+
+	bool allowed = false;
+
+	if (self->team > 0)
+	{
+		allowed = (self->team == other->team);
+	}
+	else if (self->allowed_teams > 0)
+	{
+		allowed = (self->team & other->team);
+	}
+
+	// race condition here?
+
+	if (allowed)
+	{
+		self->solid = SOLID_NOT;
+	}
+	else
+	{
+		self->solid = SOLID_BSP;
+	}
 }
 
 void SP_func_wall (edict_t *self)
@@ -672,6 +710,8 @@ void SP_func_wall (edict_t *self)
 	}
 
 	self->use = func_wall_use;
+	self->touch = func_wall_touch;
+
 	if (self->spawnflags & 4)
 	{
 		self->solid = SOLID_BSP;

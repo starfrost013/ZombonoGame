@@ -38,7 +38,6 @@ spawn_t	spawns[] = {
 	{"info_player_start", SP_info_player_start},
 	{"info_player_start_director", SP_info_player_start_director},
 	{"info_player_start_player", SP_info_player_start_player},
-	{"info_team_door", SP_info_team_door},
 
 	{"func_plat", SP_func_plat},
 	{"func_button", SP_func_button},
