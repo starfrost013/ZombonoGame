@@ -77,29 +77,29 @@ void MoveClientToIntermission(edict_t* ent, player_team winning_team)
 		{
 			if (ent->team == winning_team)
 			{
-				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "pics/ui/leaderboardui_win_director", true);
+				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_win_director", true);
 			}
 			else
 			{
-				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "pics/ui/leaderboardui_lose_director", true);
+				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_lose_director", true);
 			}
 		}
 		else if (winning_team == team_player)
 		{
 			if (ent->team == winning_team)
 			{
-				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "pics/ui/leaderboardui_win_player", true);
+				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_win_player", true);
 
 				
 			}
 			else
 			{
-				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "pics/ui/leaderboardui_win_player", true);
+				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_win_player", true);
 			}
 		}
 		else
 		{
-			G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "pics/ui/leaderboardui_draw", true);
+			G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_draw", true);
 		}
 	}
 
@@ -371,7 +371,7 @@ void G_SetStats (edict_t *ent)
 
 	if (power_armor_type && (!armor || (level.framenum & 8) ) )
 	{	// flash between power armor and other armor icon
-		ent->client->ps.stats[STAT_ARMOR_ICON] = gi.imageindex ("pics/i_powershield");
+		ent->client->ps.stats[STAT_ARMOR_ICON] = gi.imageindex ("2d/i_powershield");
 		ent->client->ps.stats[STAT_ARMOR] = cells;
 	}
 	else if (armor)
@@ -399,22 +399,22 @@ void G_SetStats (edict_t *ent)
 	//
 	if (ent->client->quad_framenum > level.framenum)
 	{
-		ent->client->ps.stats[STAT_TIMER_ICON] = gi.imageindex ("pics/p_quad");
+		ent->client->ps.stats[STAT_TIMER_ICON] = gi.imageindex ("2d/p_quad");
 		ent->client->ps.stats[STAT_TIMER] = (ent->client->quad_framenum - level.framenum)/10;
 	}
 	else if (ent->client->invincible_framenum > level.framenum)
 	{
-		ent->client->ps.stats[STAT_TIMER_ICON] = gi.imageindex ("pics/p_invulnerability");
+		ent->client->ps.stats[STAT_TIMER_ICON] = gi.imageindex ("2d/p_invulnerability");
 		ent->client->ps.stats[STAT_TIMER] = (ent->client->invincible_framenum - level.framenum)/10;
 	}
 	else if (ent->client->enviro_framenum > level.framenum)
 	{
-		ent->client->ps.stats[STAT_TIMER_ICON] = gi.imageindex ("pics/p_envirosuit");
+		ent->client->ps.stats[STAT_TIMER_ICON] = gi.imageindex ("2d/p_envirosuit");
 		ent->client->ps.stats[STAT_TIMER] = (ent->client->enviro_framenum - level.framenum)/10;
 	}
 	else if (ent->client->breather_framenum > level.framenum)
 	{
-		ent->client->ps.stats[STAT_TIMER_ICON] = gi.imageindex ("pics/p_rebreather");
+		ent->client->ps.stats[STAT_TIMER_ICON] = gi.imageindex ("2d/p_rebreather");
 		ent->client->ps.stats[STAT_TIMER] = (ent->client->breather_framenum - level.framenum)/10;
 	}
 	else
@@ -450,7 +450,7 @@ void G_SetStats (edict_t *ent)
 	// help icon / current weapon if not shown
 	//
 	if (ent->client->pers.helpchanged && (level.framenum&8) )
-		ent->client->ps.stats[STAT_HELPICON] = gi.imageindex ("pics/i_help");
+		ent->client->ps.stats[STAT_HELPICON] = gi.imageindex ("2d/i_help");
 	else if ( (ent->client->pers.hand == CENTER_HANDED)
 		&& ent->client->pers.weapon)
 		ent->client->ps.stats[STAT_HELPICON] = gi.imageindex (ent->client->pers.weapon->icon);
