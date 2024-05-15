@@ -762,7 +762,7 @@ float FloatNoSwap (float f)
 Swap_Init
 ================
 */
-void Swap_Init (void)
+void Swap_Init ()
 {
 	uint8_t	swaptest[2] = {1,0};
 

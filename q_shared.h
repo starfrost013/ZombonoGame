@@ -203,7 +203,7 @@ int32_t LittleInt (int32_t l);
 float	BigFloat (float l);
 float	LittleFloat (float l);
 
-void	Swap_Init (void);
+void	Swap_Init ();
 char	*va(char *format, ...);
 
 //=============================================
@@ -253,7 +253,7 @@ int32_t Hunk_End();
 */
 char	*Sys_FindFirst (char *path, uint32_t musthave, uint32_t canthave );
 char	*Sys_FindNext (uint32_t musthave, uint32_t canthave );
-void	Sys_FindClose (void);
+void	Sys_FindClose ();
 
 
 // this is only here so the functions in q_shared.c and q_shwin.c can link

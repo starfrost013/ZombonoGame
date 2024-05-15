@@ -166,9 +166,9 @@ typedef struct game_import_s
 	cvar_t* (*cvar_forceset) (char *var_name, char *value);
 
 	// ClientCommand and ServerCommand parameter access
-	int32_t 	(*argc) (void);
+	int32_t 	(*argc) ();
 	char	*(*argv) (int32_t n);
-	char	*(*args) (void);	// concatenation of all argv >= 1
+	char	*(*args) ();	// concatenation of all argv >= 1
 
 	// add commands to the server console as if they were typed in
 	// for map changing, etc
@@ -187,8 +187,8 @@ typedef struct
 	// the init function will only be called when a game starts,
 	// not each time a level is loaded.  Persistant data for clients
 	// and the server can be allocated in init
-	void		(*Init) (void);
-	void		(*Shutdown) (void);
+	void		(*Init) ();
+	void		(*Shutdown) ();
 
 	// each new level entered will cause a call to SpawnEntities
 	void		(*SpawnEntities) (char *mapname, char *entstring, char *spawnpoint);
@@ -213,13 +213,13 @@ typedef struct
 	void		(*ClientCommand_NoConsole) (edict_t* ent);
 	void		(*ClientThink) (edict_t *ent, usercmd_t *cmd);
 
-	void		(*RunFrame) (void);
+	void		(*RunFrame) ();
 
 	// ServerCommand will be called when an "sv <command>" command is issued on the
 	// server console.
 	// The game can issue gi.argc() / gi.argv() commands to get the rest
 	// of the parameters
-	void		(*ServerCommand) (void);
+	void		(*ServerCommand) ();
 
 	//
 	// global variables shared between game and server

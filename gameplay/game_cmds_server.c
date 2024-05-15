@@ -150,7 +150,7 @@ bool SV_FilterPacket (char *from)
 SV_AddIP_f
 =================
 */
-void SVCmd_AddIP_f (void)
+void SVCmd_AddIP_f ()
 {
 	int		i;
 	
@@ -181,7 +181,7 @@ void SVCmd_AddIP_f (void)
 SV_RemoveIP_f
 =================
 */
-void SVCmd_RemoveIP_f (void)
+void SVCmd_RemoveIP_f ()
 {
 	ipfilter_t	f;
 	int			i, j;
@@ -212,7 +212,7 @@ void SVCmd_RemoveIP_f (void)
 SV_ListIP_f
 =================
 */
-void SVCmd_ListIP_f (void)
+void SVCmd_ListIP_f ()
 {
 	int		i;
 	uint8_t	b[4];
@@ -230,7 +230,7 @@ void SVCmd_ListIP_f (void)
 SV_WriteIP_f
 =================
 */
-void SVCmd_WriteIP_f (void)
+void SVCmd_WriteIP_f ()
 {
 	FILE	*f;
 	char	name[MAX_OSPATH];
@@ -274,7 +274,7 @@ The game can issue gi.argc() / gi.argv() commands to get the rest
 of the parameters
 =================
 */
-void	ServerCommand (void)
+void	ServerCommand ()
 {
 	char	*cmd;
 

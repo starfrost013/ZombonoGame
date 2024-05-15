@@ -48,7 +48,7 @@ bool	trail_active = false;
 #define PREV(n)		(((n) - 1) & (TRAIL_LENGTH - 1))
 
 
-void PlayerTrail_Init (void)
+void PlayerTrail_Init ()
 {
 	int		n;
 	for (n = 0; n < TRAIL_LENGTH; n++)
@@ -138,7 +138,7 @@ edict_t *PlayerTrail_PickNext (edict_t *self)
 	return trail[marker];
 }
 
-edict_t *PlayerTrail_LastSpot (void)
+edict_t *PlayerTrail_LastSpot ()
 {
 	return trail[PREV(trail_head)];
 }

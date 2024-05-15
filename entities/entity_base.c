@@ -317,7 +317,7 @@ All but the first will have the FL_TEAMSLAVE flag set.
 All but the last will have the teamchain field set to the next one
 ================
 */
-void G_FindTeams (void)
+void G_FindTeams ()
 {
 	edict_t	*e, *e2, *chain;
 	int		i, j;

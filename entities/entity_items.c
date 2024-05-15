@@ -2026,7 +2026,7 @@ void SP_item_health_mega (edict_t *self)
 }
 
 
-void InitItems (void)
+void InitItems ()
 {
 	game.num_items = sizeof(itemlist)/sizeof(itemlist[0]) - 1;
 }
@@ -2040,7 +2040,7 @@ SetItemNames
 Called by worldspawn
 ===============
 */
-void SetItemNames (void)
+void SetItemNames ()
 {
 	int		i;
 	gitem_t	*it;

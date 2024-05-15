@@ -499,7 +499,7 @@ void SV_CalcBlend (edict_t *ent)
 P_WorldEffects
 =============
 */
-void P_WorldEffects (void)
+void P_WorldEffects ()
 {
 	bool	breather;
 	bool	envirosuit;

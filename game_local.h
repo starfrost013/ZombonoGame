@@ -681,8 +681,8 @@ void Cmd_Leaderboard_f (edict_t* ent);
 // g_items.c
 //
 void PrecacheItem (gitem_t *it);
-void InitItems (void);
-void SetItemNames (void);
+void InitItems ();
+void SetItemNames ();
 gitem_t	*FindItem (char *pickup_name);
 gitem_t	*FindItemByClassname (char *classname);
 #define	ITEM_INDEX(x) ((x)-itemlist)
@@ -709,7 +709,7 @@ void	G_UseTargets (edict_t *ent, edict_t *activator);
 void	G_SetMovedir (vec3_t angles, vec3_t movedir);
 
 void	G_InitEdict (edict_t *e);
-edict_t	*G_Spawn (void);
+edict_t	*G_Spawn ();
 void	G_FreeEdict (edict_t *e);
 
 void	G_TouchTriggers (edict_t *ent);
@@ -802,7 +802,7 @@ void BecomeExplosion1(edict_t *self);
 //
 // ai_base.c
 //
-void AI_SetSightClient (void);
+void AI_SetSightClient ();
 
 void ai_stand (edict_t *self, float dist);
 void ai_move (edict_t *self, float dist);
@@ -842,12 +842,12 @@ void Ammo_Tangfuslicator (edict_t* self, vec3_t start, vec3_t aimdir); //todo: r
 //
 // game_player_trail.c
 //
-void PlayerTrail_Init (void);
+void PlayerTrail_Init ();
 void PlayerTrail_Add (vec3_t spot);
 void PlayerTrail_New (vec3_t spot);
 edict_t *PlayerTrail_PickFirst (edict_t *self);
 edict_t *PlayerTrail_PickNext (edict_t *self);
-edict_t	*PlayerTrail_LastSpot (void);
+edict_t	*PlayerTrail_LastSpot ();
 
 //
 // game_client_*.c
@@ -857,7 +857,7 @@ void BeginIntermission (edict_t *targ);
 void PutClientInServer (edict_t *ent);
 void InitClientPersistent (edict_t *client_edict);
 void InitClientResp (gclient_t *client);
-void InitBodyQue (void);
+void InitBodyQue ();
 void ClientBeginServerFrame (edict_t *ent);
 
 //
@@ -869,7 +869,7 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int32_t d
 //
 // game_cmds_server.c
 //
-void	ServerCommand (void);
+void	ServerCommand ();
 bool	SV_FilterPacket (char *from);
 
 //
@@ -898,7 +898,7 @@ void G_RunEntity (edict_t *ent);
 //
 // game_save.c
 //
-void SaveClientData (void);
+void SaveClientData ();
 void FetchClientEntData (edict_t *ent);
 
 //

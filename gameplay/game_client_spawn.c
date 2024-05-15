@@ -106,7 +106,7 @@ be mirrored out to the client structure before all the
 edicts are wiped.
 ==================
 */
-void SaveClientData(void)
+void SaveClientData()
 {
 	int		i;
 	edict_t* ent;
@@ -409,7 +409,7 @@ void	SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles)
 //======================================================================
 
 
-void InitBodyQue(void)
+void InitBodyQue()
 {
 	int		i;
 	edict_t* ent;
@@ -760,7 +760,7 @@ void SP_info_player_start_player(edict_t* self)
 The deathmatch intermission point will be at one of these
 Use 'angles' instead of 'angle', so you can set pitch or roll as well as yaw.  'pitch yaw roll'
 */
-void SP_info_player_intermission(void)
+void SP_info_player_intermission()
 {
 
 }

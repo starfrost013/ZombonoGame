@@ -418,7 +418,7 @@ instead of being removed and recreated, which can cause interpolated
 angles and bad trails.
 =================
 */
-edict_t *G_Spawn (void)
+edict_t *G_Spawn ()
 {
 	int			i;
 	edict_t		*e;

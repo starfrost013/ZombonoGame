@@ -48,7 +48,7 @@ will be null.
 In coop games, sight_client will cycle between the clients.
 =================
 */
-void AI_SetSightClient (void)
+void AI_SetSightClient ()
 {
 	edict_t	*ent;
 	int		start, check;

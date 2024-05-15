@@ -163,7 +163,7 @@ only happens when a new game is started or a save game
 is loaded.
 ============
 */
-void InitGame (void)
+void InitGame ()
 {
 	gi.dprintf ("==== InitGame ====\n"); 
 

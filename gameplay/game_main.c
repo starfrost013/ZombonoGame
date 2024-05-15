@@ -85,8 +85,8 @@ void WriteGame (char *filename, bool autosave);
 void ReadGame (char *filename);
 void WriteLevel (char *filename);
 void ReadLevel (char *filename);
-void InitGame (void);
-void G_RunFrame (void);
+void InitGame ();
+void G_RunFrame ();
 
 // Gamemode-specific stuff
 void CheckGamemodeRules();
@@ -95,7 +95,7 @@ void CheckTDMRules();
 //===================================================================
 
 
-void ShutdownGame (void)
+void ShutdownGame ()
 {
 	gi.dprintf ("==== ShutdownGame ====\n");
 
@@ -179,7 +179,7 @@ void Com_Printf (char *msg, ...)
 ClientEndServerFrames
 =================
 */
-void ClientEndServerFrames (void)
+void ClientEndServerFrames ()
 {
 	int		i;
 	edict_t	*ent;
@@ -221,7 +221,7 @@ EndMatch
 The conditions to end the current gamemode have been reached.
 =================
 */
-void EndMatch (void)
+void EndMatch ()
 {
 	edict_t		*ent;
 	char *s, *t, *f;
@@ -285,7 +285,7 @@ void EndMatch (void)
 CheckNeedPass
 =================
 */
-void CheckNeedPass (void)
+void CheckNeedPass ()
 {
 	int32_t need;
 
@@ -311,7 +311,7 @@ void CheckNeedPass (void)
 CheckGamemodeRules
 =================
 */
-void CheckGamemodeRules (void)
+void CheckGamemodeRules ()
 {
 	if (level.intermissiontime)
 		return;
@@ -416,7 +416,7 @@ ExitLevel
 This runs after the end of a game
 =============
 */
-void ExitLevel (void)
+void ExitLevel ()
 {
 	int		i;
 	edict_t	*ent;
@@ -450,7 +450,7 @@ G_RunFrame
 Advances the world by 0.1 seconds
 ================
 */
-void G_RunFrame (void)
+void G_RunFrame ()
 {
 	int		i;
 	edict_t	*ent;
