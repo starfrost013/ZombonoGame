@@ -107,7 +107,7 @@ void MoveClientToIntermission(edict_t* ent, player_team winning_team)
 
 void BeginIntermission (edict_t *targ)
 {
-	int		i, n;
+	int32_t	i, n;
 	edict_t	*ent, *client;
 	player_team winning_team;
 
