@@ -665,6 +665,7 @@ typedef enum zombie_type_e
 // ogre stuff
 // shrek attack
 #define OGRE_RANGE_MELEE			MELEE_DISTANCE		// Range of the ogre's melee attack
+#define OGRE_RANGE_FUNNY_SHREK		500					// Range of the ogre's rocket atack
 
 #define OGRE_DAMAGE_MELEE			80					// Damage of the ogre's melee attack (80 because it moves so slow only incompetents walk into it)
 #define OGRE_DAMAGE_FUNNY_SHREK		40					// Damage of the ogre's rockets

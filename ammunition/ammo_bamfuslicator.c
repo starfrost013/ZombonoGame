@@ -176,5 +176,4 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 	gi.WritePosition(trace.endpos);
 
 	gi.sound(self, CHAN_VOICE, gi.soundindex("zombie/zombie_spawn.wav"), 1, ATTN_NORM, 0);
-	//gi.WriteDir(zombie->s.angles);
 }

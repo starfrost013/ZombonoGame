@@ -1312,7 +1312,7 @@ always owned, never in the world
 /*QUAKED Weapon_shotgun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"wapon_shotgun", 
+		"weapon_shotgun", 
 		Pickup_Weapon,
 		Use_Weapon,
 		Drop_Weapon,

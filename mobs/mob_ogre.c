@@ -320,17 +320,19 @@ void ogre_fire(edict_t* self)
 	float	attack_random = random();
 
 	//temp
-	VectorSet(aim, OGRE_RANGE_MELEE, 0, 16);
+
 
 	// random chance to fire a rocket
 	// test for 3/23/2024
 	if (attack_random > 0.75)
 	{
+		VectorSet(aim, OGRE_RANGE_FUNNY_SHREK, 0, 16);
 		AngleVectors(self->s.angles, forward, NULL, NULL);
 		Ammo_Rocket(self, self->s.origin, forward, OGRE_DAMAGE_FUNNY_SHREK, OGRE_SPEED_FUNNY_SHREK, 120, 120);
 	}
 	else
 	{
+		VectorSet(aim, OGRE_RANGE_MELEE, 0, 16);
 		// todo: types
 		Ammo_Melee(self, aim, OGRE_RANGE_MELEE, 0);
 	}
@@ -424,7 +426,7 @@ mframe_t ogre_frames_attack2[] =
 	ai_charge, 0, NULL,
 	ai_charge, 0, NULL,
 	ai_charge, 0, NULL,
-	ai_charge, 0,  ogre_attack2_refire2,
+	ai_charge, 0, ogre_attack2_refire2,
 	ai_charge, 0, NULL,
 	ai_charge, 0, NULL
 };
@@ -506,7 +508,7 @@ mframe_t ogre_frames_attack6[] =
 	ai_charge, 5, NULL,
 	ai_charge, 3, NULL,
 	ai_charge, 2, ogre_attack6_refire,
-	ai_charge, 3,  NULL,
+	ai_charge, 3, NULL,
 	ai_charge, 2, NULL,
 	ai_charge, 2, NULL,
 	ai_charge, 5, NULL,
@@ -620,18 +622,18 @@ void ogre_dead(edict_t* self)
 
 mframe_t ogre_frames_death1[] =
 {
-	ai_move, 0,   NULL,
+	ai_move, 0,  NULL,
 	ai_move, -2, NULL,
 	ai_move, -2, NULL,
 	ai_move, -2, NULL,
-	ai_move, -1,  NULL,
-	ai_move, 0,   ogre_fire,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   ogre_fire,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL
+	ai_move, -1, NULL,
+	ai_move, 0,  ogre_fire,
+	ai_move, 0,  NULL,
+	ai_move, 0,  NULL,
+	ai_move, 0,  NULL,
+	ai_move, 0,  ogre_fire,
+	ai_move, 0,  NULL,
+	ai_move, 0,  NULL
 };
 
 // TEMP
