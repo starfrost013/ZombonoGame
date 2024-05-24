@@ -130,26 +130,26 @@ extern vec3_t vec3_origin;
 #define VectorNegate(a,b)		(b[0]=-a[0],b[1]=-a[1],b[2]=-a[2])
 #define VectorSet(v, x, y, z)	(v[0]=(x), v[1]=(y), v[2]=(z))
 
-void VectorMA (vec3_t veca, float scale, vec3_t vecb, vec3_t vecc);
+void VectorMA(vec3_t veca, float scale, vec3_t vecb, vec3_t vecc);
 
-void ClearBounds (vec3_t mins, vec3_t maxs);
-void AddPointToBounds (vec3_t v, vec3_t mins, vec3_t maxs);
-int32_t VectorCompare (vec3_t v1, vec3_t v2);
-vec_t VectorLength (vec3_t v);
-void CrossProduct (vec3_t v1, vec3_t v2, vec3_t cross);
-vec_t VectorNormalize (vec3_t v);		// returns vector length
-vec_t VectorNormalize2 (vec3_t v, vec3_t out);
-void VectorInverse (vec3_t v);
-void VectorScale (vec3_t in, vec_t scale, vec3_t out);
+void ClearBounds(vec3_t mins, vec3_t maxs);
+void AddPointToBounds(vec3_t v, vec3_t mins, vec3_t maxs);
+int32_t VectorCompare(vec3_t v1, vec3_t v2);
+vec_t VectorLength(vec3_t v);
+void CrossProduct(vec3_t v1, vec3_t v2, vec3_t cross);
+vec_t VectorNormalize(vec3_t v);		// returns vector length
+vec_t VectorNormalize2(vec3_t v, vec3_t out);
+void VectorInverse(vec3_t v);
+void VectorScale(vec3_t in, vec_t scale, vec3_t out);
 int32_t Q_log2(int32_t val);
 
-void R_ConcatRotations (float in1[3][3], float in2[3][3], float out[3][3]);
-void R_ConcatTransforms (float in1[3][4], float in2[3][4], float out[3][4]);
+void R_ConcatRotations(float in1[3][3], float in2[3][3], float out[3][3]);
+void R_ConcatTransforms(float in1[3][4], float in2[3][4], float out[3][4]);
 
-void AngleVectors (vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
-int32_t BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct cplane_s *plane);
+void AngleVectors(vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
+int32_t BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, struct cplane_s* plane);
 float	anglemod(float a);
-float LerpAngle (float a1, float a2, float frac);
+float LerpAngle(float a1, float a2, float frac);
 
 #define BOX_ON_PLANE_SIDE(emins, emaxs, p)	\
 	(((p)->type < 3)?						\
@@ -167,44 +167,44 @@ float LerpAngle (float a1, float a2, float frac);
 	:										\
 		BoxOnPlaneSide( (emins), (emaxs), (p)))
 
-void ProjectPointOnPlane( vec3_t dst, const vec3_t p, const vec3_t normal );
-void PerpendicularVector( vec3_t dst, const vec3_t src );
-void RotatePointAroundVector( vec3_t dst, const vec3_t dir, const vec3_t point, float degrees );
+void ProjectPointOnPlane(vec3_t dst, const vec3_t p, const vec3_t normal);
+void PerpendicularVector(vec3_t dst, const vec3_t src);
+void RotatePointAroundVector(vec3_t dst, const vec3_t dir, const vec3_t point, float degrees);
 
 
 //=============================================
 
-char *COM_SkipPath (char *pathname);
-void COM_StripExtension (char *in, char *out);
-void COM_FileBase (char *in, char *out);
-void COM_FilePath (char *in, char *out);
-void COM_DefaultExtension (char *path, char *extension);
+char* COM_SkipPath(char* pathname);
+void COM_StripExtension(char* in, char* out);
+void COM_FileBase(char* in, char* out);
+void COM_FilePath(char* in, char* out);
+void COM_DefaultExtension(char* path, char* extension);
 
-char *COM_Parse (char **data_p);
+char* COM_Parse(char** data_p);
 // data is an in/out parm, returns a parsed out token
 
-void Com_sprintf (char *dest, int32_t size, char *fmt, ...);
+void Com_sprintf(char* dest, int32_t size, char* fmt, ...);
 
-void Com_PageInMemory (uint8_t *buffer, int32_t size);
+void Com_PageInMemory(uint8_t* buffer, int32_t size);
 
 //=============================================
 
 // portable case insensitive compare
-int32_t Q_stricmp (char *s1, char *s2);
-int32_t Q_strcasecmp (char *s1, char *s2);
-int32_t Q_strncasecmp (char *s1, char *s2, int32_t n);
+int32_t Q_stricmp(char* s1, char* s2);
+int32_t Q_strcasecmp(char* s1, char* s2);
+int32_t Q_strncasecmp(char* s1, char* s2, int32_t n);
 
 //=============================================
 
 short	BigShort(int16_t l);
 short	LittleShort(int16_t l);
-int32_t BigInt (int32_t l);
-int32_t LittleInt (int32_t l);
-float	BigFloat (float l);
-float	LittleFloat (float l);
+int32_t BigInt(int32_t l);
+int32_t LittleInt(int32_t l);
+float	BigFloat(float l);
+float	LittleFloat(float l);
 
-void	Swap_Init ();
-char	*va(char *format, ...);
+void	Swap_Init();
+char* va(char* format, ...);
 
 //=============================================
 
@@ -215,10 +215,10 @@ char	*va(char *format, ...);
 #define	MAX_INFO_VALUE		64
 #define	MAX_INFO_STRING		512
 
-char *Info_ValueForKey (char *s, char *key);
-void Info_RemoveKey (char *s, char *key);
-void Info_SetValueForKey (char *s, char *key, char *value);
-bool Info_Validate (char *s);
+char* Info_ValueForKey(char* s, char* key);
+void Info_RemoveKey(char* s, char* key);
+void Info_SetValueForKey(char* s, char* key, char* value);
+bool Info_Validate(char* s);
 
 /*
 ==============================================================
@@ -231,14 +231,14 @@ SYSTEM SPECIFIC
 extern	int32_t curtime;		// time returned by last Sys_Milliseconds
 extern	int64_t curtime_ns;		// time returned by last Sys_Nanoseconds
 
-int32_t 	Sys_Milliseconds();
-int64_t		Sys_Nanoseconds(); // should be platform independent
-void	Sys_Mkdir (char *path);
+int32_t Sys_Milliseconds();
+int64_t Sys_Nanoseconds(); // should be platform independent
+void Sys_Mkdir(char* path);
 
 // large block stack allocation routines
-void	*Hunk_Begin (int32_t maxsize);
-void	*Hunk_Alloc (int32_t size);
-void	Hunk_Free (void *buf);
+void* Hunk_Begin(int32_t maxsize);
+void* Hunk_Alloc(int32_t size);
+void Hunk_Free(void* buf);
 int32_t Hunk_End();
 
 // directory searching
@@ -251,9 +251,9 @@ int32_t Hunk_End();
 /*
 ** pass in an attribute mask of things you wish to REJECT
 */
-char	*Sys_FindFirst (char *path, uint32_t musthave, uint32_t canthave );
-char	*Sys_FindNext (uint32_t musthave, uint32_t canthave );
-void	Sys_FindClose ();
+char* Sys_FindFirst(char* path, uint32_t musthave, uint32_t canthave);
+char* Sys_FindNext(uint32_t musthave, uint32_t canthave);
+void Sys_FindClose ();
 
 
 // this is only here so the functions in q_shared.c and q_shwin.c can link
@@ -269,9 +269,6 @@ CVARS (console variables)
 ==========================================================
 */
 
-#ifndef CVAR
-#define	CVAR
-
 #define	CVAR_ARCHIVE	1	// set to cause it to be saved to vars.rc
 #define	CVAR_USERINFO	2	// added to userinfo  when changed
 #define	CVAR_SERVERINFO	4	// added to serverinfo when changed
@@ -282,16 +279,14 @@ CVARS (console variables)
 // nothing outside the Cvar_*() functions should modify these fields!
 typedef struct cvar_s
 {
-	char		*name;
-	char		*string;
-	char		*latched_string;	// for CVAR_LATCH vars
+	char*			name;
+	char*			string;
+	char*			latched_string;	// for CVAR_LATCH vars
 	int32_t 		flags;
-	bool	modified;	// set each time the cvar is changed
-	float		value;
-	struct cvar_s *next;
+	bool			modified;	// set each time the cvar is changed
+	float			value;
+	struct cvar_s*	next;
 } cvar_t;
-
-#endif		// CVAR
 
 /*
 ==============================================================
