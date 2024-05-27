@@ -33,7 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define	GAMENAME	"Zombono"
 
 // the "gameversion" client command will print this plus compile date
-#define GAMEVERSION GAMENAME " v0.0.9 " __DATE__
+#define GAMEVERSION GAMENAME " v0.0.10 " __DATE__
 
 // protocol bytes that can be directly added to messages
 #define	svc_muzzleflash			1
@@ -352,18 +352,18 @@ typedef struct level_locals_s
 
 	// intermission state
 	float		intermissiontime;		// time the intermission was started
-	char		*changemap;
+	char*		changemap;
 	int32_t		exitintermission;
 	vec3_t		intermission_origin;
 	vec3_t		intermission_angle;
 
-	edict_t		*sight_client;	// changed once each frame for coop games
+	edict_t*	sight_client;	// changed once each frame for coop games
 
-	edict_t		*sight_entity;
+	edict_t*	sight_entity;
 	int32_t		sight_entity_framenum;
-	edict_t		*sound_entity;
+	edict_t*	sound_entity;
 	int32_t		sound_entity_framenum;
-	edict_t		*sound2_entity;
+	edict_t*	sound2_entity;
 	int32_t		sound2_entity_framenum;
 
 	int32_t		pic_health;
@@ -377,7 +377,7 @@ typedef struct level_locals_s
 	int32_t		total_monsters;
 	int32_t		killed_monsters;
 
-	edict_t		*current_entity;	// entity running from G_RunFrame
+	edict_t*	current_entity;	// entity running from G_RunFrame
 	int32_t		body_que;			// dead bodies
 
 	int32_t		power_cubes;		// ugly necessity for coop
@@ -390,23 +390,23 @@ typedef struct level_locals_s
 typedef struct spawn_temp_s
 {
 	// world vars
-	char		*sky;
-	float		skyrotate;
-	vec3_t		skyaxis;
-	char		*nextmap;
+	char*	sky;
+	float	skyrotate;
+	vec3_t	skyaxis;
+	char*	nextmap;
 
-	int32_t		lip;
-	int32_t		distance;
-	int32_t		height;
-	char		*noise;
-	float		pausetime;
-	char		*item;
-	char		*gravity;
+	int32_t	lip;
+	int32_t	distance;
+	int32_t	height;
+	char*	noise;
+	float	pausetime;
+	char*	item;
+	char*	gravity;
 
-	float		minyaw;
-	float		maxyaw;
-	float		minpitch;
-	float		maxpitch;
+	float	minyaw;
+	float	maxyaw;
+	float	minpitch;
+	float	maxpitch;
 } spawn_temp_t;
 
 
@@ -437,7 +437,7 @@ typedef struct moveinfo_s
 	float		next_speed;
 	float		remaining_distance;
 	float		decel_distance;
-	void		(*endfunc)(edict_t *);
+	void		(*endfunc)(edict_t*);
 } moveinfo_t;
 
 
@@ -496,14 +496,14 @@ typedef struct monsterinfo_s
 	int32_t	wander_steps_total;		// The current total number of wander steps.
 } monsterinfo_t;
 
-extern	game_locals_t	game;
-extern	level_locals_t	level;
-extern	game_import_t	gi;
-extern	game_export_t	globals;
-extern	spawn_temp_t	st;
+extern game_locals_t	game;
+extern level_locals_t	level;
+extern game_import_t	gi;
+extern game_export_t	globals;
+extern spawn_temp_t	st;
 
-extern	int	sm_meat_index;
-extern	int	snd_fry;
+extern int32_t	sm_meat_index;
+extern int32_t	snd_fry;
 
 // means of death
 #define MOD_UNKNOWN			0
@@ -1059,16 +1059,16 @@ typedef struct gclient_s
 struct edict_s
 {
 	entity_state_t	s;
-	struct gclient_s	*client;	// NULL if not a player
-									// the server expects the first part
-									// of gclient_s to be a player_state_t
-									// but the rest of it is opaque
+	struct gclient_s* client;	// NULL if not a player
+	// the server expects the first part
+	// of gclient_s to be a player_state_t
+	// but the rest of it is opaque
 	bool		inuse;
 	int32_t		linkcount;
 
 	// FIXME: move these fields to a server private sv_entity_t
 	link_t		area;				// linked to a division node or leaf
-	
+
 	int32_t		num_clusters;		// if -1, use headnode instead
 	int32_t		clusternums[MAX_ENT_CLUSTERS];
 	int32_t		headnode;			// unused if num_clusters != -1
@@ -1092,9 +1092,9 @@ struct edict_s
 	int32_t		movetype;
 	int32_t		flags;
 
-	char*		model;
+	char*		 model;
 	float		freetime;			// sv.time when the object was freed
-	
+
 	//
 	// only used locally in game, not by server
 	//
@@ -1123,7 +1123,7 @@ struct edict_s
 	int32_t		mass;
 	float		air_finished;
 	float		gravity;		// per entity gravity multiplier (1.0 is normal)
-								// use for lowgrav artifact, flares
+	// use for lowgrav artifact, flares
 
 	edict_t*	goalentity;
 	edict_t*	movetarget;
@@ -1131,13 +1131,13 @@ struct edict_s
 	float		ideal_yaw;
 
 	float		nextthink;
-	void		(*prethink) (edict_t *ent);
-	void		(*think)(edict_t *self);
-	void		(*blocked)(edict_t *self, edict_t *other);	//move to moveinfo?
-	void		(*touch)(edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf);
-	void		(*use)(edict_t *self, edict_t *other, edict_t *activator);
-	void		(*pain)(edict_t *self, edict_t *other, float kick, int32_t damage);
-	void		(*die)(edict_t *self, edict_t *inflictor, edict_t *attacker, int32_t damage, vec3_t point);
+	void		(*prethink) (edict_t* ent);
+	void		(*think)(edict_t* self);
+	void		(*blocked)(edict_t* self, edict_t* other);	//move to moveinfo?
+	void		(*touch)(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* surf);
+	void		(*use)(edict_t* self, edict_t* other, edict_t* activator);
+	void		(*pain)(edict_t* self, edict_t* other, float kick, int32_t damage);
+	void		(*die)(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t damage, vec3_t point);
 
 	float		touch_debounce_time;		// are all these legit?  do we need more/less of them?
 	float		pain_debounce_time;
@@ -1153,7 +1153,7 @@ struct edict_s
 
 	float		powerarmor_time;
 
-	char		*map;			// target_changelevel
+	char*		map;			// target_changelevel
 
 	int32_t		viewheight;		// height above origin where eyesight is determined
 	int32_t		takedamage;
@@ -1163,17 +1163,17 @@ struct edict_s
 	int32_t		sounds;			//make this a spawntemp var?
 	int32_t		count;
 
-	edict_t		*chain;
-	edict_t		*enemy;
-	edict_t		*oldenemy;
-	edict_t		*activator;
-	edict_t		*groundentity;
+	edict_t*	chain;
+	edict_t*	enemy;
+	edict_t*	oldenemy;
+	edict_t*	activator;
+	edict_t*	groundentity;
 	int32_t		groundentity_linkcount;
-	edict_t		*teamchain;
-	edict_t		*teammaster;
+	edict_t*	teamchain;
+	edict_t*	teammaster;
 
-	edict_t		*mynoise;		// can go in client only
-	edict_t		*mynoise2;
+	edict_t*	mynoise;		// can go in client only
+	edict_t*	mynoise2;
 
 	int32_t		noise_index;
 	int32_t		noise_index2;
@@ -1202,7 +1202,7 @@ struct edict_s
 
 	int32_t		style;			// also used as areaportal number
 
-	gitem_t		*item;			// for bonus items
+	gitem_t*	item;			// for bonus items
 
 	// common data blocks
 	moveinfo_t		moveinfo;

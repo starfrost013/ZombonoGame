@@ -1,4 +1,3 @@
-
 /*
 Copyright (C) 1997-2001 Id Software, Inc.
 Copyright (C) 2023-2024 starfrost
@@ -30,9 +29,9 @@ void Weapon_RocketLauncher_Fire(edict_t* ent)
 {
 	vec3_t	offset, start;
 	vec3_t	forward, right;
-	int		damage;
+	int32_t	damage;
 	float	damage_radius;
-	int		radius_damage;
+	int32_t	radius_damage;
 
 	damage = 100 + (int32_t)(random() * 20.0);
 	radius_damage = 120;
@@ -68,8 +67,8 @@ void Weapon_RocketLauncher_Fire(edict_t* ent)
 
 void Weapon_RocketLauncher(edict_t* ent)
 {
-	static int	pause_frames[] = { 25, 33, 42, 50, 0 };
-	static int	fire_frames[] = { 5, 0 };
+	static int32_t pause_frames[] = { 25, 33, 42, 50, 0 };
+	static int32_t fire_frames[] = { 5, 0 };
 
 	Weapon_Generic(ent, 4, 12, 50, 54, pause_frames, fire_frames, NULL, Weapon_RocketLauncher_Fire, NULL);
 }
