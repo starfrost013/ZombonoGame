@@ -27,7 +27,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 mmove_t mmove_reloc;
 
-field_t fields[] = {
+field_t fields[] = 
+{
 	{"classname", FOFS(classname), F_LSTRING},
 	{"model", FOFS(model), F_LSTRING},
 	{ "spawnflags", FOFS(spawnflags), F_INT },
@@ -165,86 +166,87 @@ is loaded.
 */
 void InitGame ()
 {
-	gi.dprintf ("==== InitGame ====\n"); 
+	gi.dprintf("==== InitGame ====\n");
 
-	gun_x = gi.cvar ("gun_x", "0", 0);
-	gun_y = gi.cvar ("gun_y", "0", 0);
-	gun_z = gi.cvar ("gun_z", "0", 0);
+	gun_x = gi.cvar("gun_x", "0", 0);
+	gun_y = gi.cvar("gun_y", "0", 0);
+	gun_z = gi.cvar("gun_z", "0", 0);
 
 	//FIXME: sv_ prefix is wrong for these
-	sv_rollspeed = gi.cvar ("sv_rollspeed", "200", 0);
-	sv_rollangle = gi.cvar ("sv_rollangle", "2", 0);
-	sv_maxvelocity = gi.cvar ("sv_maxvelocity", "2000", 0);
-	sv_gravity = gi.cvar ("sv_gravity", "800", 0);
+	sv_rollspeed = gi.cvar("sv_rollspeed", "200", 0);
+	sv_rollangle = gi.cvar("sv_rollangle", "2", 0);
+	sv_maxvelocity = gi.cvar("sv_maxvelocity", "2000", 0);
+	sv_gravity = gi.cvar("sv_gravity", "800", 0);
 
 	// noset vars
-	dedicated = gi.cvar ("dedicated", "0", CVAR_NOSET);
+	dedicated = gi.cvar("dedicated", "0", CVAR_NOSET);
 
 	// latched vars
-	sv_cheats = gi.cvar ("cheats", "0", CVAR_SERVERINFO|CVAR_LATCH);
-	gi.cvar ("gamename", GAMENAME , CVAR_SERVERINFO | CVAR_LATCH);
-	gi.cvar ("gamedate", __DATE__ , CVAR_SERVERINFO | CVAR_LATCH);
+	sv_cheats = gi.cvar("cheats", "0", CVAR_SERVERINFO | CVAR_LATCH);
+
+	gi.cvar("gamename", GAMENAME, CVAR_SERVERINFO | CVAR_LATCH);
+	gi.cvar("gamedate", __DATE__, CVAR_SERVERINFO | CVAR_LATCH);
 	gi.cvar("gameversion", GAMEVERSION, CVAR_SERVERINFO | CVAR_LATCH);
 
-	maxclients = gi.cvar ("maxclients", "4", CVAR_SERVERINFO | CVAR_LATCH);
-	maxspectators = gi.cvar ("maxspectators", "4", CVAR_SERVERINFO);
-	gamemode = gi.cvar ("gamemode", "0", CVAR_SERVERINFO | CVAR_LATCH);
-	skill = gi.cvar ("skill", "1", CVAR_LATCH);
+	maxclients = gi.cvar("maxclients", "4", CVAR_SERVERINFO | CVAR_LATCH);
+	maxspectators = gi.cvar("maxspectators", "4", CVAR_SERVERINFO);
+	gamemode = gi.cvar("gamemode", "0", CVAR_SERVERINFO | CVAR_LATCH);
+	skill = gi.cvar("skill", "1", CVAR_LATCH);
 
 	// change anytime vars
-	gameflags = gi.cvar ("gameflags", "0", CVAR_SERVERINFO);
-	fraglimit = gi.cvar ("fraglimit", "0", CVAR_SERVERINFO);
-	timelimit = gi.cvar ("timelimit", "0", CVAR_SERVERINFO);
-	password = gi.cvar ("password", "", CVAR_USERINFO);
-	spectator_password = gi.cvar ("spectator_password", "", CVAR_USERINFO);
-	needpass = gi.cvar ("needpass", "0", CVAR_SERVERINFO);
-	filterban = gi.cvar ("filterban", "1", 0);
+	gameflags = gi.cvar("gameflags", "0", CVAR_SERVERINFO);
+	fraglimit = gi.cvar("fraglimit", "0", CVAR_SERVERINFO);
+	timelimit = gi.cvar("timelimit", "0", CVAR_SERVERINFO);
+	password = gi.cvar("password", "", CVAR_USERINFO);
+	spectator_password = gi.cvar("spectator_password", "", CVAR_USERINFO);
+	needpass = gi.cvar("needpass", "0", CVAR_SERVERINFO);
+	filterban = gi.cvar("filterban", "1", 0);
 
-	g_select_empty = gi.cvar ("g_select_empty", "0", CVAR_ARCHIVE);
+	g_select_empty = gi.cvar("g_select_empty", "0", CVAR_ARCHIVE);
 
-	run_pitch = gi.cvar ("run_pitch", "0.002", 0);
-	run_roll = gi.cvar ("run_roll", "0.005", 0);
-	bob_up  = gi.cvar ("bob_up", "0.005", 0);
-	bob_pitch = gi.cvar ("bob_pitch", "0.002", 0);
-	bob_roll = gi.cvar ("bob_roll", "0.002", 0);
+	run_pitch = gi.cvar("run_pitch", "0.002", 0);
+	run_roll = gi.cvar("run_roll", "0.005", 0);
+	bob_up = gi.cvar("bob_up", "0.005", 0);
+	bob_pitch = gi.cvar("bob_pitch", "0.002", 0);
+	bob_roll = gi.cvar("bob_roll", "0.002", 0);
 
 	// flood control
-	flood_msgs = gi.cvar ("flood_msgs", "4", 0);
-	flood_persecond = gi.cvar ("flood_persecond", "4", 0);
-	flood_waitdelay = gi.cvar ("flood_waitdelay", "10", 0);
+	flood_msgs = gi.cvar("flood_msgs", "4", 0);
+	flood_persecond = gi.cvar("flood_persecond", "4", 0);
+	flood_waitdelay = gi.cvar("flood_waitdelay", "10", 0);
 
 	// multiplayer server map list
-	sv_maplist = gi.cvar ("sv_maplist", "", 0);
+	sv_maplist = gi.cvar("sv_maplist", "", 0);
 
 	/* others */
-	aimfix = gi.cvar ("aimfix", "0", CVAR_ARCHIVE);
+	aimfix = gi.cvar("aimfix", "0", CVAR_ARCHIVE);
 
 	// items
-	InitItems ();
+	InitItems();
 
-	Com_sprintf (game.helpmessage1, sizeof(game.helpmessage1), "");
+	Com_sprintf(game.helpmessage1, sizeof(game.helpmessage1), "");
 
-	Com_sprintf (game.helpmessage2, sizeof(game.helpmessage2), "");
+	Com_sprintf(game.helpmessage2, sizeof(game.helpmessage2), "");
 
 	// initialize all entities for this game
 	game.maxentities = MAX_EDICTS;
-	g_edicts =  gi.TagMalloc (game.maxentities * sizeof(g_edicts[0]), TAG_GAME);
+	g_edicts = gi.TagMalloc(game.maxentities * sizeof(g_edicts[0]), TAG_GAME);
 	globals.edicts = g_edicts;
 	globals.max_edicts = game.maxentities;
 
 	// initialize all clients for this game
 	game.maxclients = maxclients->value;
-	game.clients = gi.TagMalloc (game.maxclients * sizeof(game.clients[0]), TAG_GAME);
-	globals.num_edicts = game.maxclients+1;
+	game.clients = gi.TagMalloc(game.maxclients * sizeof(game.clients[0]), TAG_GAME);
+	globals.num_edicts = game.maxclients + 1;
 }
 
 //=========================================================
 
 void WriteField1 (FILE *f, field_t *field, uint8_t *base)
 {
-	void		*p;
-	int			len;
-	int			index;
+	void*	p;
+	int32_t	len;
+	int32_t	index;
 
 	if (field->flags & FFL_SPAWNTEMP)
 		return;
@@ -315,8 +317,8 @@ void WriteField1 (FILE *f, field_t *field, uint8_t *base)
 
 void WriteField2 (FILE *f, field_t *field, uint8_t *base)
 {
-	int			len;
-	void		*p;
+	int32_t	len;
+	void*	p;
 
 	if (field->flags & FFL_SPAWNTEMP)
 		return;
@@ -338,9 +340,9 @@ void WriteField2 (FILE *f, field_t *field, uint8_t *base)
 
 void ReadField (FILE *f, field_t *field, uint8_t *base)
 {
-	void		*p;
-	int			len;
-	int			index;
+	void*	p;
+	int32_t	len;
+	int32_t	index;
 
 	if (field->flags & FFL_SPAWNTEMP)
 		return;
@@ -421,7 +423,7 @@ All pointer variables (except function pointers) must be handled specially.
 */
 void WriteClient (FILE *f, gclient_t *client)
 {
-	field_t		*field;
+	field_t*	field;
 	gclient_t	temp;
 	
 	// all of the ints, floats, and vectors stay as they are
@@ -452,7 +454,7 @@ All pointer variables (except function pointers) must be handled specially.
 */
 void ReadClient (FILE *f, gclient_t *client)
 {
-	field_t		*field;
+	field_t* field;
 
 	fread (client, sizeof(*client), 1, f);
 
@@ -478,8 +480,8 @@ last save position.
 */
 void WriteGame (char *filename, bool autosave)
 {
-	FILE	*f;
-	int		i;
+	FILE*	f;
+	int32_t	i;
 	char	str[16];
 
 	if (!autosave)
@@ -505,8 +507,8 @@ void WriteGame (char *filename, bool autosave)
 
 void ReadGame (char *filename)
 {
-	FILE	*f;
-	int		i;
+	FILE*	f;
+	int32_t	i;
 	char	str[16];
 
 	gi.FreeTags (TAG_GAME);
@@ -700,11 +702,11 @@ No clients are connected yet.
 */
 void ReadLevel (char *filename)
 {
-	int		entnum;
-	FILE	*f;
-	int		i;
-	void	*base;
-	edict_t	*ent;
+	int32_t	entnum;
+	FILE*	f;
+	int32_t	i;
+	void*	base;
+	edict_t* ent;
 
 	f = fopen (filename, "rb");
 	if (!f)

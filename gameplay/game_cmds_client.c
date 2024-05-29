@@ -132,18 +132,20 @@ Give items to a client
 */
 void Cmd_Give_f (edict_t *ent)
 {
-	char		*name;
-	gitem_t		*it;
-	int			index;
-	int			i;
-	bool	give_all;
-	edict_t		*it_ent;
+	char*		name;
+	gitem_t*	it;
+	int32_t		index;
+	int32_t		i;
+	bool		give_all;
+	edict_t*	it_ent;
 
+#ifdef NDEBUG
 	if (!sv_cheats->value)
 	{
 		gi.cprintf (ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
 		return;
 	}
+#endif
 
 	name = gi.args();
 
@@ -301,11 +303,13 @@ void Cmd_God_f (edict_t *ent)
 {
 	char	*msg;
 
+#ifdef NDEBUG
 	if (!sv_cheats->value)
 	{
 		gi.cprintf (ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
 		return;
 	}
+#endif
 
 	ent->flags ^= FL_GODMODE;
 	if (!(ent->flags & FL_GODMODE) )
@@ -330,11 +334,13 @@ void Cmd_Notarget_f (edict_t *ent)
 {
 	char	*msg;
 
+#ifdef NDEBUG
 	if (!sv_cheats->value)
 	{
 		gi.cprintf (ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
 		return;
 	}
+#endif
 
 	ent->flags ^= FL_NOTARGET;
 	if (!(ent->flags & FL_NOTARGET) )
@@ -357,11 +363,13 @@ void Cmd_Noclip_f (edict_t *ent)
 {
 	char	*msg;
 
+#ifdef NDEBUG
 	if (!sv_cheats->value)
 	{
 		gi.cprintf (ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
 		return;
 	}
+#endif
 
 	if (ent->movetype == MOVETYPE_NOCLIP)
 	{
