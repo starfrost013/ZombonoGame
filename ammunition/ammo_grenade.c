@@ -62,6 +62,7 @@ static void Ammo_Grenade_explode(edict_t* ent)
 		mod = MOD_HG_SPLASH;
 	else
 		mod = MOD_G_SPLASH;
+
 	T_RadiusDamage(ent, ent->owner, ent->dmg, ent->enemy, ent->dmg_radius, mod);
 
 	VectorMA(ent->s.origin, -0.02, ent->velocity, origin);

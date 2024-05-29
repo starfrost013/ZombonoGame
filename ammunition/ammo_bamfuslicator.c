@@ -105,7 +105,6 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 		if (!strncmp(trace.ent->classname, "player", 6))
 		{
 			gi.sound(self, CHAN_VOICE, gi.soundindex("weapons/bamfuslicator/spawn_failed.wav"), 1, ATTN_NORM, 0);
-
 			return;
 		}
 
@@ -155,7 +154,7 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 	VectorSubtract(monster->absmin, min_dist, vec_absmin);
 	VectorAdd(monster->absmax, min_dist, vec_absmax);
 
-	// now see if we are tyrign 
+	// now see if we are trying to spawn the zombie within another entity...
 	int32_t num_within_monster_bounds = gi.BoxEdicts(vec_absmin, vec_absmax, &within_monster_bounds, 64, AREA_SOLID);
 
 	for (int32_t edict = 0; edict < num_within_monster_bounds; edict++)

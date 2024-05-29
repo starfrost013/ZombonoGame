@@ -761,24 +761,24 @@ typedef struct entity_state_s
 {
 	int32_t 	number;			// edict index
 
-	vec3_t	origin;
-	vec3_t	angles;
-	vec3_t	old_origin;		// for lerping
-	vec3_t  extents;
+	vec3_t		origin;
+	vec3_t		angles;
+	vec3_t		old_origin;		// for lerping
+	vec3_t		extents;
 
-	int32_t 	modelindex;
+	int32_t		modelindex;
 	int32_t 	modelindex2, modelindex3, modelindex4;	// weapons, CTF flags, etc
 	int32_t 	frame;
 	int32_t 	skinnum;
 	uint32_t	effects;		// PGM - we're filling it, so it needs to be unsigned
 	int32_t 	renderfx;
 	int32_t 	solid;			// for client side prediction, 8*(bits 0-4) is x/y radius
-							// 8*(bits 5-9) is z down distance, 8(bits10-15) is z up
-							// gi.linkentity sets this properly
+	// 8*(bits 5-9) is z down distance, 8(bits10-15) is z up
+	// gi.linkentity sets this properly
 	int32_t 	sound;			// for looping sounds, to guarantee shutoff
 	int32_t 	event;			// impulse events -- muzzle flashes, footsteps, etc
-							// events only go out for a single frame, they
-							// are automatically cleared each frame
+	// events only go out for a single frame, they
+	// are automatically cleared each frame
 } entity_state_t;
 
 //==============================================
@@ -829,7 +829,7 @@ typedef enum player_team_e
 
 	team_unassigned = 4,
 
-	// Sentinel value defining the last valid team.
+	// Sentinel value defining the last valid team flag.
 	team_max = 4,
 
 } player_team;
