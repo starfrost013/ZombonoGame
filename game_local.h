@@ -530,7 +530,6 @@ extern int32_t	snd_fry;
 #define MOD_HELD_GRENADE	24
 #define MOD_EXPLOSIVE		25
 #define MOD_BARREL			26
-#define MOD_BOMB			27
 #define MOD_EXIT			28
 #define MOD_SPLASH			29
 #define MOD_TARGET_LASER	30
@@ -539,6 +538,7 @@ extern int32_t	snd_fry;
 #define MOD_TARGET_BLASTER	33
 #define MOD_ZOMBIE			34
 #define MOD_CRUSHED			35
+#define MOD_ZOMBIFIED		36
 #define MOD_FRIENDLY_FIRE	0x8000000
 
 extern	int	meansOfDeath;

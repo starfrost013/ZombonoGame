@@ -715,12 +715,18 @@ void ClientObituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 	case MOD_TARGET_BLASTER:
 		message = "got blasted";
 		break;
-	case MOD_BOMB:
 	case MOD_SPLASH:
 	case MOD_TRIGGER_HURT:
 		message = "was in the wrong place";
 		break;
+	case MOD_ZOMBIE:
+		message = "was killed by a ^2zombie^7";
+		break;
+	case MOD_ZOMBIFIED:
+		message = "was ^2zombified!^7";
+		break;
 	}
+
 	if (attacker == self)
 	{
 		switch (mod)

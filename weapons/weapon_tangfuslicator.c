@@ -37,15 +37,15 @@ void Weapon_Tangfuslicator_Fire(edict_t* ent)
 
 	P_ProjectSource(ent, offset, forward, right, start);
 
-	Ammo_Tangfuslicator(ent, start, forward, ent->client->pers.weapon->spawn_type); // will always store current spawn type
+	Ammo_Tangfuslicator(ent, start, forward); // will always store current spawn type
 
 	ent->client->ps.gunframe++; // increment anim frame
 }
 
 void Weapon_Tangfuslicator(edict_t* ent)
 {
-	static int	pause_frames[] = { 29, 42, 57, 0 };
-	static int	fire_frames[] = { 7, 0 };
+	static int32_t pause_frames[] = { 29, 42, 57, 0 };
+	static int32_t fire_frames[] = { 7, 0 };
 
 	Weapon_Generic(ent, 6, 17, 56, 61, pause_frames, fire_frames, fire_frames, Weapon_Tangfuslicator_Fire, NULL);
 }

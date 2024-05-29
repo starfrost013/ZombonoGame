@@ -52,6 +52,7 @@ static void Ammo_Grenade_explode(edict_t* ent)
 			mod = MOD_HANDGRENADE;
 		else
 			mod = MOD_GRENADE;
+
 		T_Damage(ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int32_t)points, (int32_t)points, DAMAGE_RADIUS, mod);
 	}
 
@@ -118,9 +119,9 @@ static void Ammo_Grenade_touch(edict_t* ent, edict_t* other, cplane_t* plane, cs
 
 void Ammo_Grenade(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, float timer, float damage_radius)
 {
-	edict_t* grenade;
-	vec3_t	dir;
-	vec3_t	forward, right, up;
+	edict_t*	grenade;
+	vec3_t		dir;
+	vec3_t		forward, right, up;
 
 	vectoangles(aimdir, dir);
 	AngleVectors(dir, forward, right, up);

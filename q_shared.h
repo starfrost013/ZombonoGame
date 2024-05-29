@@ -527,6 +527,7 @@ typedef struct
 #define	EF_QUAD				0x2000
 #define	EF_PENT				0x4000
 #define	EF_TELEPORTER		0x8000	// particle fountain
+#define EF_LIGHTNING		0x10000	// e.g. tangfuslicator
 
 // entity_state_t->renderfx flags
 #define	RF_MINLIGHT			0x1		// allways have some light (viewmodel)

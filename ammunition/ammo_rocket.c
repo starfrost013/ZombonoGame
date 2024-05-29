@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // ammo_rocket.c: Code for the rocket launcher's rockets (split from g_weapon.c)
 
+#define ROCKET_MAX_DISTANCE	8000
 
 /*
 =================
@@ -94,7 +95,7 @@ void Ammo_Rocket(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_
 	rocket->s.modelindex = gi.modelindex("models/objects/rocket/tris.md2");
 	rocket->owner = self;
 	rocket->touch = Ammo_Rocket_touch;
-	rocket->nextthink = level.time + 8000 / speed;
+	rocket->nextthink = level.time + ROCKET_MAX_DISTANCE / speed;
 	rocket->think = G_FreeEdict;
 	rocket->dmg = damage;
 	rocket->radius_dmg = radius_damage;

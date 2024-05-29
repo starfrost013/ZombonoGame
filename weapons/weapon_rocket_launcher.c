@@ -36,6 +36,7 @@ void Weapon_RocketLauncher_Fire(edict_t* ent)
 	damage = 100 + (int32_t)(random() * 20.0);
 	radius_damage = 120;
 	damage_radius = 120;
+
 	if (is_quad)
 	{
 		damage *= 4;

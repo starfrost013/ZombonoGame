@@ -105,7 +105,6 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 		if (!strncmp(trace.ent->classname, "player", 6))
 		{
 			gi.sound(self, CHAN_VOICE, gi.soundindex("weapons/bamfuslicator/spawn_failed.wav"), 1, ATTN_NORM, 0);
-			G_FreeEdict(monster);
 
 			return;
 		}
