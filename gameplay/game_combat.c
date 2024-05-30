@@ -187,13 +187,13 @@ dflags		these flags are used to control how T_Damage works
 static int32_t CheckPowerArmor (edict_t *ent, vec3_t point, vec3_t normal, int32_t damage, int32_t dflags)
 {
 	gclient_t*	client;
-	int32_t		save;
-	int32_t		power_armor_type;
+	int32_t		save = 0;
+	int32_t		power_armor_type = 0;
 	loadout_entry_t* loadout_ptr_cells = NULL;
-	int32_t		damage_per_cell;
-	int32_t		temp_entity_type;
+	int32_t		damage_per_cell = 0;
+	int32_t		temp_entity_type = 0;
 	int32_t		power = 0;
-	int32_t		power_used;
+	int32_t		power_used = 0;
 
 	if (!damage)
 		return 0;
@@ -226,25 +226,7 @@ static int32_t CheckPowerArmor (edict_t *ent, vec3_t point, vec3_t normal, int32
 	if (!power)
 		return 0;
 
-	if (power_armor_type == POWER_ARMOR_SCREEN)
-	{
-		vec3_t		vec = { 0 };
-		float		dot;
-		vec3_t		forward;
-
-		// only works if damage point is in front
-		AngleVectors (ent->s.angles, forward, NULL, NULL);
-		VectorSubtract (point, ent->s.origin, vec);
-		VectorNormalize (vec);
-		dot = DotProduct (vec, forward);
-		if (dot <= 0.3)
-			return 0;
-
-		damage_per_cell = 1;
-		temp_entity_type = TE_SCREEN_SPARKS;
-		damage = damage / 3;
-	}
-	else
+	if (power_armor_type == POWER_ARMOR_SHIELD)
 	{
 		damage_per_cell = 2;
 		temp_entity_type = TE_SHIELD_SPARKS;

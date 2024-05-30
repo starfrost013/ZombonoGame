@@ -687,16 +687,12 @@ int32_t GetCurrentPowerArmor (edict_t *ent)
 		return POWER_ARMOR_NONE;
 
 	loadout_entry_t* loadout_entry_power_screen = Loadout_GetItem(ent, "Power screen");
-	loadout_entry_t* loadout_entry_power_shield = Loadout_GetItem(ent, "Power shield");
 
 	if (!(ent->flags & FL_POWER_ARMOR))
 		return POWER_ARMOR_NONE;
 
 	if (loadout_entry_power_screen->amount > 0)
 		return POWER_ARMOR_SHIELD;
-
-	if (loadout_entry_power_shield->amount > 0)
-		return POWER_ARMOR_SCREEN;
 
 	return POWER_ARMOR_NONE;
 }
