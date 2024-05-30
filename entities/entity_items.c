@@ -406,7 +406,7 @@ void	Use_Invulnerability (edict_t *ent, gitem_t *item)
 
 //======================================================================
 
-void	Use_Silencer (edict_t *ent, gitem_t *item)
+void Use_Silencer (edict_t *ent, gitem_t *item)
 {
 	loadout_entry_t* loadout_entry_ptr = Loadout_GetItem(ent, item->pickup_name);
 	loadout_entry_ptr->amount--;

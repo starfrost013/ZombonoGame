@@ -126,7 +126,7 @@ void PlayerNoise(edict_t* who, vec3_t where, int32_t type)
 
 bool Pickup_Weapon(edict_t* ent, edict_t* other)
 {
-	int			index;
+	int32_t		index;
 	gitem_t*	ammo;
 	loadout_entry_t* loadout_ptr = Loadout_GetItem(other, ent->item->pickup_name);
 

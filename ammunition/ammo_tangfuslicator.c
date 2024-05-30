@@ -40,6 +40,14 @@ void Ammo_Tangfuslicator_Touch(edict_t* self, edict_t* other, cplane_t* plane, c
 
 	if (!strncmp(other->classname, "player", 6))
 	{
+		if (!((int32_t)gameflags->value & GF_ITEM_FRIENDLY_FIRE)
+			&& other->team != team_player)
+		{
+			// TODO: PLAY SOUND
+			gi.cprintf(do_not_zombify, PRINT_CHAT, "Can't zombify a director!");
+			return;
+		}
+
 		// spawn a zombie where the player is starting
 		
 		// spawn the zombie

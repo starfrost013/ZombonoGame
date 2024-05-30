@@ -33,13 +33,13 @@ MACHINEGUN / CHAINGUN
 
 void Weapon_Machinegun_Fire(edict_t* ent)
 {
-	int	i;
-	vec3_t		start;
-	vec3_t		forward, right;
-	vec3_t		angles;
-	int			damage = 8;
-	int			kick = 2;
-	vec3_t		offset;
+	int32_t	i;
+	vec3_t	start;
+	vec3_t	forward, right;
+	vec3_t	angles;
+	int32_t	damage = 8;
+	int32_t	kick = 2;
+	vec3_t	offset = { 0 };
 
 	if (!(ent->client->buttons & BUTTON_ATTACK1))
 	{
@@ -53,16 +53,22 @@ void Weapon_Machinegun_Fire(edict_t* ent)
 	else
 		ent->client->ps.gunframe = 5;
 
-	if (ent->client->loadout_current_ammo < 1)
+	if (!((int32_t)gameflags->value & GF_INFINITE_AMMO))
 	{
-		ent->client->ps.gunframe = 6;
-		if (level.time >= ent->pain_debounce_time)
+		// decrement the amount of ammo
+		ent->client->loadout_current_ammo->amount--;
+
+		if (ent->client->loadout_current_ammo->amount < 1)
 		{
-			gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/noammo.wav"), 1, ATTN_NORM, 0);
-			ent->pain_debounce_time = level.time + 1;
+			ent->client->ps.gunframe = 6;
+			if (level.time >= ent->pain_debounce_time)
+			{
+				gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/noammo.wav"), 1, ATTN_NORM, 0);
+				ent->pain_debounce_time = level.time + 1;
+			}
+			NoAmmoWeaponChange(ent);
+			return;
 		}
-		NoAmmoWeaponChange(ent);
-		return;
 	}
 
 	if (is_quad)
@@ -76,6 +82,7 @@ void Weapon_Machinegun_Fire(edict_t* ent)
 		ent->client->kick_origin[i] = crandom() * 0.35;
 		ent->client->kick_angles[i] = crandom() * 0.7;
 	}
+
 	ent->client->kick_origin[0] = crandom() * 0.35;
 	ent->client->kick_angles[0] = ent->client->machinegun_shots * -1.5;
 
@@ -93,10 +100,8 @@ void Weapon_Machinegun_Fire(edict_t* ent)
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
-	if (!((int32_t)gameflags->value & GF_INFINITE_AMMO))
-		ent->client->loadout_current_ammo->amount--;
-
 	ent->client->anim_priority = ANIM_ATTACK;
+
 	if (ent->client->ps.pmove.pm_flags & PMF_DUCKED)
 	{
 		ent->s.frame = FRAME_crattak1 - (int32_t)(random() + 0.25);
@@ -111,8 +116,8 @@ void Weapon_Machinegun_Fire(edict_t* ent)
 
 void Weapon_Machinegun(edict_t* ent)
 {
-	static int	pause_frames[] = { 23, 45, 0 };
-	static int	fire_frames[] = { 4, 5, 0 };
+	static int32_t pause_frames[] = { 23, 45, 0 };
+	static int32_t fire_frames[] = { 4, 5, 0 };
 
 	Weapon_Generic(ent, 3, 5, 45, 49, pause_frames, fire_frames, NULL, Weapon_Machinegun_Fire, NULL);
 }
