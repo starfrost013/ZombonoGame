@@ -676,18 +676,13 @@ void G_SetClientEffects (edict_t *ent)
 	if (ent->health <= 0 || level.intermissiontime)
 		return;
 
-	if (ent->powerarmor_time > level.time)
+	if (ent->powerarmor_time > level.time
+		&& pa_type == POWER_ARMOR_SHIELD)
 	{
 		pa_type = GetCurrentPowerArmor (ent);
-		if (pa_type == POWER_ARMOR_SCREEN)
-		{
-			ent->s.effects |= EF_POWERSCREEN;
-		}
-		else if (pa_type == POWER_ARMOR_SHIELD)
-		{
-			ent->s.effects |= EF_COLOR_SHELL;
-			ent->s.renderfx |= RF_SHELL_GREEN;
-		}
+
+		ent->s.effects |= EF_COLOR_SHELL;
+		ent->s.renderfx |= RF_SHELL_GREEN;
 	}
 
 	if (ent->client->quad_framenum > level.framenum)

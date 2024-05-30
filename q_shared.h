@@ -518,7 +518,6 @@ typedef struct
 #define	EF_GRENADE			0x10
 #define	EF_HYPERBLASTER		0x20
 #define EF_COLOR_SHELL		0x40
-#define EF_POWERSCREEN		0x80
 #define	EF_ANIM01			0x100	// automatically cycle between frames 0 and 1 at 2 hz
 #define	EF_ANIM23			0x200	// automatically cycle between frames 2 and 3 at 2 hz
 #define EF_ANIM_ALL			0x400	// automatically cycle through all frames at 2hz

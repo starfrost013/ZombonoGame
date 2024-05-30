@@ -214,16 +214,6 @@ bool Pickup_Adrenaline (edict_t *ent, edict_t *other)
 	return true;
 }
 
-bool Pickup_AncientHead (edict_t *ent, edict_t *other)
-{
-	other->max_health += 2;
-
-	if (!(ent->spawnflags & DROPPED_ITEM))
-		SetRespawn (ent, ent->item->quantity);
-
-	return true;
-}
-
 bool Pickup_Bandolier (edict_t *ent, edict_t *other)
 {
 	gitem_t	*item = FindItem("Bullets");
@@ -1104,7 +1094,7 @@ void SpawnItem (edict_t *ent, gitem_t *item)
 	}
 	if ((int32_t)gameflags->value & GF_NO_HEALTH)
 	{
-		if (item->pickup == Pickup_Health || item->pickup == Pickup_Adrenaline || item->pickup == Pickup_AncientHead)
+		if (item->pickup == Pickup_Health || item->pickup == Pickup_Adrenaline)
 		{
 			G_FreeEdict(ent);
 			return;
@@ -1230,30 +1220,6 @@ gitem_t	itemlist[] =
 		0,
 		NULL,
 		ARMOR_SHARD,
-/* precache */ ""
-	},
-
-
-/*QUAKED item_power_screen (.3 .3 1) (-16 -16 -16) (16 16 16)
-*/
-	{
-		"item_power_screen", 
-		Pickup_PowerArmor,
-		Use_PowerArmor,
-		Drop_PowerArmor,
-		NULL,
-		"misc/ar3_pkup.wav",
-		"models/items/armor/screen/tris.md2", EF_ROTATE, 
-		NULL,
-/* icon */		"2d/i_powerscreen",
-/* pickup */	"Power Screen",
-/* width */		0,
-		60,
-		NULL,
-		IT_ARMOR,
-		0,
-		NULL,
-		0,
 /* precache */ ""
 	},
 
@@ -1822,30 +1788,6 @@ always owned, never in the world
 		NULL,
 		0,
 /* precache */ "items/airout.wav"
-	},
-
-/*QUAKED item_ancient_head (.3 .3 1) (-16 -16 -16) (16 16 16)
-Special item that gives +2 to maximum health
-*/
-	{
-		"item_ancient_head",
-		Pickup_AncientHead,
-		NULL,
-		NULL,
-		NULL,
-		"items/pkup.wav",
-		"models/items/c_head/tris.md2", EF_ROTATE,
-		NULL,
-/* icon */		"2d/i_fixme",
-/* pickup */	"Ancient Head",
-/* width */		2,
-		60,
-		NULL,
-		0,
-		0,
-		NULL,
-		0,
-/* precache */ ""
 	},
 
 /*QUAKED item_adrenaline (.3 .3 1) (-16 -16 -16) (16 16 16)

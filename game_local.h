@@ -193,8 +193,7 @@ typedef enum
 
 // power armor types
 #define POWER_ARMOR_NONE		0
-#define POWER_ARMOR_SCREEN		1
-#define POWER_ARMOR_SHIELD		2
+#define POWER_ARMOR_SHIELD		1
 
 // handedness values
 #define RIGHT_HANDED			0
