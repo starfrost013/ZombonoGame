@@ -56,6 +56,7 @@ spawn_t	spawns[] = {
 	{"func_explosive", SP_func_explosive},
 	{"func_killbox", SP_func_killbox},
 	{"func_trampoline", SP_func_trampoline},
+	{"func_particle_effect", SP_func_particle_effect},
 
 	{"trigger_always", SP_trigger_always},
 	{"trigger_once", SP_trigger_once},

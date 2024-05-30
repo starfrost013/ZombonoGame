@@ -87,8 +87,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define FL_POWER_ARMOR			0x00001000	// power armor (if any) is active
 #define FL_RESPAWN				0x80000000	// used for item respawning
 
-#define	FRAMETIME		0.1					//1/(frametime) = tickrate
-
 // memory tags to allow dynamic memory to be cleaned up
 #define	TAG_GAME	765		// clear when unloading the dll
 #define	TAG_LEVEL	766		// clear when loading a new level
@@ -1091,7 +1089,7 @@ struct edict_s
 	int32_t		movetype;
 	int32_t		flags;
 
-	char*		 model;
+	char*		model;
 	float		freetime;			// sv.time when the object was freed
 
 	//
@@ -1103,7 +1101,7 @@ struct edict_s
 
 	float		timestamp;
 
-	float		angle;			// set in qe3, -1 = up, -2 = down
+	float		angle;			// set in level editor, -1 = up, -2 = down
 	char*		target;
 	char*		targetname;
 	char*		killtarget;
@@ -1200,6 +1198,9 @@ struct edict_s
 	int32_t		light_level;
 
 	int32_t		style;			// also used as areaportal number
+
+	int32_t		particle_effect; // func_particle_effect
+	int32_t		lifetime;		 // func_particle_effect
 
 	gitem_t*	item;			// for bonus items
 

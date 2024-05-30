@@ -48,6 +48,7 @@ void SP_func_areaportal(edict_t* ent);
 void SP_func_clock(edict_t* ent);
 void SP_func_killbox(edict_t* ent);
 void SP_func_trampoline(edict_t* ent);
+void SP_func_particle_effect(edict_t* ent);
 
 void SP_trigger_always(edict_t* ent);
 void SP_trigger_once(edict_t* ent);

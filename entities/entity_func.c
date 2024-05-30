@@ -1954,7 +1954,7 @@ void door_secret_done (edict_t *self)
 	door_use_areaportals (self, false);
 }
 
-void door_secret_blocked  (edict_t *self, edict_t *other)
+void door_secret_blocked (edict_t *self, edict_t *other)
 {
 	if (!(other->svflags & SVF_MONSTER) && (!other->client) )
 	{
@@ -2010,19 +2010,21 @@ void SP_func_door_secret (edict_t *ent)
 	if (!ent->wait)
 		ent->wait = 5;
 
-	ent->moveinfo.accel =
-	ent->moveinfo.decel =
-	ent->moveinfo.speed = 50;
+	ent->moveinfo.accel = ent->moveinfo.decel = ent->moveinfo.speed = 50;
 
 	// calculate positions
 	AngleVectors (ent->s.angles, forward, right, up);
 	VectorClear (ent->s.angles);
+
 	side = 1.0 - (ent->spawnflags & SECRET_1ST_LEFT);
+
 	if (ent->spawnflags & SECRET_1ST_DOWN)
 		width = fabs(DotProduct(up, ent->size));
 	else
 		width = fabs(DotProduct(right, ent->size));
+
 	length = fabs(DotProduct(forward, ent->size));
+
 	if (ent->spawnflags & SECRET_1ST_DOWN)
 		VectorMA (ent->s.origin, -1 * width, up, ent->pos1);
 	else
@@ -2098,5 +2100,19 @@ void SP_func_trampoline(edict_t* ent)
 	// set model to worldmodel
 	gi.setmodel(ent, ent->model);
 
+	gi.linkentity(ent);
+}
+
+
+void func_particle_effect_think(edict_t* self)
+{
+
+}
+
+void SP_func_particle_effect(edict_t* ent)
+{
+	ent->classname = "func_particle_effect";
+	ent->think = func_particle_effect_think;
+	ent->nextthink = level.time + FRAMETIME;
 	gi.linkentity(ent);
 }

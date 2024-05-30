@@ -29,8 +29,8 @@ bool ai_checkattack (edict_t *self, float dist);
 
 bool	enemy_vis;
 bool	enemy_infront;
-int			enemy_range;
-float		enemy_yaw;
+int32_t	enemy_range;
+float	enemy_yaw;
 
 //============================================================================
 
@@ -50,8 +50,8 @@ In coop games, sight_client will cycle between the clients.
 */
 void AI_SetSightClient ()
 {
-	edict_t	*ent;
-	int		start, check;
+	edict_t*	ent;
+	int32_t		start, check;
 
 	if (level.sight_client == NULL)
 		start = 1;
@@ -437,9 +437,9 @@ slower noticing monsters.
 */
 bool FindTarget (edict_t *self)
 {
-	edict_t		*client;
-	bool	heardit;
-	int			r;
+	edict_t*	client;
+	bool		heardit;
+	int32_t		r;
 
 	if (self->monsterinfo.aiflags & AI_GOOD_GUY)
 	{
@@ -808,7 +808,7 @@ used by ai_run and ai_stand
 */
 bool ai_checkattack (edict_t *self, float dist)
 {
-	vec3_t		temp;
+	vec3_t	temp;
 	bool	hesDeadJim;
 
 // this causes monsters to run blindly to the combat point w/o firing
@@ -920,7 +920,6 @@ bool ai_checkattack (edict_t *self, float dist)
 	VectorSubtract (self->enemy->s.origin, self->s.origin, temp);
 	enemy_yaw = vectoyaw(temp);
 
-
 	// JDC self->ideal_yaw = enemy_yaw;
 
 	if (self->monsterinfo.attack_state == AS_MISSILE)
@@ -952,10 +951,10 @@ The monster has an enemy it is trying to kill
 void ai_run (edict_t *self, float dist)
 {
 	vec3_t		v;
-	edict_t		*tempgoal;
-	edict_t		*save;
-	bool	new;
-	edict_t		*marker;
+	edict_t*	tempgoal;
+	edict_t*	save;
+	bool		new;
+	edict_t*	marker;
 	float		d1, d2;
 	trace_t		tr;
 	vec3_t		v_forward, v_right;
