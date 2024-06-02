@@ -240,6 +240,14 @@ void ED_ParseField (char *key, char *value, edict_t *ent)
 			case F_VECTOR4:
 				successful = sscanf(value, "%f %f %f %f", &vec4[0], &vec4[1], &vec4[2], &vec4[3]);
 
+				// allow rgb colours, but assume alpha is 255
+				if (successful == 3)
+				{
+					gi.dprintf("Warning: Provided vector3 to vector4 type, assuming vec4[3] is 255...");
+					successful = 4;
+					vec4[3] = 255;
+				}
+
 				if (successful != 4)
 					Sys_Error("Malformed Vector4 passed to ED_ParseField!");
 

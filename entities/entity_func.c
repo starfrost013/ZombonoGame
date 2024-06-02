@@ -2131,6 +2131,8 @@ void func_particle_effect_think(edict_t* self)
 	{
 		if (level.framenum % self->particle_rate != 0)
 			return;
+		else
+			particles_per_tick = 1;
 	}
 	else // per tick
 	{
@@ -2159,8 +2161,11 @@ void func_particle_effect_think(edict_t* self)
 	// send the tempent type we want over the netowrk
 	for (float i = 0; i < particles_per_tick; i++)
 	{
+		// tell the client to spawn a tempent and also the type
 		gi.WriteByte(svc_temp_entity);
+		gi.WriteByte(self->particle_effect);
 
+		// send our tempent info
 		switch (self->particle_effect)
 		{
 			// Generic tempent
