@@ -2166,7 +2166,7 @@ void func_particle_effect_think(edict_t* self)
 		gi.WriteByte(self->particle_effect);
 
 		// send our tempent info
-		switch (self->particle_effect)
+ 		switch (self->particle_effect)
 		{
 			// Generic tempent
 		case TE_GENERIC:
@@ -2177,6 +2177,7 @@ void func_particle_effect_think(edict_t* self)
 			gi.WritePos(self->color_run);
 			gi.WriteInt(self->angles_spread);
 			gi.WritePos(self->velocity);
+			gi.WriteInt(self->particle_lifetime);
 			gi.WriteFloat(self->alphavel);
 			break;
 			// Tempents that only send a position

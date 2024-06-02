@@ -243,7 +243,7 @@ void ED_ParseField (char *key, char *value, edict_t *ent)
 				// allow rgb colours, but assume alpha is 255
 				if (successful == 3)
 				{
-					gi.dprintf("Warning: Provided vector3 to vector4 type, assuming vec4[3] is 255...");
+					gi.dprintf("Warning: Provided vector3 to vector4 type, assuming vec4[3] is 255...\n");
 					successful = 4;
 					vec4[3] = 255;
 				}
