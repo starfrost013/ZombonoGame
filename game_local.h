@@ -269,31 +269,31 @@ typedef struct gitem_armor_s
 
 typedef struct gitem_s
 {
-	char		*classname;	// spawning name
-	bool		(*pickup)(struct edict_s *ent, struct edict_s *other);
-	void		(*use)(struct edict_s *ent, struct gitem_s *item);
-	void		(*drop)(struct edict_s *ent, struct gitem_s *item);
-	void		(*weaponthink)(struct edict_s *ent);
-	char		*pickup_sound;
-	char		*world_model;
+	char*		classname;	// spawning name
+	bool		(*pickup)(struct edict_s* ent, struct edict_s* other);
+	void		(*use)(struct edict_s* ent, struct gitem_s* item);
+	void		(*drop)(struct edict_s* ent, struct gitem_s* item);
+	void		(*weaponthink)(struct edict_s* ent);
+	char*		pickup_sound;
+	char*		world_model;
 	int32_t		world_model_flags;
-	char		*view_model;
+	char*		view_model;
 
 	// client side info
-	char		*icon;
-	char		*pickup_name;	// for printing on pickup
+	char*		icon;
+	char*		pickup_name;	// for printing on pickup
 	int32_t		count_width;		// number of digits to display by icon
 
 	int32_t		quantity;		// for ammo how much, for weapons how much is used per shot
-	char		*ammo;			// for weapons
+	char*		ammo;			// for weapons
 	int32_t		flags;			// IT_* flags
 
 	int32_t		weapmodel;		// weapon model index (for weapons)
 
-	void		*info;
+	void*		info;
 	int32_t		tag;
 
-	char		*precaches;		// string of all models, sounds, and images this item will use
+	char*		precaches;		// string of all models, sounds, and images this item will use
 
 	int32_t		allowed_teams;	// The teams that are allowed for this item.
 	int32_t		spawn_type;		// Type of entity to spawn (item-specific)
@@ -312,25 +312,25 @@ typedef struct game_locals_s
 	char		helpmessage1[512];
 	char		helpmessage2[512];
 	int32_t		helpchanged;	// flash F1 icon if non 0, play sound
-								// and increment only if 1, 2, or 3
+	// and increment only if 1, 2, or 3
 
-	gclient_t	*clients;		// [maxclients]
+	gclient_t*	clients;		// [maxclients]
 
 	// can't store spawnpoint in level, because
 	// it would get overwritten by the savegame restore
 	char		spawnpoint[512];	// needed for coop respawns
 
 	// store latched cvars here that we want to get at often
-	int32_t			maxclients;
-	int32_t			maxentities;
+	int32_t		maxclients;
+	int32_t		maxentities;
 
 	// cross level triggers
-	int32_t			serverflags;
+	int32_t		serverflags;
 
 	// items
-	int32_t			num_items;
+	int32_t		num_items;
 
-	bool	autosaved;
+	bool		autosaved;
 } game_locals_t;
 
 
@@ -538,10 +538,10 @@ extern int32_t	snd_fry;
 #define MOD_ZOMBIFIED		36
 #define MOD_FRIENDLY_FIRE	0x8000000
 
-extern	int	meansOfDeath;
+extern	int32_t		meansOfDeath;
 
 
-extern	edict_t			*g_edicts;
+extern	edict_t*	g_edicts;
 
 #define	FOFS(x) (intptr_t)&(((edict_t *)0)->x)
 #define	STOFS(x) (intptr_t)&(((spawn_temp_t *)0)->x)
@@ -587,7 +587,7 @@ extern	cvar_t* flood_waitdelay;
 
 extern	cvar_t* sv_maplist;
 
-extern  cvar_t  *aimfix;
+extern  cvar_t* aimfix;
 
 #define world	(&g_edicts[0])
 
@@ -607,12 +607,13 @@ extern  cvar_t  *aimfix;
 #define FFL_SPAWNTEMP		1
 #define FFL_NOSPAWN			2
 
-typedef enum {
+typedef enum fieldtype_e {
 	F_INT, 
 	F_FLOAT,
 	F_LSTRING,			// string on disk, pointer in memory, TAG_LEVEL
 	F_GSTRING,			// string on disk, pointer in memory, TAG_GAME
-	F_VECTOR,
+	F_VECTOR3,
+	F_VECTOR4,
 	F_ANGLEHACK,
 	F_EDICT,			// index on disk, pointer in memory
 	F_ITEM,				// index on disk, pointer in memory
@@ -622,9 +623,9 @@ typedef enum {
 	F_IGNORE
 } fieldtype_t;
 
-typedef struct
+typedef struct field_s
 {
-	char	*name;
+	char*		name;
 	int32_t		ofs;
 	fieldtype_t	type;
 	int32_t		flags;
@@ -673,47 +674,47 @@ typedef enum zombie_type_e
 //
 // g_cmds.c
 //
-void Cmd_Leaderboard_f (edict_t* ent);
+void Cmd_Leaderboard_f(edict_t* ent);
 
 //
 // g_items.c
 //
-void PrecacheItem (gitem_t *it);
-void InitItems ();
-void SetItemNames ();
-gitem_t	*FindItem (char *pickup_name);
-gitem_t	*FindItemByClassname (char *classname);
+void PrecacheItem(gitem_t* it);
+void InitItems();
+void SetItemNames();
+gitem_t* FindItem(char* pickup_name);
+gitem_t* FindItemByClassname(char* classname);
 #define	ITEM_INDEX(x) ((x)-itemlist)
-edict_t *Drop_Item (edict_t *ent, gitem_t *item);
-void SetRespawn (edict_t *ent, float delay);
-void ChangeWeapon (edict_t *ent);
-void SpawnItem (edict_t *ent, gitem_t *item);
-void Think_Weapon (edict_t *ent);
-loadout_entry_t* GetCurrentArmor (edict_t *ent);
-int32_t GetCurrentPowerArmor (edict_t *ent);
-gitem_t	*GetItemByIndex (int32_t index);
-bool Add_Ammo (edict_t *ent, gitem_t *item, int32_t count);
-void Touch_Item (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf);
+edict_t* Drop_Item(edict_t* ent, gitem_t* item);
+void SetRespawn(edict_t* ent, float delay);
+void ChangeWeapon(edict_t* ent);
+void SpawnItem(edict_t* ent, gitem_t* item);
+void Think_Weapon(edict_t* ent);
+loadout_entry_t* GetCurrentArmor(edict_t* ent);
+int32_t GetCurrentPowerArmor(edict_t* ent);
+gitem_t* GetItemByIndex(int32_t index);
+bool Add_Ammo(edict_t* ent, gitem_t* item, int32_t count);
+void Touch_Item(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t* surf);
 
 //
 // g_utils.c
 //
-bool	KillBox (edict_t *ent);
-void	G_ProjectSource (vec3_t point, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
-edict_t *G_Find (edict_t *from, int32_t fieldofs, char *match);
-edict_t *findradius (edict_t *from, vec3_t org, float rad);
-edict_t *G_PickTarget (char *targetname);
-void	G_UseTargets (edict_t *ent, edict_t *activator);
-void	G_SetMovedir (vec3_t angles, vec3_t movedir);
+bool	G_KillBox(edict_t* ent);
+void	G_ProjectSource(vec3_t point, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
+edict_t* G_Find(edict_t* from, int32_t fieldofs, char* match);
+edict_t* G_FindRadius(edict_t* from, vec3_t org, float rad);
+edict_t* G_PickTarget(char* targetname);
+void	G_UseTargets(edict_t* ent, edict_t* activator);
+void	G_SetMovedir(vec3_t angles, vec3_t movedir);
 
-void	G_InitEdict (edict_t *e);
-edict_t	*G_Spawn ();
-void	G_FreeEdict (edict_t *e);
+void	G_InitEdict(edict_t* e);
+edict_t* G_Spawn();
+void	G_FreeEdict(edict_t* e);
 
-void	G_TouchTriggers (edict_t *ent);
-void	G_TouchSolids (edict_t *ent);
+void	G_TouchTriggers(edict_t* ent);
+void	G_TouchSolids(edict_t* ent);
 
-void	G_UISend (edict_t *ent, char* ui_name, bool enabled, bool activated, bool reliable);
+void	G_UISend(edict_t* ent, char* ui_name, bool enabled, bool activated, bool reliable);
 void	G_UISetText(edict_t* ent, char* ui_name, char* control_name, char* text, bool reliable);
 void	G_UISetImage(edict_t* ent, char* ui_name, char* control_name, char* image_path, bool reliable);
 
@@ -721,13 +722,13 @@ int32_t		G_CountClients();
 
 void	G_LeaderboardSend(edict_t* ent);
 
-char	*G_CopyString (char *in);
+char* G_CopyString(char* in);
 
-float	*tv (float x, float y, float z);
-char	*vtos (vec3_t v);
+float* tv(float x, float y, float z);
+char* vtos(vec3_t v);
 
-float vectoyaw (vec3_t vec);
-void vectoangles (vec3_t vec, vec3_t angles);
+float vectoyaw(vec3_t vec);
+void vectoangles(vec3_t vec, vec3_t angles);
 
 // A tiny little struct containing both teams' scores.
 typedef struct team_scores_s
@@ -843,9 +844,9 @@ void Ammo_Tangfuslicator (edict_t* self, vec3_t start, vec3_t aimdir); //todo: r
 void PlayerTrail_Init ();
 void PlayerTrail_Add (vec3_t spot);
 void PlayerTrail_New (vec3_t spot);
-edict_t *PlayerTrail_PickFirst (edict_t *self);
-edict_t *PlayerTrail_PickNext (edict_t *self);
-edict_t	*PlayerTrail_LastSpot ();
+edict_t* PlayerTrail_PickFirst(edict_t* self);
+edict_t* PlayerTrail_PickNext(edict_t* self);
+edict_t* PlayerTrail_LastSpot();
 
 //
 // game_client_*.c
@@ -1179,6 +1180,18 @@ struct edict_s
 
 	int32_t		jump_height; // for func_trampoline
 
+	int32_t 	angles_spread;		// func_particle_effect angle spread
+	vec4_t		color;
+	// MAKE THIS A VEC4_T!!!!!
+	vec3_t		color_run;			// func_particle_effect run
+	int32_t		particle_effect;	// func_particle_effect tempent ID
+	int32_t		particle_rate;		// func_particle_effect rate
+	int32_t		particle_lifetime;	// func_particle_effect lifetime (ignored if spawnflags & 2)
+	int32_t		particle_magnitude;	// func_particle_effect magnitude
+	int32_t		particles_next_frame;	// func_particle_effect next frame particles
+			
+	float		alphavel;			// func_particle_effect alphavel
+
 	// timing variables
 	float		wait;
 	float		delay;			// before firing targets
@@ -1199,8 +1212,6 @@ struct edict_s
 
 	int32_t		style;			// also used as areaportal number
 
-	int32_t		particle_effect; // func_particle_effect
-	int32_t		lifetime;		 // func_particle_effect
 
 	gitem_t*	item;			// for bonus items
 

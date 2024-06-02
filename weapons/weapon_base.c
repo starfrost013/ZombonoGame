@@ -288,24 +288,28 @@ void NoAmmoWeaponChange(edict_t* ent)
 		ent->client->newweapon = FindItem("railgun");
 		return;
 	}
+
 	if (Loadout_GetItem(ent, "cells")
 		&& Loadout_GetItem(ent, "hyperblaster"))
 	{
 		ent->client->newweapon = FindItem("hyperblaster");
 		return;
 	}
+
 	if (Loadout_GetItem(ent, "bullets")
 		&& Loadout_GetItem(ent, "chaingun"))
 	{
 		ent->client->newweapon = FindItem("chaingun");
 		return;
 	}
+
 	if (Loadout_GetItem(ent, "bullets")
 		&& Loadout_GetItem(ent, "machinegun"))
 	{
 		ent->client->newweapon = FindItem("machinegun");
 		return;
 	}
+
 	//required as super shotgun uses 2 bullets
 	loadout_entry_t* bullets = Loadout_GetItem(ent, "bullets");
 
@@ -316,12 +320,14 @@ void NoAmmoWeaponChange(edict_t* ent)
 		ent->client->newweapon = FindItem("super shotgun");
 		return;
 	}
+
 	if (Loadout_GetItem(ent, "shells")
 		&& Loadout_GetItem(ent, "shotgun"))
 	{
 		ent->client->newweapon = FindItem("shotgun");
 		return;
 	}
+
 	ent->client->newweapon = FindItem("blaster");
 }
 

@@ -147,26 +147,26 @@ game_export_t *GetGameAPI (game_import_t *import)
 // this is only here so the functions in q_shared.c and q_shwin.c can link
 void Sys_Error (char *error, ...)
 {
-	va_list		argptr;
-	char		text[1024];
+	va_list	argptr;
+	char	text[1024];
 
 	va_start (argptr, error);
 	vsnprintf (text, 1024, error, argptr);
 	va_end (argptr);
 
-	gi.error (ERR_FATAL, "%s", text);
+	gi.error(text);
 }
 
 void Com_Printf (char *msg, ...)
 {
-	va_list		argptr;
-	char		text[1024];
+	va_list	argptr;
+	char	text[1024];
 
 	va_start (argptr, msg);
 	vsnprintf (text, 1024, msg, argptr);
 	va_end (argptr);
 
-	gi.dprintf ("%s", text);
+	gi.dprintf (text);
 }
 
 #endif

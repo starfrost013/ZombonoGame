@@ -59,7 +59,7 @@ void Ammo_Blaster_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface
 	{
 		gi.WriteByte(svc_temp_entity);
 		gi.WriteByte(TE_BLASTER);
-		gi.WritePosition(self->s.origin);
+		gi.WritePos(self->s.origin);
 		if (!plane)
 			gi.WriteDir(vec3_origin);
 		else

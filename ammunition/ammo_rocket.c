@@ -71,7 +71,7 @@ void Ammo_Rocket_touch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t
 		gi.WriteByte(TE_ROCKET_EXPLOSION_WATER);
 	else
 		gi.WriteByte(TE_ROCKET_EXPLOSION);
-	gi.WritePosition(origin);
+	gi.WritePos(origin);
 	gi.multicast(ent->s.origin, MULTICAST_PHS);
 
 	G_FreeEdict(ent);

@@ -368,7 +368,7 @@ void monster_start_go (edict_t *self);
 void monster_triggered_spawn (edict_t *self)
 {
 	self->s.origin[2] += 1;
-	KillBox (self);
+	G_KillBox (self);
 
 	self->solid = SOLID_BBOX;
 	self->movetype = MOVETYPE_STEP;

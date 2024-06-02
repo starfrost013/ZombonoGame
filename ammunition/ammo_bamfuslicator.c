@@ -171,7 +171,7 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 	// spawn some nice particles
 	gi.WriteByte(svc_temp_entity);
 	gi.WriteByte(TE_TELEPORT);
-	gi.WritePosition(trace.endpos);
+	gi.WritePos(trace.endpos);
 
 	gi.sound(self, CHAN_VOICE, gi.soundindex("zombie/zombie_spawn.wav"), 1, ATTN_NORM, 0);
 }

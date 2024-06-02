@@ -92,7 +92,7 @@ static void Ammo_Bullet_generic(edict_t* self, vec3_t start, vec3_t aimdir, int3
 					gi.WriteByte(svc_temp_entity);
 					gi.WriteByte(TE_SPLASH);
 					gi.WriteByte(8);
-					gi.WritePosition(tr.endpos);
+					gi.WritePos(tr.endpos);
 					gi.WriteDir(tr.plane.normal);
 					gi.WriteByte(color);
 					gi.multicast(tr.endpos, MULTICAST_PVS);
@@ -129,7 +129,7 @@ static void Ammo_Bullet_generic(edict_t* self, vec3_t start, vec3_t aimdir, int3
 				{
 					gi.WriteByte(svc_temp_entity);
 					gi.WriteByte(te_impact);
-					gi.WritePosition(tr.endpos);
+					gi.WritePos(tr.endpos);
 					gi.WriteDir(tr.plane.normal);
 					gi.multicast(tr.endpos, MULTICAST_PVS);
 
@@ -158,8 +158,8 @@ static void Ammo_Bullet_generic(edict_t* self, vec3_t start, vec3_t aimdir, int3
 
 		gi.WriteByte(svc_temp_entity);
 		gi.WriteByte(TE_BUBBLETRAIL);
-		gi.WritePosition(water_start);
-		gi.WritePosition(tr.endpos);
+		gi.WritePos(water_start);
+		gi.WritePos(tr.endpos);
 		gi.multicast(pos, MULTICAST_PVS);
 	}
 }

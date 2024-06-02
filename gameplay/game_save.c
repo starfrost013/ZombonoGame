@@ -29,8 +29,8 @@ mmove_t mmove_reloc;
 
 field_t fields[] = 
 {
-	{"classname", FOFS(classname), F_LSTRING},
-	{"model", FOFS(model), F_LSTRING},
+	{ "classname", FOFS(classname), F_LSTRING },
+	{ "model", FOFS(model), F_LSTRING },
 	{ "spawnflags", FOFS(spawnflags), F_INT },
 	{ "speed", FOFS(speed), F_FLOAT },
 	{ "accel", FOFS(accel), F_FLOAT },
@@ -46,8 +46,8 @@ field_t fields[] =
 	{ "wait", FOFS(wait), F_FLOAT },
 	{ "delay", FOFS(delay), F_FLOAT },
 	{ "random", FOFS(random), F_FLOAT },
-	{ "move_origin", FOFS(move_origin), F_VECTOR },
-	{ "move_angles", FOFS(move_angles), F_VECTOR },
+	{ "move_origin", FOFS(move_origin), F_VECTOR3 },
+	{ "move_angles", FOFS(move_angles), F_VECTOR3 },
 	{ "style", FOFS(style), F_INT },
 	{ "count", FOFS(count), F_INT },
 	{ "health", FOFS(health), F_INT },
@@ -58,13 +58,22 @@ field_t fields[] =
 	{ "volume", FOFS(volume), F_FLOAT },
 	{ "attenuation", FOFS(attenuation), F_FLOAT },
 	{ "map", FOFS(map), F_LSTRING },
-	{ "origin", FOFS(s.origin), F_VECTOR },
-	{ "angles", FOFS(s.angles), F_VECTOR },
+	{ "origin", FOFS(s.origin), F_VECTOR3 },
 	{ "angle", FOFS(s.angles), F_ANGLEHACK },
+	{ "angles", FOFS(s.angles), F_VECTOR3 },
+	{ "velocity", FOFS(velocity), F_VECTOR3 },
+	{ "angles_spread", FOFS(angles_spread), F_INT },
 	{ "jump_velocity", FOFS(jump_height), F_INT },
+	{ "particle_effect", FOFS(particle_effect), F_INT },
+	{ "particle_rate", FOFS(particle_rate), F_INT },
+	{ "particle_lifetime", FOFS(particle_lifetime), F_INT },
+	{ "particle_magnitude", FOFS(particle_magnitude), F_INT },
+	{ "alphavel", FOFS(alphavel), F_FLOAT},
+	{ "color", FOFS(color), F_VECTOR4},
+	{ "color_run", FOFS(color_run), F_VECTOR3},
 
 	// Area of effects of entity
-	{ "extents", FOFS(s.extents), F_VECTOR },
+	{ "extents", FOFS(s.extents), F_VECTOR3 },
 
 	{ "goalentity", FOFS(goalentity), F_EDICT, FFL_NOSPAWN },
 	{ "movetarget", FOFS(movetarget), F_EDICT, FFL_NOSPAWN },
@@ -117,7 +126,7 @@ field_t fields[] =
 	{ "gravity", STOFS(gravity), F_LSTRING, FFL_SPAWNTEMP },
 	{ "sky", STOFS(sky), F_LSTRING, FFL_SPAWNTEMP },
 	{ "skyrotate", STOFS(skyrotate), F_FLOAT, FFL_SPAWNTEMP },
-	{ "skyaxis", STOFS(skyaxis), F_VECTOR, FFL_SPAWNTEMP },
+	{ "skyaxis", STOFS(skyaxis), F_VECTOR3, FFL_SPAWNTEMP },
 	{ "minyaw", STOFS(minyaw), F_FLOAT, FFL_SPAWNTEMP },
 	{ "maxyaw", STOFS(maxyaw), F_FLOAT, FFL_SPAWNTEMP },
 	{ "minpitch", STOFS(minpitch), F_FLOAT, FFL_SPAWNTEMP },
@@ -126,9 +135,6 @@ field_t fields[] =
 
 	// Valve 220 map support 
 	{ "mapversion", 0, F_IGNORE },
-
-	// Zombono Q1 maps
-	{ "level_has_prespawn", 0, F_IGNORE },
 
 	{0, 0, 0, 0}
 
@@ -257,7 +263,7 @@ void WriteField1 (FILE *f, field_t *field, uint8_t *base)
 	case F_INT:
 	case F_FLOAT:
 	case F_ANGLEHACK:
-	case F_VECTOR:
+	case F_VECTOR3:
 	case F_IGNORE:
 		break;
 
@@ -350,10 +356,12 @@ void ReadField (FILE *f, field_t *field, uint8_t *base)
 	p = (void *)(base + field->ofs);
 	switch (field->type)
 	{
+		// these are already parsed
 	case F_INT:
 	case F_FLOAT:
 	case F_ANGLEHACK:
-	case F_VECTOR:
+	case F_VECTOR3:
+	case F_VECTOR4:
 	case F_IGNORE:
 		break;
 

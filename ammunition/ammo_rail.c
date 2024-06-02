@@ -69,16 +69,16 @@ void Ammo_Rail(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32
 	// send gun puff / flash
 	gi.WriteByte(svc_temp_entity);
 	gi.WriteByte(TE_RAILTRAIL);
-	gi.WritePosition(start);
-	gi.WritePosition(tr.endpos);
+	gi.WritePos(start);
+	gi.WritePos(tr.endpos);
 	gi.multicast(self->s.origin, MULTICAST_PHS);
 	//	gi.multicast (start, MULTICAST_PHS);
 	if (water)
 	{
 		gi.WriteByte(svc_temp_entity);
 		gi.WriteByte(TE_RAILTRAIL);
-		gi.WritePosition(start);
-		gi.WritePosition(tr.endpos);
+		gi.WritePos(start);
+		gi.WritePos(tr.endpos);
 		gi.multicast(tr.endpos, MULTICAST_PHS);
 	}
 

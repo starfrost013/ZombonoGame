@@ -76,7 +76,7 @@ Returns entities that have origins within a spherical area
 findradius (origin, radius)
 =================
 */
-edict_t *findradius (edict_t *from, vec3_t org, float rad)
+edict_t *G_FindRadius (edict_t *from, vec3_t org, float rad)
 {
 	vec3_t	eorg;
 	int		j;
@@ -544,7 +544,7 @@ Kills all entities that would touch the proposed new positioning
 of ent.  Ent should be unlinked before calling this!
 =================
 */
-bool KillBox (edict_t *ent)
+bool G_KillBox (edict_t *ent)
 {
 	trace_t		tr;
 

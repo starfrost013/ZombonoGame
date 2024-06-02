@@ -721,7 +721,7 @@ void PutClientInServer(edict_t* ent)
 	else
 		client->resp.spectator = false;
 
-	if (!KillBox(ent))
+	if (!G_KillBox(ent))
 	{	// could't spawn in?
 	}
 

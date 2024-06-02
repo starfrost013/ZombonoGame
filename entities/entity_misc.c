@@ -314,7 +314,7 @@ void BecomeExplosion1 (edict_t *self)
 {
 	gi.WriteByte (svc_temp_entity);
 	gi.WriteByte (TE_EXPLOSION1);
-	gi.WritePosition (self->s.origin);
+	gi.WritePos (self->s.origin);
 	gi.multicast (self->s.origin, MULTICAST_PVS);
 
 	G_FreeEdict (self);
@@ -325,7 +325,7 @@ void BecomeExplosion2 (edict_t *self)
 {
 	gi.WriteByte (svc_temp_entity);
 	gi.WriteByte (TE_EXPLOSION2);
-	gi.WritePosition (self->s.origin);
+	gi.WritePos (self->s.origin);
 	gi.multicast (self->s.origin, MULTICAST_PVS);
 
 	G_FreeEdict (self);
@@ -480,33 +480,6 @@ void SP_point_combat (edict_t *self)
 	gi.linkentity (self);
 };
 
-
-/*QUAKED viewthing (0 .5 .8) (-8 -8 -8) (8 8 8)
-Just for the debugging level.  Don't use
-*/
-void TH_viewthing(edict_t *ent)
-{
-	ent->s.frame = (ent->s.frame + 1) % 7;
-	ent->nextthink = level.time + FRAMETIME;
-}
-
-void SP_viewthing(edict_t *ent)
-{
-	gi.dprintf ("viewthing spawned\n");
-
-	ent->movetype = MOVETYPE_NONE;
-	ent->solid = SOLID_BBOX;
-	ent->s.renderfx = RF_FRAMELERP;
-	VectorSet (ent->mins, -16, -16, -24);
-	VectorSet (ent->maxs, 16, 16, 32);
-	ent->s.modelindex = gi.modelindex ("models/objects/banner/tris.md2");
-	gi.linkentity (ent);
-	ent->nextthink = level.time + 0.5;
-	ent->think = TH_viewthing;
-	return;
-}
-
-
 /*QUAKED info_null (0 0.5 0) (-4 -4 -4) (4 4 4)
 Used as a positional target for spotlights, etc.
 */
@@ -619,7 +592,7 @@ void func_wall_use (edict_t *self, edict_t *other, edict_t *activator)
 		// ignore walkthrough walls
 		if (!(self->spawnflags & 32)) self->solid = SOLID_BSP;
 		self->svflags &= ~SVF_NOCLIENT;
-		KillBox (self);
+		G_KillBox (self);
 	}
 	else
 	{
@@ -751,7 +724,7 @@ void func_object_use (edict_t *self, edict_t *other, edict_t *activator)
 	self->solid = SOLID_BSP;
 	self->svflags &= ~SVF_NOCLIENT;
 	self->use = NULL;
-	KillBox (self);
+	G_KillBox (self);
 	func_object_release (self);
 }
 
@@ -882,7 +855,7 @@ void func_explosive_spawn (edict_t *self, edict_t *other, edict_t *activator)
 	self->solid = SOLID_BSP;
 	self->svflags &= ~SVF_NOCLIENT;
 	self->use = NULL;
-	KillBox (self);
+	G_KillBox (self);
 	gi.linkentity (self);
 }
 
@@ -1560,7 +1533,7 @@ void teleporter_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_
 	VectorClear (other->client->v_angle);
 
 	// kill anything at the destination
-	KillBox (other);
+	G_KillBox (other);
 
 	gi.linkentity (other);
 }

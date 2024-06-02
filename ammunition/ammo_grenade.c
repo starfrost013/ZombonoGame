@@ -81,7 +81,7 @@ static void Ammo_Grenade_explode(edict_t* ent)
 		else
 			gi.WriteByte(TE_ROCKET_EXPLOSION);
 	}
-	gi.WritePosition(origin);
+	gi.WritePos(origin);
 	gi.multicast(ent->s.origin, MULTICAST_PHS);
 
 	G_FreeEdict(ent);

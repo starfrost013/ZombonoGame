@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // game.h -- game dll information visible to server
 
-#define	GAME_API_VERSION	7
+#define	GAME_API_VERSION	8
 
 // edict->svflags
 
@@ -49,10 +49,8 @@ typedef struct link_s
 
 #define	MAX_ENT_CLUSTERS	16
 
-
 typedef struct edict_s edict_t;
 typedef struct gclient_s gclient_t;
-
 
 #ifndef GAME_INCLUDE
 
@@ -139,7 +137,7 @@ typedef struct game_import_s
 	// solidity changes, it must be relinked.
 	void	(*linkentity) (edict_t *ent);
 	void	(*unlinkentity) (edict_t *ent);		// call before removing an interactive edict
-	int32_t 	(*BoxEdicts) (vec3_t mins, vec3_t maxs, edict_t **list,	int32_t maxcount, int32_t areatype);
+	int32_t (*BoxEdicts) (vec3_t mins, vec3_t maxs, edict_t **list,	int32_t maxcount, int32_t areatype);
 	void	(*Pmove) (pmove_t *pmove);		// player movement code common with client prediction
 
 	// network messaging
@@ -151,8 +149,9 @@ typedef struct game_import_s
 	void	(*WriteInt) (int32_t c);
 	void	(*WriteFloat) (float f);
 	void	(*WriteString) (char *s);
-	void	(*WritePosition) (vec3_t pos);	// some fractional bits
-	void	(*WriteDir) (vec3_t pos);		// single byte encoded, very coarse
+	void	(*WritePos) (vec3_t pos);	// some fractional bits
+	void	(*WriteDir) (vec3_t dir);
+	void	(*WriteColor) (vec4_t color);
 	void	(*WriteAngle) (float f);
 
 	// managed memory allocation

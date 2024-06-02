@@ -28,7 +28,7 @@ void Use_Target_Tent (edict_t *ent, edict_t *other, edict_t *activator)
 {
 	gi.WriteByte (svc_temp_entity);
 	gi.WriteByte (ent->style);
-	gi.WritePosition (ent->s.origin);
+	gi.WritePos (ent->s.origin);
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
 }
 
@@ -213,7 +213,7 @@ void target_explosion_explode (edict_t *self)
 
 	gi.WriteByte (svc_temp_entity);
 	gi.WriteByte (TE_EXPLOSION1);
-	gi.WritePosition (self->s.origin);
+	gi.WritePos (self->s.origin);
 	gi.multicast (self->s.origin, MULTICAST_PHS);
 
 	T_RadiusDamage (self, self->activator, self->dmg, NULL, self->dmg+40, MOD_EXPLOSIVE);
@@ -315,7 +315,7 @@ void use_target_splash (edict_t *self, edict_t *other, edict_t *activator)
 	gi.WriteByte (svc_temp_entity);
 	gi.WriteByte (TE_SPLASH);
 	gi.WriteByte (self->count);
-	gi.WritePosition (self->s.origin);
+	gi.WritePos (self->s.origin);
 	gi.WriteDir (self->movedir);
 	gi.WriteByte (self->sounds);
 	gi.multicast (self->s.origin, MULTICAST_PVS);
@@ -362,7 +362,7 @@ void use_target_spawner (edict_t *self, edict_t *other, edict_t *activator)
 	VectorCopy (self->s.angles, ent->s.angles);
 	ED_CallSpawn (ent);
 	gi.unlinkentity (ent);
-	KillBox (ent);
+	G_KillBox (ent);
 	gi.linkentity (ent);
 	if (self->speed)
 		VectorCopy (self->movedir, ent->velocity);
@@ -475,7 +475,7 @@ void target_laser_think (edict_t *self)
 	trace_t	tr;
 	vec3_t	point;
 	vec3_t	last_movedir;
-	int		count;
+	int32_t	count;
 
 	if (self->spawnflags & 0x80000000)
 		count = 8;
@@ -511,13 +511,32 @@ void target_laser_think (edict_t *self)
 		{
 			if (self->spawnflags & 0x80000000)
 			{
+				// these are converted from legacy colour ranges
+				vec4_t color_spawnflag_02 = { 240, 0, 0, 255 };
+				vec4_t color_spawnflag_04 = { 63, 211, 27, 255 };
+				vec4_t color_spawnflag_08 = { 56, 55, 255, 255 }; 
+				vec4_t color_spawnflag_16 = { 255, 215, 22, 255 }; 
+				vec4_t color_spawnflag_32 = { 255, 0, 148, 255 };
+
+
 				self->spawnflags &= ~0x80000000;
 				gi.WriteByte (svc_temp_entity);
 				gi.WriteByte (TE_LASER_SPARKS);
-				gi.WriteByte (count);
-				gi.WritePosition (tr.endpos);
+				gi.WriteShort (count);
+				gi.WritePos (tr.endpos);
 				gi.WriteDir (tr.plane.normal);
-				gi.WriteByte (self->s.skinnum);
+
+				// set the color
+				if (self->spawnflags & 2)
+					gi.WriteColor(color_spawnflag_02);
+				else if (self->spawnflags & 4)
+					gi.WriteColor(color_spawnflag_04);
+				else if (self->spawnflags & 8)
+					gi.WriteColor(color_spawnflag_08);
+				else if (self->spawnflags & 16)
+					gi.WriteColor(color_spawnflag_16);
+				else if (self->spawnflags & 32)
+					gi.WriteColor(color_spawnflag_32);
 				gi.multicast (tr.endpos, MULTICAST_PVS);
 			}
 			break;
@@ -559,7 +578,7 @@ void target_laser_use (edict_t *self, edict_t *other, edict_t *activator)
 
 void target_laser_start (edict_t *self)
 {
-	edict_t *ent;
+	edict_t* ent;
 
 	self->movetype = MOVETYPE_NONE;
 	self->solid = SOLID_NOT;
@@ -571,18 +590,6 @@ void target_laser_start (edict_t *self)
 		self->s.frame = 16;
 	else
 		self->s.frame = 4;
-
-	// set the color
-	if (self->spawnflags & 2)
-		self->s.skinnum = 0xf2f2f0f0;
-	else if (self->spawnflags & 4)
-		self->s.skinnum = 0xd0d1d2d3;
-	else if (self->spawnflags & 8)
-		self->s.skinnum = 0xf3f3f1f1;
-	else if (self->spawnflags & 16)
-		self->s.skinnum = 0xdcdddedf;
-	else if (self->spawnflags & 32)
-		self->s.skinnum = 0xe0e1e2e3;
 
 	if (!self->enemy)
 	{

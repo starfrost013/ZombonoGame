@@ -216,7 +216,7 @@ bool Pickup_Adrenaline (edict_t *ent, edict_t *other)
 
 bool Pickup_Bandolier (edict_t *ent, edict_t *other)
 {
-	gitem_t	*item = FindItem("Bullets");
+	gitem_t* item = FindItem("Bullets");
 	loadout_entry_t* loadout_item = Loadout_GetItem(ent, "Bullets");
 
 	if (other->client->pers.max_bullets < 250)

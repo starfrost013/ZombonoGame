@@ -22,13 +22,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <game_local.h>
 #include "entity_base.h"
 
-typedef struct
+typedef struct spawn_s 
 {
 	char	*name;
 	void	(*spawn)(edict_t *ent);
 } spawn_t;
 
-spawn_t	spawns[] = {
+spawn_t	spawns[] =
+{
 	{"item_health", SP_item_health},
 	{"item_health_small", SP_item_health_small},
 	{"item_health_large", SP_item_health_large},
@@ -88,7 +89,6 @@ spawn_t	spawns[] = {
 	{"target_string", SP_target_string},
 
 	{"worldspawn", SP_worldspawn},
-	{"viewthing", SP_viewthing},
 
 	{"light", SP_light},
 	{"light_mine1", SP_light_mine1},
@@ -206,10 +206,12 @@ in an edict
 */
 void ED_ParseField (char *key, char *value, edict_t *ent)
 {
-	field_t	*f;
+	field_t* f;
 	uint8_t* b;
 	float	v;
-	vec3_t	vec;
+	vec3_t	vec3 = { 0 };
+	vec4_t	vec4 = { 0 };
+	int32_t successful = 0;
 
 	for (f=fields ; f->name ; f++)
 	{
@@ -225,11 +227,26 @@ void ED_ParseField (char *key, char *value, edict_t *ent)
 			case F_LSTRING:
 				*(char **)(b+f->ofs) = ED_NewString (value);
 				break;
-			case F_VECTOR:
-				sscanf (value, "%f %f %f", &vec[0], &vec[1], &vec[2]);
-				((float *)(b+f->ofs))[0] = vec[0];
-				((float *)(b+f->ofs))[1] = vec[1];
-				((float *)(b+f->ofs))[2] = vec[2];
+			case F_VECTOR3:
+				successful = sscanf(value, "%f %f %f", &vec3[0], &vec3[1], &vec3[2]);
+
+				if (successful != 3)
+					Sys_Error("Malformed Vector3 passed to ED_ParseField!");
+
+				((float *)(b+f->ofs))[0] = vec3[0];
+				((float *)(b+f->ofs))[1] = vec3[1];
+				((float *)(b+f->ofs))[2] = vec3[2];
+				break;
+			case F_VECTOR4:
+				successful = sscanf(value, "%f %f %f %f", &vec4[0], &vec4[1], &vec4[2], &vec4[3]);
+
+				if (successful != 4)
+					Sys_Error("Malformed Vector4 passed to ED_ParseField!");
+
+				((float*)(b + f->ofs))[0] = vec4[0];
+				((float*)(b + f->ofs))[1] = vec4[1];
+				((float*)(b + f->ofs))[2] = vec4[2];
+				((float*)(b + f->ofs))[3] = vec4[3];
 				break;
 			case F_INT:
 				*(int32_t *)(b+f->ofs) = atoi(value);

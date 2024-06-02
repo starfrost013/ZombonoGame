@@ -57,6 +57,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define	MAX_OSPATH			260		// max length of a filesystem pathname
 
 #define	FRAMETIME			0.1					//1/(frametime) = tickrate
+#define TICK_RATE			1/FRAMETIME
 
 //
 // per-level limits
@@ -109,6 +110,10 @@ typedef float vec_t;
 typedef vec_t vec3_t[3];
 typedef vec_t vec4_t[4];
 typedef vec_t vec5_t[5];
+
+// color types
+typedef vec3_t color3_t;
+typedef vec4_t color4_t;
 
 #ifndef M_PI
 #define M_PI		3.14159265358979323846	// matches value in gcc v2 math.h
@@ -173,7 +178,6 @@ void ProjectPointOnPlane(vec3_t dst, const vec3_t p, const vec3_t normal);
 void PerpendicularVector(vec3_t dst, const vec3_t src);
 void RotatePointAroundVector(vec3_t dst, const vec3_t dir, const vec3_t point, float degrees);
 
-
 //=============================================
 
 char* COM_SkipPath(char* pathname);
@@ -206,7 +210,7 @@ float	BigFloat(float l);
 float	LittleFloat(float l);
 
 void	Swap_Init();
-char* va(char* format, ...);
+char*	va(char* format, ...);
 
 //=============================================
 
@@ -331,7 +335,6 @@ COLLISION DETECTION
 #define	CONTENTS_TRANSLUCENT	0x10000000	// auto set if any surface has trans
 #define	CONTENTS_LADDER			0x20000000
 
-
 #define	SURF_LIGHT		0x1		// value will hold the light strength
 
 #define	SURF_SLICK		0x2		// effects game physics
@@ -342,8 +345,6 @@ COLLISION DETECTION
 #define	SURF_TRANS66	0x20
 #define	SURF_FLOWING	0x40	// scroll towards angle
 #define	SURF_NODRAW		0x80	// don't bother referencing the texture
-
-
 
 // content masks
 #define	MASK_ALL				(-1)
@@ -388,14 +389,14 @@ typedef struct cmodel_s
 {
 	vec3_t		mins, maxs;
 	vec3_t		origin;		// for sounds or lights
-	int32_t 		headnode;
+	int32_t 	headnode;
 } cmodel_t;
 
 typedef struct csurface_s
 {
 	char		name[16];
-	int32_t 		flags;
-	int32_t 		value;
+	int32_t 	flags;
+	int32_t 	value;
 } csurface_t;
 
 typedef struct mapsurface_s  // used internally due to name len probs //ZOID
@@ -407,14 +408,14 @@ typedef struct mapsurface_s  // used internally due to name len probs //ZOID
 // a trace is returned when a box is swept through the world
 typedef struct
 {
-	bool	allsolid;	// if true, plane is not valid
-	bool	startsolid;	// if true, the initial point was in a solid area
-	float		fraction;	// time completed, 1.0 = didn't hit anything
-	vec3_t		endpos;		// final position
-	cplane_t	plane;		// surface normal at impact
-	csurface_t	*surface;	// surface hit
+	bool			allsolid;	// if true, plane is not valid
+	bool			startsolid;	// if true, the initial point was in a solid area
+	float			fraction;	// time completed, 1.0 = didn't hit anything
+	vec3_t			endpos;		// final position
+	cplane_t		plane;		// surface normal at impact
+	csurface_t*		surface;	// surface hit
 	int32_t 		contents;	// contents on other side of surface hit
-	struct edict_s	*ent;		// not set by CM_*() functions
+	struct edict_s* ent;		// not set by CM_*() functions
 } trace_t;
 
 
@@ -487,23 +488,23 @@ typedef struct
 
 	// command (in)
 	usercmd_t		cmd;
-	bool		snapinitial;	// if s has been changed outside pmove
+	bool			snapinitial;	// if s has been changed outside pmove
 
 	// results (out)
 	int32_t 		numtouch;
-	struct edict_s	*touchents[MAXTOUCH];
+	struct edict_s* touchents[MAXTOUCH];
 
-	vec3_t		viewangles;			// clamped
-	float		viewheight;
+	vec3_t			viewangles;			// clamped
+	float			viewheight;
 
-	vec3_t		mins, maxs;			// bounding box size
+	vec3_t			mins, maxs;			// bounding box size
 
-	struct edict_s	*groundentity;
+	struct edict_s* groundentity;
 	int32_t 		watertype;
 	int32_t 		waterlevel;
 
 	// callbacks to test the world
-	trace_t		(*trace) (vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end);
+	trace_t			(*trace) (vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end);
 	int32_t 		(*pointcontents) (vec3_t point);
 } pmove_t;
 
@@ -708,7 +709,6 @@ typedef enum
 #define	ANGLE2SHORT(x)	((int32_t)((x)*65536/360) & 65535)
 #define	SHORT2ANGLE(x)	((x)*(360.0/65536))
 
-
 //
 // config strings are a general means of communication from
 // the server to all connected clients.
@@ -734,9 +734,7 @@ typedef enum
 #define CS_GENERAL			(CS_PLAYERSKINS+MAX_CLIENTS)
 #define	MAX_CONFIGSTRINGS	(CS_GENERAL+MAX_GENERAL)
 
-
 //==============================================
-
 
 // entity_state_t->event values
 // ertity events are for effects that take place reletive

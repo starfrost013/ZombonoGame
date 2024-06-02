@@ -154,7 +154,7 @@ void SpawnDamage (int32_t type, vec3_t origin, vec3_t normal, int32_t damage)
 	gi.WriteByte (svc_temp_entity);
 	gi.WriteByte (type);
 //	gi.WriteByte (damage);
-	gi.WritePosition (origin);
+	gi.WritePos (origin);
 	gi.WriteDir (normal);
 	gi.multicast (origin, MULTICAST_PVS);
 }
@@ -575,7 +575,7 @@ void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_
 	vec3_t	v;
 	vec3_t	dir;
 
-	while ((ent = findradius(ent, inflictor->s.origin, radius)) != NULL)
+	while ((ent = G_FindRadius(ent, inflictor->s.origin, radius)) != NULL)
 	{
 		if (ent == ignore)
 			continue;
