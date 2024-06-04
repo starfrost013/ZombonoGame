@@ -97,10 +97,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // for gameplay/game_client.c
 
-extern	edict_t* current_player;
-extern	gclient_t* current_client;
+extern edict_t* current_player;
+extern gclient_t* current_client;
 
-extern	vec3_t	forward, right, up;
+extern vec3_t	forward, right, up;
 
 extern float	xyspeed;
 
@@ -410,31 +410,31 @@ typedef struct spawn_temp_s
 typedef struct moveinfo_s
 {
 	// fixed data
-	vec3_t		start_origin;
-	vec3_t		start_angles;
-	vec3_t		end_origin;
-	vec3_t		end_angles;
+	vec3_t	start_origin;
+	vec3_t	start_angles;
+	vec3_t	end_origin;
+	vec3_t	end_angles;
 
-	int32_t		sound_start;
-	int32_t		sound_middle;
-	int32_t		sound_end;
+	int32_t	sound_start;
+	int32_t	sound_middle;
+	int32_t	sound_end;
 
-	float		accel;
-	float		speed;
-	float		decel;
-	float		distance;
+	float	accel;
+	float	speed;
+	float	decel;
+	float	distance;
 
-	float		wait;
+	float	wait;
 
 	// state data
-	int32_t		state;
-	vec3_t		dir;
-	float		current_speed;
-	float		move_speed;
-	float		next_speed;
-	float		remaining_distance;
-	float		decel_distance;
-	void		(*endfunc)(edict_t*);
+	int32_t	state;
+	vec3_t	dir;
+	float	current_speed;
+	float	move_speed;
+	float	next_speed;
+	float	remaining_distance;
+	float	decel_distance;
+	void	(*endfunc)(edict_t*);
 } moveinfo_t;
 
 
@@ -455,7 +455,7 @@ typedef struct mmove_s
 
 typedef struct monsterinfo_s
 {
-	mmove_t	*currentmove;
+	mmove_t* currentmove;
 	int32_t	aiflags;
 	int32_t	nextframe;
 	float	scale;
@@ -538,10 +538,10 @@ extern int32_t	snd_fry;
 #define MOD_ZOMBIFIED		36
 #define MOD_FRIENDLY_FIRE	0x8000000
 
-extern	int32_t		meansOfDeath;
+extern int32_t	meansOfDeath;
 
 
-extern	edict_t*	g_edicts;
+extern edict_t*	g_edicts;
 
 #define	FOFS(x) (intptr_t)&(((edict_t *)0)->x)
 #define	STOFS(x) (intptr_t)&(((spawn_temp_t *)0)->x)
@@ -551,43 +551,42 @@ extern	edict_t*	g_edicts;
 #define random()	((rand () & 0x7fff) / ((float)0x7fff))
 #define crandom()	(2.0 * (random() - 0.5))
 
-extern	cvar_t* gamemode;
-extern	cvar_t* gameflags;
-extern	cvar_t* skill;
-extern	cvar_t* fraglimit;
-extern	cvar_t* timelimit;
-extern	cvar_t* password;
-extern	cvar_t* spectator_password;
-extern	cvar_t* needpass;
-extern	cvar_t* g_select_empty;
-extern	cvar_t* dedicated;
+extern cvar_t* gamemode;
+extern cvar_t* gameflags;
+extern cvar_t* skill;
+extern cvar_t* fraglimit;
+extern cvar_t* timelimit;
+extern cvar_t* password;
+extern cvar_t* spectator_password;
+extern cvar_t* needpass;
+extern cvar_t* g_select_empty;
+extern cvar_t* dedicated;
 
-extern	cvar_t* filterban;
+extern cvar_t* filterban;
 
-extern	cvar_t* sv_gravity;
-extern	cvar_t* sv_maxvelocity;
+extern cvar_t* sv_gravity;
+extern cvar_t* sv_maxvelocity;
 
-extern	cvar_t* gun_x, *gun_y, *gun_z;
-extern	cvar_t* sv_rollspeed;
-extern	cvar_t* sv_rollangle;
+extern cvar_t* gun_x, *gun_y, *gun_z;
+extern cvar_t* sv_rollspeed;
+extern cvar_t* sv_rollangle;
 
-extern	cvar_t* run_pitch;
-extern	cvar_t* run_roll;
-extern	cvar_t* bob_up;
-extern	cvar_t* bob_pitch;
-extern	cvar_t* bob_roll;
+extern cvar_t* run_pitch;
+extern cvar_t* run_roll;
+extern cvar_t* bob_up;
+extern cvar_t* bob_pitch;
+extern cvar_t* bob_roll;
 
-extern	cvar_t* sv_cheats;
-extern	cvar_t* maxclients;
-extern	cvar_t* maxspectators;
+extern cvar_t* sv_cheats;
+extern cvar_t* maxclients;
+extern cvar_t* maxspectators; 
+extern cvar_t* flood_msgs;
+extern cvar_t* flood_persecond;
+extern cvar_t* flood_waitdelay;
 
-extern	cvar_t* flood_msgs;
-extern	cvar_t* flood_persecond;
-extern	cvar_t* flood_waitdelay;
+extern cvar_t* sv_maplist;
 
-extern	cvar_t* sv_maplist;
-
-extern  cvar_t* aimfix;
+extern cvar_t* aimfix;
 
 #define world	(&g_edicts[0])
 

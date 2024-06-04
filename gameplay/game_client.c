@@ -62,10 +62,10 @@ usually be a couple times for each server frame.
 */
 void ClientThink(edict_t* ent, usercmd_t* ucmd)
 {
-	gclient_t* client;
-	edict_t* other;
-	int		i, j;
-	pmove_t	pm;
+	gclient_t*	client;
+	edict_t*	other;
+	int32_t		i, j;
+	pmove_t		pm;
 
 	level.current_entity = ent;
 	client = ent->client;
@@ -92,8 +92,8 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 		client->resp.cmd_angles[2] = SHORT2ANGLE(ucmd->angles[2]);
 
 	}
-	else {
-
+	else 
+	{
 		// set up for pmove
 		memset(&pm, 0, sizeof(pm));
 
@@ -145,12 +145,6 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 		client->ps.pmove = pm.s;
 		client->old_pmove = pm.s;
 
-		for (i = 0; i < 3; i++)
-		{
-			ent->s.origin[i] = pm.s.origin[i];
-			ent->velocity[i] = pm.s.velocity[i];
-		}
-
 		VectorCopy(pm.mins, ent->mins);
 		VectorCopy(pm.maxs, ent->maxs);
 
@@ -162,12 +156,24 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 		{
 			gi.sound(ent, CHAN_VOICE, gi.soundindex("*jump1.wav"), 1, ATTN_NORM, 0);
 			PlayerNoise(ent, ent->s.origin, PNOISE_SELF);
+
+			// add the relative velocity of the object we're on
+
+			if (ent->groundentity->velocity != vec3_origin)
+				VectorAdd(pm.s.velocity, ent->groundentity->velocity, pm.s.velocity);
+		}
+
+		for (i = 0; i < 3; i++)
+		{
+			ent->s.origin[i] = pm.s.origin[i];
+			ent->velocity[i] = pm.s.velocity[i];
 		}
 
 		ent->viewheight = pm.viewheight;
 		ent->waterlevel = pm.waterlevel;
 		ent->watertype = pm.watertype;
 		ent->groundentity = pm.groundentity;
+
 		if (pm.groundentity)
 			ent->groundentity_linkcount = pm.groundentity->linkcount;
 
@@ -266,8 +272,8 @@ any other entities in the world.
 */
 void ClientBeginServerFrame(edict_t* ent)
 {
-	gclient_t* client;
-	int			buttonMask;
+	gclient_t*	client;
+	int32_t		buttonMask;
 
 	if (level.intermissiontime)
 		return;
@@ -425,6 +431,7 @@ void ClientEndServerFrame(edict_t* ent)
 		G_SetSpectatorStats(ent);
 	else
 		G_SetStats(ent);
+
 	G_CheckChaseStats(ent);
 
 	G_SetClientEvent(ent);

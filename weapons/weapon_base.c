@@ -23,8 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <game_local.h>
 #include <mobs/mob_player.h>
 
-bool		is_quad;
-uint8_t		is_silenced;
+bool	is_quad;
+uint8_t	is_silenced;
 
 void P_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result)
 {
