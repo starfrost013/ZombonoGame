@@ -657,7 +657,7 @@ mmove_t zombie_fast_move_death2 = { FRAME_paine1, FRAME_paine12, zombie_fast_fra
 
 void zombie_fast_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t damage, vec3_t point)
 {
-	int		n;
+	int32_t	n;
 
 	// check for gib
 	if (self->health <= self->gib_health)

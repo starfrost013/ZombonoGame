@@ -418,8 +418,6 @@ typedef struct
 	struct edict_s* ent;		// not set by CM_*() functions
 } trace_t;
 
-
-
 // pmove_state_t is the information necessary for client side movement
 // prediction
 typedef enum 
@@ -579,8 +577,7 @@ typedef struct
 #define MZ2_SOLDIER_SHOTGUN_1			2
 #define MZ2_SOLDIER_MACHINEGUN_1		3
 
-extern	vec3_t monster_flash_offset [];
-
+extern vec3_t monster_flash_offset [];
 
 // temp entity events
 //
@@ -603,7 +600,6 @@ typedef enum
 	TE_ROCKET_EXPLOSION_WATER,
 	TE_GRENADE_EXPLOSION_WATER,
 	TE_SPARKS,
-	TE_SCREEN_SPARKS,
 	TE_SHIELD_SPARKS,
 	TE_BULLET_SPARKS,
 	TE_LASER_SPARKS,
@@ -641,13 +637,11 @@ typedef enum
 #define	CHAN_NO_PHS_ADD			8	// send to all clients, not just ones in PHS (ATTN 0 will also do this)
 #define	CHAN_RELIABLE			16	// send by reliable message, not datagram
 
-
 // sound attenuation values
 #define	ATTN_NONE               0	// full volume the entire level
 #define	ATTN_NORM               1
 #define	ATTN_IDLE               2
 #define	ATTN_STATIC             3	// diminish very rapidly with distance
-
 
 // player_state->stats[] indexes
 #define STAT_HEALTH_ICON		0
@@ -670,7 +664,6 @@ typedef enum
 #define STAT_SPECTATOR			17
 
 #define	MAX_STATS				32
-
 
 // gameflags->value flags
 #define	GF_NO_HEALTH			0x00000001	// 1

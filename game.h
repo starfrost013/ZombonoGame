@@ -151,7 +151,7 @@ typedef struct game_import_s
 	void	(*WriteString) (char *s);
 	void	(*WritePos) (vec3_t pos);	// some fractional bits
 	void	(*WriteDir) (vec3_t dir);
-	void	(*WriteColor) (vec4_t color);
+	void	(*WriteColor) (color4_t color);
 	void	(*WriteAngle) (float f);
 
 	// managed memory allocation

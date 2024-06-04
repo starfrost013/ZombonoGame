@@ -512,11 +512,11 @@ void target_laser_think (edict_t *self)
 			if (self->spawnflags & 0x80000000)
 			{
 				// these are converted from legacy colour ranges
-				vec4_t color_spawnflag_02 = { 240, 0, 0, 255 };
-				vec4_t color_spawnflag_04 = { 63, 211, 27, 255 };
-				vec4_t color_spawnflag_08 = { 56, 55, 255, 255 }; 
-				vec4_t color_spawnflag_16 = { 255, 215, 22, 255 }; 
-				vec4_t color_spawnflag_32 = { 255, 0, 148, 255 };
+				color4_t color_spawnflag_02 = { 240, 0, 0, 255 };
+				color4_t color_spawnflag_04 = { 63, 211, 27, 255 };
+				color4_t color_spawnflag_08 = { 56, 55, 255, 255 }; 
+				color4_t color_spawnflag_16 = { 255, 215, 22, 255 }; 
+				color4_t color_spawnflag_32 = { 255, 0, 148, 255 };
 
 
 				self->spawnflags &= ~0x80000000;

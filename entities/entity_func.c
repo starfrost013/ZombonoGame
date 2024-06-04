@@ -2119,12 +2119,12 @@ void func_particle_effect_think(edict_t* self)
 	if (self->spawnflags & 1)
 	{
 		self->nextthink = level.time + self->wait;
+		self->spawnflags &= ~1;
 		return;
 	}
 
 	// get rid of the start off spawnflag, since we finished raitng
 	self->nextthink = level.time + FRAMETIME;
-	self->spawnflags &= ~1;
 
 	// if it's lower than the tickrate, don't spawn an entity until we hit that tickrate
 	if (self->particle_rate < TICK_RATE)
@@ -2205,7 +2205,6 @@ void func_particle_effect_think(edict_t* self)
 		case TE_GUNSHOT:
 		case TE_SPARKS:
 		case TE_BULLET_SPARKS:
-		case TE_SCREEN_SPARKS:
 		case TE_SHOTGUN:
 		case TE_BLASTER:
 			gi.WritePos(self->s.origin);
