@@ -27,7 +27,7 @@ void Blaster_Fire(edict_t* ent, vec3_t g_offset, int32_t damage, bool hyper, int
 {
 	vec3_t	forward, right;
 	vec3_t	start;
-	vec3_t	offset;
+	vec3_t	offset = { 0 };
 
 	if (is_quad)
 		damage *= 4;
@@ -65,8 +65,8 @@ void Weapon_Blaster_Fire(edict_t* ent)
 
 void Weapon_Blaster(edict_t* ent)
 {
-	static int	pause_frames[] = { 19, 32, 0 };
-	static int	fire_frames[] = { 5, 0 };
+	static int32_t pause_frames[] = { 19, 32, 0 };
+	static int32_t fire_frames[] = { 5, 0 };
 
 	Weapon_Generic(ent, 4, 8, 52, 55, pause_frames, fire_frames, NULL, Weapon_Blaster_Fire, NULL);
 }

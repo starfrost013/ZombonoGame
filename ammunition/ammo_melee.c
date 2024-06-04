@@ -62,6 +62,7 @@ bool Ammo_Melee(edict_t* self, vec3_t attack_radius, int32_t damage, int32_t kic
 	VectorMA(self->s.origin, range, dir, point);
 
 	tr = gi.trace(self->s.origin, NULL, NULL, point, self, MASK_SHOT);
+
 	if (tr.fraction < 1)
 	{
 		if (!tr.ent->takedamage)

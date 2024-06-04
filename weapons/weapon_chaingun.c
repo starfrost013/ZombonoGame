@@ -25,14 +25,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void Chaingun_Fire(edict_t* ent)
 {
-	int			i;
-	int			shots;
-	vec3_t		start;
-	vec3_t		forward, right, up;
-	float		r, u;
-	vec3_t		offset;
-	int			damage;
-	int			kick = 2;
+	int32_t	i;
+	int32_t	shots;
+	vec3_t	start;
+	vec3_t	forward, right, up;
+	float	r, u;
+	vec3_t	offset = { 0 };
+	int32_t	damage;
+	int32_t	kick = 2;
 	loadout_entry_t* loadout_ptr = Loadout_GetItem(ent, "chaingun");
 
 	damage = 6;
@@ -146,8 +146,8 @@ void Chaingun_Fire(edict_t* ent)
 
 void Weapon_Chaingun(edict_t* ent)
 {
-	static int	pause_frames[] = { 38, 43, 51, 61, 0 };
-	static int	fire_frames[] = { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 0 };
+	static int32_t pause_frames[] = { 38, 43, 51, 61, 0 };
+	static int32_t fire_frames[] = { 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 0 };
 
 	Weapon_Generic(ent, 4, 31, 61, 64, pause_frames, fire_frames, NULL, Chaingun_Fire, NULL);
 }

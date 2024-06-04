@@ -407,7 +407,6 @@ Drop_Weapon
 */
 void Drop_Weapon(edict_t* ent, gitem_t* item)
 {
-	int		index;
 
 	if ((int32_t)(gameflags->value) & GF_WEAPONS_STAY)
 		return;
@@ -440,7 +439,7 @@ A generic function to handle the basics of weapon thinking
 void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIRE_LAST, int32_t FRAME_IDLE_LAST, int32_t FRAME_DEACTIVATE_LAST,
 	int32_t* pause_frames, int32_t* fire_frames_primary, int32_t* fire_frames_secondary, void (*fire_primary)(edict_t* ent), void(*fire_secondary)(edict_t* ent))
 {
-	int			n;
+	int32_t	n;
 	bool	no_ammo = false;
 
 	if (ent->deadflag || ent->s.modelindex != 255) // VWep animations screw up corpses
@@ -600,6 +599,7 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 				gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/noammo.wav"), 1, ATTN_NORM, 0);
 				ent->pain_debounce_time = level.time + 1;
 			}
+
 			NoAmmoWeaponChange(ent);
 		}
 

@@ -30,12 +30,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void Weapon_grenade_fire(edict_t* ent, bool held)
 {
-	vec3_t	offset;
+	vec3_t	offset = { 0 };
 	vec3_t	forward, right;
 	vec3_t	start;
-	int		damage = 125;
+	int32_t	damage = 125;
 	float	timer;
-	int		speed;
+	int32_t	speed;
 	float	radius;
 
 	radius = damage + 40;
@@ -79,7 +79,7 @@ void Weapon_grenade_fire(edict_t* ent, bool held)
 
 void Weapon_Grenade(edict_t* ent)
 {
-	bool	no_ammo = false;
+	bool no_ammo = false;
 
 	if ((ent->client->newweapon) && (ent->client->weaponstate == WEAPON_READY))
 	{

@@ -66,8 +66,8 @@ void Weapon_Bamfuslicator_Fire(edict_t* ent)
 
 void Weapon_Bamfuslicator(edict_t* ent)
 {
-	static int	pause_frames[] = { 29, 42, 57, 0 };
-	static int	fire_frames[] = { 7, 0 };
+	static int32_t pause_frames[] = { 29, 42, 57, 0 };
+	static int32_t fire_frames[] = { 7, 0 };
 
 	Weapon_Generic(ent, 6, 17, 56, 61, pause_frames, fire_frames, fire_frames, Weapon_Bamfuslicator_Fire, Weapon_Bamfuslicator_SetType);
 }

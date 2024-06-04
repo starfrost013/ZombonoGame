@@ -26,12 +26,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void Weapon_supershotgun_fire(edict_t* ent)
 {
-	vec3_t		start;
-	vec3_t		forward, right;
-	vec3_t		offset;
-	vec3_t		v;
-	int			damage = 6;
-	int			kick = 12;
+	vec3_t	start;
+	vec3_t	forward, right;
+	vec3_t	offset;
+	vec3_t	v;
+	int32_t	damage = 6;
+	int32_t	kick = 12;
 
 	AngleVectors(ent->client->v_angle, forward, right, NULL);
 
@@ -68,14 +68,13 @@ void Weapon_supershotgun_fire(edict_t* ent)
 	if (!((int32_t)gameflags->value & GF_INFINITE_AMMO))
 	{
 		ent->client->loadout_current_ammo->amount -= 2; 
-
 	}
 }
 
 void Weapon_SuperShotgun(edict_t* ent)
 {
-	static int	pause_frames[] = { 29, 42, 57, 0 };
-	static int	fire_frames[] = { 7, 0 };
+	static int32_t pause_frames[] = { 29, 42, 57, 0 };
+	static int32_t fire_frames[] = { 7, 0 };
 
 	Weapon_Generic(ent, 6, 17, 57, 61, pause_frames, fire_frames, NULL, Weapon_supershotgun_fire, NULL);
 }

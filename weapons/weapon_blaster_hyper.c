@@ -27,8 +27,8 @@ void Weapon_HyperBlaster_Fire(edict_t* ent)
 {
 	float	rotation;
 	vec3_t	offset;
-	int		effect;
-	int		damage;
+	int32_t	effect;
+	int32_t	damage;
 
 	ent->client->weapon_sound = gi.soundindex("weapons/hyprbl1a.wav");
 
@@ -94,8 +94,8 @@ void Weapon_HyperBlaster_Fire(edict_t* ent)
 
 void Weapon_HyperBlaster(edict_t* ent)
 {
-	static int	pause_frames[] = { 0 };
-	static int	fire_frames[] = { 6, 7, 8, 9, 10, 11, 0 };
+	static int32_t pause_frames[] = { 0 };
+	static int32_t fire_frames[] = { 6, 7, 8, 9, 10, 11, 0 };
 
 	Weapon_Generic(ent, 5, 20, 49, 53, pause_frames, fire_frames, NULL, Weapon_HyperBlaster_Fire, NULL);
 

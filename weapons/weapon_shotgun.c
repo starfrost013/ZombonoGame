@@ -26,11 +26,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void Weapon_shotgun_fire(edict_t* ent)
 {
-	vec3_t		start;
-	vec3_t		forward, right;
-	vec3_t		offset;
-	int			damage = 4;
-	int			kick = 8;
+	vec3_t	start;
+	vec3_t	forward, right;
+	vec3_t	offset;
+	int32_t	damage = 4;
+	int32_t	kick = 8;
 
 	if (ent->client->ps.gunframe == 9)
 	{

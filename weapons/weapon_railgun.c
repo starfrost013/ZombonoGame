@@ -34,11 +34,11 @@ RAILGUN
 
 void Weapon_railgun_fire(edict_t* ent)
 {
-	vec3_t		start;
-	vec3_t		forward, right;
-	vec3_t		offset;
-	int			damage;
-	int			kick;
+	vec3_t	start;
+	vec3_t	forward, right;
+	vec3_t	offset;
+	int32_t	damage;
+	int32_t	kick;
 
 	damage = 100;
 	kick = 200;
@@ -74,8 +74,8 @@ void Weapon_railgun_fire(edict_t* ent)
 
 void Weapon_Railgun(edict_t* ent)
 {
-	static int	pause_frames[] = { 56, 0 };
-	static int	fire_frames[] = { 4, 0 };
+	static int32_t pause_frames[] = { 56, 0 };
+	static int32_t fire_frames[] = { 4, 0 };
 
 	Weapon_Generic(ent, 3, 18, 56, 61, pause_frames, fire_frames, NULL, Weapon_railgun_fire, NULL);
 }
