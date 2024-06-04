@@ -737,21 +737,26 @@ typedef struct team_scores_s
 	int32_t player_score;
 } team_scores_t;
 
+//
+// Gamemode: TDM
+//
 player_team	G_TDMGetWinner();
 team_scores_t G_TDMGetScores();
 
 //
-// g_combat.c
+// game_combat.c
 //
 bool CanDamage (edict_t *targ, edict_t *inflictor);
 void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir, vec3_t point, vec3_t normal, int32_t damage, int32_t knockback, int32_t dflags, int32_t mod);
 void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_t *ignore, float radius, int32_t mod);
+void P_FallingDamage(edict_t* ent);
+void P_DamageFeedback(edict_t* player);
 
 //
 // p_client.c
 // 
-void	SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles);
-void	GiveBaseWeaponForTeam(edict_t* client_edict);
+void SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles);
+void GiveBaseWeaponForTeam(edict_t* client_edict);
 
 // damage flags
 #define DAMAGE_RADIUS			0x00000001	// damage was indirect
@@ -868,13 +873,21 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int32_t d
 //
 // game_cmds_server.c
 //
-void	ServerCommand ();
-bool	SV_FilterPacket (char *from);
+void ServerCommand ();
+bool SV_FilterPacket (char *from);
 
 //
 // game_client_view.c
 //
 void ClientEndServerFrame (edict_t *ent);
+void SV_CalcViewOffset(edict_t* ent);
+void SV_CalcGunOffset(edict_t* ent);
+void SV_CalcBlend(edict_t* ent);
+void G_SetClientEvent(edict_t* ent);
+void G_SetClientEffects(edict_t* ent);
+void G_SetClientSound(edict_t* ent);
+void G_SetClientFrame(edict_t* ent);
+void P_WorldEffects();
 
 //
 // game_ui.c

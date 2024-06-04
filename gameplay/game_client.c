@@ -323,7 +323,7 @@ and right after spawning
 void ClientEndServerFrame(edict_t* ent)
 {
 	float	bobtime;
-	int		i;
+	int32_t	i;
 
 	current_player = ent;
 	current_client = ent->client;
@@ -444,8 +444,6 @@ void ClientEndServerFrame(edict_t* ent)
 
 	// update the leaderboard every 10 ticks (1 second)
 	// BEFORE IT WAS UPDATING IT EVERY FRAME WHILE ACTIVE???
-	if ((level.framenum % (int)(1 / FRAMETIME)) == 0)
-	{
+	if ((level.framenum % (int32_t)(1 / FRAMETIME)) == 0)
 		G_LeaderboardSend(ent);
-	}
 }

@@ -75,7 +75,7 @@ void P_DamageFeedback (edict_t *player)
 	float	side;
 	float	realcount, count, kick;
 	vec3_t	v;
-	int		r, l;
+	int32_t	r, l;
 	static	vec3_t	power_color = {0.0, 1.0, 0.0};
 	static	vec3_t	acolor = {1.0, 1.0, 1.0};
 	static	vec3_t	bcolor = {1.0, 0.0, 0.0};
@@ -222,11 +222,11 @@ Auto pitching on slopes?
 */
 void SV_CalcViewOffset (edict_t *ent)
 {
-	float		*angles;
-	float		bob;
-	float		ratio;
-	float		delta;
-	vec3_t		v;
+	float*	angles;
+	float	bob;
+	float	ratio;
+	float	delta;
+	vec3_t	v;
 
 
 //===================================
@@ -345,7 +345,7 @@ SV_CalcGunOffset
 */
 void SV_CalcGunOffset (edict_t *ent)
 {
-	int		i;
+	int32_t	i;
 	float	delta;
 
 	// gun angles from bobbing
@@ -418,9 +418,9 @@ SV_CalcBlend
 */
 void SV_CalcBlend (edict_t *ent)
 {
-	int		contents;
+	int32_t	contents;
 	vec3_t	vieworg;
-	int		remaining;
+	int32_t	remaining;
 
 	ent->client->ps.blend[0] = ent->client->ps.blend[1] = 
 		ent->client->ps.blend[2] = ent->client->ps.blend[3] = 0;
@@ -503,7 +503,7 @@ void P_WorldEffects ()
 {
 	bool	breather;
 	bool	envirosuit;
-	int		waterlevel, old_waterlevel;
+	int32_t	waterlevel, old_waterlevel;
 
 	if (current_player->movetype == MOVETYPE_NOCLIP)
 	{
@@ -667,8 +667,8 @@ G_SetClientEffects
 */
 void G_SetClientEffects (edict_t *ent)
 {
-	int		pa_type;
-	int		remaining;
+	int32_t	pa_type;
+	int32_t	remaining;
 
 	ent->s.effects = 0;
 	ent->s.renderfx = 0;
@@ -732,7 +732,7 @@ G_SetClientSound
 */
 void G_SetClientSound (edict_t *ent)
 {
-	char	*weap;
+	char* weap;
 
 	if (ent->client->pers.game_helpchanged != game.helpchanged)
 	{
@@ -771,8 +771,8 @@ G_SetClientFrame
 */
 void G_SetClientFrame (edict_t *ent)
 {
-	gclient_t	*client;
-	bool	duck, run;
+	gclient_t*	client;
+	bool		duck, run;
 
 	if (ent->s.modelindex != 255)
 		return;		// not in the player model

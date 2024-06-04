@@ -447,7 +447,7 @@ void ExitLevel ()
 ================
 G_RunFrame
 
-Advances the world by 0.1 seconds
+Advances the world by (1/TICKRATE) seconds
 ================
 */
 void G_RunFrame ()
