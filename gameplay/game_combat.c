@@ -234,8 +234,10 @@ static int32_t CheckPowerArmor (edict_t *ent, vec3_t point, vec3_t normal, int32
 	}
 
 	save = power * damage_per_cell;
+
 	if (!save)
 		return 0;
+
 	if (save > damage)
 		save = damage;
 
@@ -253,10 +255,10 @@ static int32_t CheckPowerArmor (edict_t *ent, vec3_t point, vec3_t normal, int32
 
 static int32_t CheckArmor (edict_t *ent, vec3_t point, vec3_t normal, int32_t damage, int32_t te_sparks, int32_t dflags)
 {
-	gclient_t	*client;
-	int32_t		save;
-	loadout_entry_t*	current_armor = GetCurrentArmor(ent);
-	gitem_t		*armor;
+	gclient_t*		client;
+	int32_t			save;
+	loadout_entry_t* current_armor = GetCurrentArmor(ent);
+	gitem_t*		armor;
 
 	if (!damage)
 		return 0;
@@ -272,12 +274,13 @@ static int32_t CheckArmor (edict_t *ent, vec3_t point, vec3_t normal, int32_t da
 	if (!current_armor)
 		return 0;
 
-	armor = GetItemByIndex (current_armor);
+	armor = FindItem(current_armor->item_name);
 
 	if (dflags & DAMAGE_ENERGY)
 		save = ceil(((gitem_armor_t *)armor->info)->energy_protection*damage);
 	else
 		save = ceil(((gitem_armor_t *)armor->info)->normal_protection*damage);
+
 	if (save >= current_armor->amount)
 		save = current_armor->amount;
 

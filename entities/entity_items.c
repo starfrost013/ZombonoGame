@@ -579,20 +579,29 @@ loadout_entry_t* GetCurrentArmor(edict_t* ent)
 	loadout_entry_t* loadout_ptr_body = Loadout_GetItem(ent, "Body Armor");
 
 	if (loadout_ptr_jacket == NULL
-		|| loadout_ptr_combat == NULL
-		|| loadout_ptr_body == NULL)
+		&& loadout_ptr_combat == NULL
+		&& loadout_ptr_body == NULL)
 	{
 		return 0;
 	}
 
-	if (loadout_ptr_jacket->amount > 0)
+	if (loadout_ptr_jacket != NULL
+		&& loadout_ptr_jacket->amount > 0)
+	{
 		return loadout_ptr_jacket;
+	}
 
-	if (loadout_ptr_combat->amount > 0)
+	if (loadout_ptr_combat != NULL
+		&& loadout_ptr_combat->amount > 0)
+	{
 		return loadout_ptr_combat;
+	}
 
-	if (loadout_ptr_body->amount > 0)
+	if (loadout_ptr_body != NULL
+		&& loadout_ptr_body->amount > 0)
+	{
 		return loadout_ptr_body;
+	}
 
 	return 0;
 }
@@ -612,8 +621,6 @@ bool Pickup_Armor (edict_t *ent, edict_t *other)
 	// add new armor to loadout if it exists
 	if (!loadout_ptr_new)
 		loadout_ptr_new = Loadout_AddItem(other, ent->item->pickup_name, ent->item->icon, loadout_entry_type_armor, 0); // amount is set later
-	if (!loadout_ptr_old)
-		loadout_ptr_old = Loadout_AddItem(other, ent->item->pickup_name, ent->item->icon, loadout_entry_type_armor, 0); // amount is set later
 
 	// get info on new armor
 	newinfo = (gitem_armor_t *)ent->item->info;
@@ -628,7 +635,6 @@ bool Pickup_Armor (edict_t *ent, edict_t *other)
 	{
 		loadout_ptr_new->amount = newinfo->base_count;
 	}
-
 	// use the better armor
 	else
 	{

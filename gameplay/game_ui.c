@@ -357,6 +357,7 @@ void G_SetStats (edict_t *ent)
 	// armor
 	//
 	power_armor_type = GetCurrentPowerArmor (ent);
+
 	if (power_armor_type)
 	{
 		if (cells == NULL
@@ -376,7 +377,7 @@ void G_SetStats (edict_t *ent)
 	}
 	else if (armor)
 	{
-		ent->client->ps.stats[STAT_ARMOR_ICON] = gi.imageindex (item->icon);
+		ent->client->ps.stats[STAT_ARMOR_ICON] = gi.imageindex (armor->icon);
 		ent->client->ps.stats[STAT_ARMOR] = armor->amount;
 	}
 	else
