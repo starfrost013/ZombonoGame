@@ -1193,9 +1193,9 @@ struct edict_s
 	int32_t		jump_height; // for func_trampoline
 
 	int32_t 	angles_spread;		// func_particle_effect angle spread
-	vec4_t		color;
-	// MAKE THIS A VEC4_T!!!!!
-	vec3_t		color_run;			// func_particle_effect run
+	color4_t	color;
+	// TODO: MAKE THIS A COLOR4_T!!!!!
+	color3_t	color_run;			// func_particle_effect run
 	int32_t		particle_effect;	// func_particle_effect tempent ID
 	int32_t		particle_rate;		// func_particle_effect rate
 	int32_t		particle_lifetime;	// func_particle_effect lifetime (ignored if spawnflags & 2)
