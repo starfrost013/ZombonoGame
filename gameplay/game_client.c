@@ -282,7 +282,7 @@ void ClientBeginServerFrame(edict_t* ent)
 
 	if (client->pers.spectator != client->resp.spectator &&
 		(level.time - client->respawn_time) >= 5) {
-		spectator_respawn(ent);
+		Client_RespawnSpectator(ent);
 		return;
 	}
 
@@ -304,7 +304,7 @@ void ClientBeginServerFrame(edict_t* ent)
 			if ((client->latched_buttons & buttonMask) ||
 				(((int32_t)gameflags->value & GF_FORCE_RESPAWN)))
 			{
-				respawn(ent);
+				Client_Respawn(ent);
 				client->latched_buttons = 0;
 			}
 		}

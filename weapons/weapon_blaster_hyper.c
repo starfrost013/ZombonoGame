@@ -23,6 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <game_local.h>
 #include <mobs/mob_player.h>
 
+extern void Blaster_Fire(edict_t* ent, vec3_t g_offset, int32_t damage, bool hyper, int32_t effect);
+
 void Weapon_HyperBlaster_Fire(edict_t* ent)
 {
 	float	rotation;

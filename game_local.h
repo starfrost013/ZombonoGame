@@ -855,13 +855,17 @@ edict_t* PlayerTrail_LastSpot();
 //
 // game_client_*.c
 //
-void respawn (edict_t *ent);
-void BeginIntermission (edict_t *targ);
-void PutClientInServer (edict_t *ent);
-void InitClientPersistent (edict_t *client_edict);
-void InitClientResp (gclient_t *client);
-void InitBodyQue ();
-void ClientBeginServerFrame (edict_t *ent);
+void Client_Respawn(edict_t* ent);
+void Client_RespawnSpectator(edict_t* ent);
+void BeginIntermission(edict_t* targ);
+void PutClientInServer(edict_t* ent);
+void InitClientPersistent(edict_t* client_edict);
+void InitClientResp(gclient_t* client);
+void InitBodyQue();
+void ClientBeginServerFrame(edict_t* ent);
+void ClientUserinfoChanged(edict_t* ent, char* userinfo);
+float SV_CalcRoll(vec3_t angles, vec3_t velocity);
+
 
 //
 // files that use mob_player.h

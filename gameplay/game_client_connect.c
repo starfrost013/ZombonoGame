@@ -21,8 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <game_local.h>
 #include <mobs/mob_player.h>
 
-void ClientUserinfoChanged (edict_t *ent, char *userinfo);
-
 /*
 =====================
 ClientBegin

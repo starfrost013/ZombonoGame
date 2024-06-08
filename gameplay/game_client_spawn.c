@@ -471,7 +471,7 @@ void CopyToBodyQue(edict_t* ent)
 }
 
 
-void respawn(edict_t* self)
+void Client_Respawn(edict_t* self)
 {
 	// spectator's don't leave bodies
 	if (self->movetype != MOVETYPE_NOCLIP)
@@ -495,7 +495,7 @@ void respawn(edict_t* self)
  * only called when pers.spectator changes
  * note that resp.spectator should be the opposite of pers.spectator here
  */
-void spectator_respawn(edict_t* ent)
+void Client_RespawnSpectator(edict_t* ent)
 {
 	int32_t i, numspec;
 

@@ -58,7 +58,6 @@ float SV_CalcRoll(vec3_t angles, vec3_t velocity)
 		side = value;
 
 	return side * sign;
-
 }
 
 
