@@ -158,8 +158,27 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 			PlayerNoise(ent, ent->s.origin, PNOISE_SELF);
 
 			// add the relative velocity of the object we're on
+			// limit it to 2x velocity
+			float max_relative_velocity_factor = 1.0f;
+			
+			bool add_relative_velocity = false;
 
-			if (ent->groundentity->velocity != vec3_origin)
+			// don't take into account jumping
+			if (ent->groundentity->velocity != vec3_origin
+				&& abs(pm.s.velocity[0]) < abs(ent->groundentity->velocity[0] * max_relative_velocity_factor)
+				&& abs(pm.s.velocity[1]) < abs(ent->groundentity->velocity[1] * max_relative_velocity_factor))
+			{
+				add_relative_velocity = true;
+			}
+
+			// tangfuslicator jump and rocketriding
+			if (!strncmp(ent->groundentity->classname, "ammo_tangfuslicator", 19)
+				|| !strncmp(ent->groundentity->classname, "rocket", 6))
+			{
+				add_relative_velocity = true;
+			}
+
+			if (add_relative_velocity)
 				VectorAdd(pm.s.velocity, ent->groundentity->velocity, pm.s.velocity);
 		}
 

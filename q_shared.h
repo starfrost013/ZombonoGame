@@ -448,17 +448,17 @@ typedef enum
 
 // this structure needs to be communicated bit-accurate
 // from the server to the client to guarantee that
-// prediction stays in sync, so no floats are used.
+// prediction stays in sync (floats are now used)
 // if any part of the game code modifies this struct, it
 // will result in a prediction error of some degree.
 typedef struct
 {
 	pmtype_t	pm_type;
 
-	float		origin[3];		// float
-	float		velocity[3];	// float
-	uint8_t		pm_flags;		// ducked, jump_held, etc
-	uint8_t		pm_time;		// each unit = 8 ms
+	vec3_t		origin;				// float
+	vec3_t		velocity;			// float
+	uint8_t		pm_flags;			// ducked, jump_held, etc
+	uint8_t		pm_time;			// each unit = 8 ms
 	int16_t		gravity;
 	int16_t		delta_angles[3];	// add to command angles to get view direction
 									// changed by spawns, rotating objects, and teleporters
