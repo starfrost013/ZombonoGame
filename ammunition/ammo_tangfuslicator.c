@@ -44,7 +44,7 @@ void Ammo_Tangfuslicator_Touch(edict_t* self, edict_t* other, cplane_t* plane, c
 			&& other->team != team_player)
 		{
 			// TODO: PLAY SOUND
-			gi.cprintf(do_not_zombify, PRINT_CHAT, "Can't zombify a director!");
+			gi.cprintf(do_not_zombify, PRINT_CHAT, "Can't zombify a director!\n");
 			return;
 		}
 
