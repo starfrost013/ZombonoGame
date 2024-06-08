@@ -264,6 +264,7 @@ void WriteField1 (FILE *f, field_t *field, uint8_t *base)
 	case F_FLOAT:
 	case F_ANGLEHACK:
 	case F_VECTOR3:
+	case F_VECTOR4:
 	case F_IGNORE:
 		break;
 

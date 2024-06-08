@@ -258,10 +258,6 @@ void EndMatch ()
 			t = strtok(NULL, seps);
 		}
 
-		// --- WHY DOES THIS NOT WORK --- //
-		//level.framenum = 0; // reset frame number 
-		//level.intermissiontime = 0;
-		//level.time = 0;
 		free(s);
 	}
 
@@ -328,7 +324,7 @@ void CheckGamemodeRules ()
 
 void CheckTDMRules()
 {
-	int			i;
+	int32_t		i;
 	gclient_t* cl;
 
 	if (timelimit->value)

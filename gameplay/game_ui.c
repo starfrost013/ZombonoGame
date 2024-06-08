@@ -70,12 +70,30 @@ void MoveClientToIntermission(edict_t* ent, player_team winning_team)
 	gi.unicast(ent, true);
 
 	// ...and if they won or lost
+	// TODO: MAKE THIS GAMEMODE-SPECIFIC
 	if (gamemode->value == GAMEMODE_TDM
 		&& winning_team > 0)
 	{
+		bool player_won = (ent->team == winning_team);
+
+		// check there wasn't a draw
+
+		if (winning_team != (team_director | team_player))
+		{
+			if (player_won)
+				gi.sound(ent, CHAN_VOICE, gi.soundindex("player/player_team_won.wav"), 1, ATTN_NORM, 0);
+			else
+				gi.sound(ent, CHAN_VOICE, gi.soundindex("player/player_team_lost.wav"), 1, ATTN_NORM, 0);
+		}
+		else
+		{
+			gi.sound(ent, CHAN_VOICE, gi.soundindex("player/player_team_drew.wav"), 1, ATTN_NORM, 0);
+		}
+
+
 		if (winning_team == team_director)
 		{
-			if (ent->team == winning_team)
+			if (player_won)
 			{
 				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_win_director", true);
 			}
@@ -86,7 +104,7 @@ void MoveClientToIntermission(edict_t* ent, player_team winning_team)
 		}
 		else if (winning_team == team_player)
 		{
-			if (ent->team == winning_team)
+			if (player_won)
 			{
 				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_win_player", true);
 
