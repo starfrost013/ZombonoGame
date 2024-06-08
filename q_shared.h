@@ -202,17 +202,23 @@ int32_t Q_strncasecmp(char* s1, char* s2, int32_t n);
 
 //=============================================
 
-short	BigShort(int16_t l);
-short	LittleShort(int16_t l);
+// If this isn't included from qcommon.h *AND* q_shared.h the game dies BECAUSE THESE FUNCTIONS ALSO GET CALLED FROM THE GAME DLL
+extern bool big_endian;
+
+int16_t	BigShort(int16_t l);
+int16_t	LittleShort(int16_t l);
+uint16_t BigShortUnsigned(int16_t l);
+uint16_t LittleShortUnsigned(int16_t l);
 int32_t BigInt(int32_t l);
 int32_t LittleInt(int32_t l);
+uint32_t BigIntUnsigned(int32_t l);
+uint32_t LittleIntUnsigned(int32_t l);
 float	BigFloat(float l);
 float	LittleFloat(float l);
 
 void	Swap_Init();
 char*	va(char* format, ...);
 
-//=============================================
 
 //
 // key / value info strings

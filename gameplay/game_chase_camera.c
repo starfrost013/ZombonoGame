@@ -33,10 +33,13 @@ void UpdateChaseCam(edict_t *ent)
 
 	// is our chase target gone?
 	if (!ent->client->chase_target->inuse
-		|| ent->client->chase_target->client->resp.spectator) {
+		|| ent->client->chase_target->client->resp.spectator) 
+	{
 		edict_t *old = ent->client->chase_target;
 		ChaseNext(ent);
-		if (ent->client->chase_target == old) {
+
+		if (ent->client->chase_target == old) 
+		{
 			ent->client->chase_target = NULL;
 			ent->client->ps.pmove.pm_flags &= ~PMF_NO_PREDICTION;
 			return;
@@ -93,6 +96,7 @@ void UpdateChaseCam(edict_t *ent)
 		ent->client->ps.pmove.pm_type = PM_FREEZE;
 
 	VectorCopy(goal, ent->s.origin);
+
 	for (i=0 ; i<3 ; i++)
 		ent->client->ps.pmove.delta_angles[i] = ANGLE2SHORT(targ->client->v_angle[i] - ent->client->resp.cmd_angles[i]);
 
@@ -100,7 +104,9 @@ void UpdateChaseCam(edict_t *ent)
 		ent->client->ps.viewangles[ROLL] = 40;
 		ent->client->ps.viewangles[PITCH] = -15;
 		ent->client->ps.viewangles[YAW] = targ->client->killer_yaw;
-	} else {
+	}
+	else 
+	{
 		VectorCopy(targ->client->v_angle, ent->client->ps.viewangles);
 		VectorCopy(targ->client->v_angle, ent->client->v_angle);
 	}
