@@ -73,7 +73,7 @@ void GiveBaseWeaponForTeam(edict_t* client_edict)
 		// add the bamfuslicator
 		client->newweapon = FindItem("Director - Bamfuslicator");
 		Loadout_AddItem(client_edict, client->newweapon->pickup_name, client->newweapon->icon, loadout_entry_type_weapon, 1);
-		
+
 		// and the tangfuslicator...
 		gitem_t* tangfuslicator = FindItem("Director - Tangfuslicator");
 		Loadout_AddItem(client_edict, tangfuslicator->pickup_name, tangfuslicator->icon, loadout_entry_type_weapon, 1);
@@ -329,49 +329,6 @@ edict_t* SelectFarthestSpawnPoint(char* spawn_class_name)
 	return spot;
 }
 
-// figure out if the other modes use this
-edict_t* SelectTeamSpawnPoint(edict_t* player)
-{
-	if ((int32_t)gamemode->value != 0)
-	{
-		gi.bprintf(PRINT_ALL, "Can't currently spawn for non-TDM gamemodes");
-
-		return SelectUnassignedSpawnPoint();
-	}
-	else
-	{
-		if (player->team == 0)
-		{
-			gi.bprintf(PRINT_ALL, "Error - Player Teamflag not set! Defaulting to info_player_start");
-			return SelectUnassignedSpawnPoint();
-		}
-		// Teamflags are used to allow items to be used with multiple teams, but not all
-		// 
-		// Teamflag 1 - Director
-		char* spawn_class_name = "info_player_start_director";
-
-		// Teamflag 2 - Player
-		if (player->team == team_player)
-		{
-			spawn_class_name = "info_player_start_player";
-		}
-		// Teamflag 4 - Unassigned
-		else if (player->team == team_unassigned)
-		{
-			return SelectUnassignedSpawnPoint();
-		}
-
-		if ((int32_t)(gameflags->value) & GF_SPAWN_FARTHEST)
-		{
-			return SelectFarthestSpawnPoint(spawn_class_name);
-		}
-		else
-		{
-			return SelectRandomSpawnPoint(spawn_class_name);
-		}
-	}
-}
-
 /*
 ===========
 SelectSpawnPoint
@@ -379,7 +336,7 @@ SelectSpawnPoint
 Chooses a player start, gamemode-specific start, etc
 ============
 */
-void	SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles)
+void SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles)
 {
 	edict_t* spot = NULL;
 
@@ -587,19 +544,17 @@ void PutClientInServer(edict_t* ent)
 {
 	vec3_t	mins = { -16, -16, -24 };
 	vec3_t	maxs = { 16, 16, 32 };
-	int		index;
+	int32_t	index;
 	vec3_t	spawn_origin, spawn_angles;
 	gclient_t* client;
-	int		i;
+	int32_t	i;
 	client_persistant_t	saved;
 	client_respawn_t	resp;
 
 	// TEMPORARY HACK FOR PLAYTEST - TODO: THIS *WILL* BREAK FOR EXISTING CLIENTS IF THE TIMELIMIT OR FRAGLIMIT IS CHANGED AFTER SERVER CREATION UNTIL YOU RESPAWN
 
 	if (timelimit->value)
-	{
 		G_UISend(ent, "TimeUI", true, false, true);
-	}
 
 	G_UISend(ent, "ScoreUI", true, false, true);
 

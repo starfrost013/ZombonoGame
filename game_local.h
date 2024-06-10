@@ -739,8 +739,8 @@ typedef struct team_scores_s
 //
 // Gamemode: TDM
 //
-player_team	G_TDMGetWinner();
-team_scores_t G_TDMGetScores();
+player_team	Gamemode_TDMGetWinner();
+team_scores_t Gamemode_TDMGetScores();
 
 //
 // game_combat.c
@@ -893,6 +893,13 @@ void G_SetClientFrame(edict_t* ent);
 void P_WorldEffects();
 
 //
+// game_client_spawn.c 
+// 
+edict_t* SelectFarthestSpawnPoint(char* spawn_class_name);
+edict_t* SelectRandomSpawnPoint(char* spawn_class_name);
+edict_t* SelectUnassignedSpawnPoint();
+
+//
 // game_ui.c
 //
 void MoveClientToIntermission (edict_t *ent, player_team winning_team);
@@ -923,6 +930,7 @@ void UpdateChaseCam(edict_t *ent);
 void ChaseNext(edict_t *ent);
 void ChasePrev(edict_t *ent);
 void GetChaseTarget(edict_t *ent);
+
 
 //============================================================================
 

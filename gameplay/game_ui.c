@@ -180,7 +180,7 @@ void BeginIntermission (edict_t *targ)
 
 		if (gamemode->value == GAMEMODE_TDM)
 		{
-			winning_team = G_TDMGetWinner();
+			winning_team = Gamemode_TDMGetWinner();
 			MoveClientToIntermission(client, winning_team);
 		}
 		else // indicate no winner as non-TDM gamemode

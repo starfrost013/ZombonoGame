@@ -363,7 +363,7 @@ void CheckTDMRules()
 	// every second update each team's score
 	if (level.framenum % (int)(1 / FRAMETIME) == 0)
 	{
-		team_scores_t team_scores = G_TDMGetScores();
+		team_scores_t team_scores = Gamemode_TDMGetScores();
 		char text[SCORE_BUF_LENGTH] = { 0 };
 
 		snprintf(text, SCORE_BUF_LENGTH, "Directors %d : Players %d", team_scores.director_score, team_scores.player_score);
@@ -390,7 +390,7 @@ void CheckTDMRules()
 			}
 			else // if individual fraglimit is off, use the aggregate scores of either team instead
 			{
-				team_scores_t team_scores = G_TDMGetScores();
+				team_scores_t team_scores = Gamemode_TDMGetScores();
 
 				if (team_scores.director_score >= fraglimit->value
 					|| team_scores.player_score >= fraglimit->value)

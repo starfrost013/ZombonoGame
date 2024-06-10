@@ -295,6 +295,7 @@
     <ClCompile Include="ammunition\ammo_rocket.c" />
     <ClCompile Include="ai\ai_base.c" />
     <ClCompile Include="ammunition\ammo_tangfuslicator.c" />
+    <ClCompile Include="gamemodes\gamemode_tdm.c" />
     <ClCompile Include="gameplay\game_chase_camera.c" />
     <ClCompile Include="gameplay\game_client.c" />
     <ClCompile Include="gameplay\game_client_spawn.c" />

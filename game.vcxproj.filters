@@ -186,6 +186,9 @@
     <ClCompile Include="gameplay\game_loadout.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gamemodes\gamemode_tdm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.def">
