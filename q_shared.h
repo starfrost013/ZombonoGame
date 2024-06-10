@@ -369,6 +369,7 @@ COLLISION DETECTION
 #define	AREA_SOLID		1
 #define	AREA_TRIGGERS	2
 
+// TODO: Move this to qcommon/bsp.h
 
 // plane_t structure
 // !!! if this is changed, it must be changed in asm code too !!!
@@ -408,7 +409,7 @@ typedef struct csurface_s
 typedef struct mapsurface_s  // used internally due to name len probs //ZOID
 {
 	csurface_t	c;
-	char		rname[32];
+	char		rname[80]; // must be set to TEXTURE_NAME_LENGTH in higher-level qcommon/bsp.h
 } mapsurface_t;
 
 // a trace is returned when a box is swept through the world

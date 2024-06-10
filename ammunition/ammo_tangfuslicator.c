@@ -117,10 +117,16 @@ void Ammo_Tangfuslicator(edict_t* self, vec3_t trace_start, vec3_t aimdir)
 	lightning_bolt->solid = SOLID_BBOX;
 	lightning_bolt->touch = Ammo_Tangfuslicator_Touch;
 
+	float bolt_half_size_x = 32 * self->s.angles[0]/360.0f;
+	float bolt_half_size_y = 32 * self->s.angles[1]/360.0f;
+
+	if (bolt_half_size_x < 8.0f) bolt_half_size_x = 8.0f;
+	if (bolt_half_size_y < 8.0f) bolt_half_size_y = 8.0f;
+
 	// since the only visual indication is the lightning particles
 	// player edict size
-	VectorSet(lightning_bolt->mins, -16, -16, -24);
-	VectorSet(lightning_bolt->maxs, 16, 16, 32);
+	VectorSet(lightning_bolt->mins, -bolt_half_size_x, -bolt_half_size_y, -8);
+	VectorSet(lightning_bolt->maxs, bolt_half_size_x, bolt_half_size_y, 8);
 
 	do_not_zombify = self;
 
