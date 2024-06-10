@@ -898,6 +898,7 @@ void P_WorldEffects();
 edict_t* SelectFarthestSpawnPoint(char* spawn_class_name);
 edict_t* SelectRandomSpawnPoint(char* spawn_class_name);
 edict_t* SelectUnassignedSpawnPoint();
+edict_t* SelectTeamSpawnPoint(edict_t* player);
 
 //
 // game_ui.c
