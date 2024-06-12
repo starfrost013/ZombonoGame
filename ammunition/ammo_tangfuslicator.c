@@ -120,8 +120,8 @@ void Ammo_Tangfuslicator(edict_t* self, vec3_t trace_start, vec3_t aimdir)
 	float bolt_half_size_x = 32 * self->s.angles[0]/360.0f;
 	float bolt_half_size_y = 32 * self->s.angles[1]/360.0f;
 
-	if (bolt_half_size_x < 8.0f) bolt_half_size_x = 8.0f;
-	if (bolt_half_size_y < 8.0f) bolt_half_size_y = 8.0f;
+	if (bolt_half_size_x < 16.0f) bolt_half_size_x = 16.0f;
+	if (bolt_half_size_y < 16.0f) bolt_half_size_y = 16.0f;
 
 	// since the only visual indication is the lightning particles
 	// player edict size
