@@ -566,8 +566,15 @@ extern cvar_t* filterban;
 
 extern cvar_t* sv_gravity;
 extern cvar_t* sv_maxvelocity;
+extern cvar_t* sv_stopspeed;
+extern cvar_t* sv_friction;
+extern cvar_t* sv_waterfriction;
 
-extern cvar_t* gun_x, *gun_y, *gun_z;
+// viewmodel position
+extern cvar_t* gun_x;
+extern cvar_t* gun_y;
+extern cvar_t* gun_z;
+
 extern cvar_t* sv_rollspeed;
 extern cvar_t* sv_rollangle;
 

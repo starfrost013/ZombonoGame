@@ -50,6 +50,9 @@ cvar_t* filterban;
 
 cvar_t* sv_maxvelocity;
 cvar_t* sv_gravity;
+cvar_t* sv_stopspeed;
+cvar_t* sv_friction;
+cvar_t* sv_waterfriction;
 
 cvar_t* sv_rollspeed;
 cvar_t* sv_rollangle;
