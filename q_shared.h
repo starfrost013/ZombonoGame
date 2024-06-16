@@ -833,6 +833,8 @@ typedef enum player_team_e
 
 } player_team;
 
+#define NETWORK_MAX_MAP_NAME_LENGTH	48
+
 // Leaderboard system
 typedef struct leaderboard_entry_s
 {
@@ -842,7 +844,7 @@ typedef struct leaderboard_entry_s
 	int32_t 		ping;							// The user's ping
 	int32_t 		time;							// Time the player has spent in the game since they joined. 
 	bool			is_spectator;					// Is the player a spectator?
-	char			map_name[32];					// Map name
+	char			map_name[NETWORK_MAX_MAP_NAME_LENGTH];					// Map name
 	int32_t 		time_remaining;					// Seconds of time left in game.
 } leaderboard_entry_t;
 
