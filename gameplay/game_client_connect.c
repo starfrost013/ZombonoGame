@@ -151,7 +151,8 @@ bool ClientConnect(edict_t* ent, char* userinfo)
 
 		if (*spectator_password->string &&
 			strcmp(spectator_password->string, "none") &&
-			strcmp(spectator_password->string, value)) {
+			strcmp(spectator_password->string, value)) 
+		{
 			Info_SetValueForKey(userinfo, "rejmsg", "Spectator password required or incorrect.");
 			return false;
 		}
@@ -163,7 +164,8 @@ bool ClientConnect(edict_t* ent, char* userinfo)
 				numspec++;
 		}
 
-		if (numspec >= maxspectators->value) {
+		if (numspec >= maxspectators->value) 
+		{
 			Info_SetValueForKey(userinfo, "rejmsg", "Server spectator limit is full.");
 			return false;
 		}
