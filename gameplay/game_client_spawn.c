@@ -33,8 +33,6 @@ but is called after each death and level change in deathmatch
 */
 void InitClientPersistent(edict_t* client_edict)
 {
-	gitem_t* item;
-
 	gclient_t* client = client_edict->client;
 
 	// fail
@@ -207,10 +205,9 @@ edict_t* SelectUnassignedSpawnPoint()
 			spot = G_Find(spot, FOFS(classname), "info_player_start");
 		}
 
+		// if it's still not there, die
 		if (!spot)
-		{
 			gi.error("Couldn't find spawn point %s\n", game.spawnpoint);
-		}
 
 		return spot;
 	}
