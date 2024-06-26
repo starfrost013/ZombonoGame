@@ -340,6 +340,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="game.def" />
+	  <Content Include="gameinfo.json">
+		  <Link>..\gameinfo.json</Link>
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
