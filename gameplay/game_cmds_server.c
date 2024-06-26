@@ -235,10 +235,10 @@ void SVCmd_WriteIP_f ()
 	FILE	*f;
 	char	name[MAX_OSPATH];
 	uint8_t	b[4];
-	int		i;
+	int32_t	i;
 	cvar_t* game;
 
-	game = gi.cvar("game", "", 0);
+	game = gi.cvar("game_asset_path", "", 0);
 
 	if (!*game->string)
 		sprintf (name, "%s/listip.cfg", GAMENAME);
