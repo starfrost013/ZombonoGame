@@ -79,7 +79,7 @@ bool Ammo_Melee(edict_t* self, vec3_t attack_radius, int32_t damage, int32_t kic
 	VectorSubtract(point, self->enemy->s.origin, dir);
 
 	// do the damage
-	T_Damage(tr.ent, self, self, dir, point, vec3_origin, damage, kick / 2, DAMAGE_NO_KNOCKBACK, MOD_HIT);
+	Player_Damage(tr.ent, self, self, dir, point, vec3_origin, damage, kick / 2, DAMAGE_NO_KNOCKBACK, MOD_HIT);
 
 	if (!(tr.ent->svflags & SVF_MONSTER) && (!tr.ent->client))
 		return false;

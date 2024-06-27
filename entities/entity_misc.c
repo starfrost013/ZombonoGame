@@ -95,7 +95,7 @@ void gib_think (edict_t *self)
 
 	if (self->s.frame == 10)
 	{
-		self->think = G_FreeEdict;
+		self->think = Edict_Free;
 		self->nextthink = level.time + 8 + random()*10;
 	}
 }
@@ -128,7 +128,7 @@ void gib_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf
 
 void gib_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int32_t damage, vec3_t point)
 {
-	G_FreeEdict (self);
+	Edict_Free (self);
 }
 
 void ThrowGib (edict_t *self, char *gibname, int32_t damage, int32_t type)
@@ -139,7 +139,7 @@ void ThrowGib (edict_t *self, char *gibname, int32_t damage, int32_t type)
 	vec3_t	size;
 	float	vscale;
 
-	gib = G_Spawn();
+	gib = Edict_Spawn();
 
 	VectorScale (self->size, 0.5, size);
 	VectorAdd (self->absmin, size, origin);
@@ -173,7 +173,7 @@ void ThrowGib (edict_t *self, char *gibname, int32_t damage, int32_t type)
 	gib->avelocity[1] = random()*600;
 	gib->avelocity[2] = random()*600;
 
-	gib->think = G_FreeEdict;
+	gib->think = Edict_Free;
 	gib->nextthink = level.time + 10 + random()*10;
 
 	gi.linkentity (gib);
@@ -218,7 +218,7 @@ void ThrowHead (edict_t *self, char *gibname, int32_t damage, int32_t type)
 
 	self->avelocity[YAW] = crandom()*600;
 
-	self->think = G_FreeEdict;
+	self->think = Edict_Free;
 	self->nextthink = level.time + 10 + random()*10;
 
 	gi.linkentity (self);
@@ -279,7 +279,7 @@ debris
 */
 void debris_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int32_t damage, vec3_t point)
 {
-	G_FreeEdict (self);
+	Edict_Free (self);
 }
 
 void ThrowDebris (edict_t *self, char *modelname, float speed, vec3_t origin)
@@ -287,7 +287,7 @@ void ThrowDebris (edict_t *self, char *modelname, float speed, vec3_t origin)
 	edict_t	*chunk;
 	vec3_t	v;
 
-	chunk = G_Spawn();
+	chunk = Edict_Spawn();
 	VectorCopy (origin, chunk->s.origin);
 	gi.setmodel (chunk, modelname);
 	v[0] = 100 * crandom();
@@ -299,7 +299,7 @@ void ThrowDebris (edict_t *self, char *modelname, float speed, vec3_t origin)
 	chunk->avelocity[0] = random()*600;
 	chunk->avelocity[1] = random()*600;
 	chunk->avelocity[2] = random()*600;
-	chunk->think = G_FreeEdict;
+	chunk->think = Edict_Free;
 	chunk->nextthink = level.time + 5 + random()*5;
 	chunk->s.frame = 0;
 	chunk->flags = 0;
@@ -317,7 +317,7 @@ void BecomeExplosion1 (edict_t *self)
 	gi.WritePos (self->s.origin);
 	gi.multicast (self->s.origin, MULTICAST_PVS);
 
-	G_FreeEdict (self);
+	Edict_Free (self);
 }
 
 
@@ -328,7 +328,7 @@ void BecomeExplosion2 (edict_t *self)
 	gi.WritePos (self->s.origin);
 	gi.multicast (self->s.origin, MULTICAST_PVS);
 
-	G_FreeEdict (self);
+	Edict_Free (self);
 }
 
 
@@ -355,12 +355,12 @@ void path_corner_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface
 
 		savetarget = self->target;
 		self->target = self->pathtarget;
-		G_UseTargets (self, other);
+		Edict_UseTargets (self, other);
 		self->target = savetarget;
 	}
 
 	if (self->target)
-		next = G_PickTarget(self->target);
+		next = Edict_PickTarget(self->target);
 	else
 		next = NULL;
 
@@ -370,7 +370,7 @@ void path_corner_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface
 		v[2] += next->mins[2];
 		v[2] -= other->mins[2];
 		VectorCopy (v, other->s.origin);
-		next = G_PickTarget(next->target);
+		next = Edict_PickTarget(next->target);
 		other->s.event = EV_OTHER_TELEPORT;
 	}
 
@@ -400,7 +400,7 @@ void SP_path_corner (edict_t *self)
 	if (!self->targetname)
 	{
 		gi.dprintf ("path_corner with no targetname at %s\n", vtos(self->s.origin));
-		G_FreeEdict (self);
+		Edict_Free (self);
 		return;
 	}
 
@@ -428,7 +428,7 @@ void point_combat_touch (edict_t *self, edict_t *other, cplane_t *plane, csurfac
 	if (self->target)
 	{
 		other->target = self->target;
-		other->goalentity = other->movetarget = G_PickTarget(other->target);
+		other->goalentity = other->movetarget = Edict_PickTarget(other->target);
 		if (!other->goalentity)
 		{
 			gi.dprintf("%s at %s target %s does not exist\n", self->classname, vtos(self->s.origin), self->target);
@@ -465,7 +465,7 @@ void point_combat_touch (edict_t *self, edict_t *other, cplane_t *plane, csurfac
 			activator = other->activator;
 		else
 			activator = other;
-		G_UseTargets (self, activator);
+		Edict_UseTargets (self, activator);
 		self->target = savetarget;
 	}
 }
@@ -485,7 +485,7 @@ Used as a positional target for spotlights, etc.
 */
 void SP_info_null (edict_t *self)
 {
-	G_FreeEdict (self);
+	Edict_Free (self);
 };
 
 
@@ -524,7 +524,7 @@ void SP_light_spot(edict_t* self)
 {
 	if (!self->targetname)
 	{
-		G_FreeEdict(self);
+		Edict_Free(self);
 		return;
 	}
 
@@ -550,7 +550,7 @@ void SP_light (edict_t *self)
 {
 	if (!self->targetname)
 	{
-		G_FreeEdict (self);
+		Edict_Free (self);
 		return;
 	}
 
@@ -592,7 +592,7 @@ void func_wall_use (edict_t *self, edict_t *other, edict_t *activator)
 		// ignore walkthrough walls
 		if (!(self->spawnflags & 32)) self->solid = SOLID_BSP;
 		self->svflags &= ~SVF_NOCLIENT;
-		G_KillBox (self);
+		Game_KillBox (self);
 	}
 	else
 	{
@@ -710,7 +710,7 @@ void func_object_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface
 		return;
 	if (other->takedamage == DAMAGE_NO)
 		return;
-	T_Damage (other, self, self, vec3_origin, self->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
+	Player_Damage (other, self, self, vec3_origin, self->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
 }
 
 void func_object_release (edict_t *self)
@@ -724,7 +724,7 @@ void func_object_use (edict_t *self, edict_t *other, edict_t *activator)
 	self->solid = SOLID_BSP;
 	self->svflags &= ~SVF_NOCLIENT;
 	self->use = NULL;
-	G_KillBox (self);
+	Game_KillBox (self);
 	func_object_release (self);
 }
 
@@ -797,7 +797,7 @@ void func_explosive_explode (edict_t *self, edict_t *inflictor, edict_t *attacke
 	self->takedamage = DAMAGE_NO;
 
 	if (self->dmg)
-		T_RadiusDamage (self, attacker, self->dmg, NULL, self->dmg+40, MOD_EXPLOSIVE);
+		Player_RadiusDamage (self, attacker, self->dmg, NULL, self->dmg+40, MOD_EXPLOSIVE);
 
 	VectorSubtract (self->s.origin, inflictor->s.origin, self->velocity);
 	VectorNormalize (self->velocity);
@@ -837,12 +837,12 @@ void func_explosive_explode (edict_t *self, edict_t *inflictor, edict_t *attacke
 		ThrowDebris (self, "models/objects/debris2/tris.md2", 2, chunkorigin);
 	}
 
-	G_UseTargets (self, attacker);
+	Edict_UseTargets (self, attacker);
 
 	if (self->dmg)
 		BecomeExplosion1 (self);
 	else
-		G_FreeEdict (self);
+		Edict_Free (self);
 }
 
 void func_explosive_use(edict_t *self, edict_t *other, edict_t *activator)
@@ -855,7 +855,7 @@ void func_explosive_spawn (edict_t *self, edict_t *other, edict_t *activator)
 	self->solid = SOLID_BSP;
 	self->svflags &= ~SVF_NOCLIENT;
 	self->use = NULL;
-	G_KillBox (self);
+	Game_KillBox (self);
 	gi.linkentity (self);
 }
 
@@ -923,7 +923,7 @@ void barrel_explode (edict_t *self)
 	float	spd;
 	vec3_t	save;
 
-	T_RadiusDamage (self, self->activator, self->dmg, NULL, self->dmg+40, MOD_BARREL);
+	Player_RadiusDamage (self, self->activator, self->dmg, NULL, self->dmg+40, MOD_BARREL);
 
 	VectorCopy (self->s.origin, save);
 	VectorMA (self->absmin, 0.5, self->size, self->s.origin);
@@ -1053,7 +1053,7 @@ void misc_blackhole_use (edict_t *ent, edict_t *other, edict_t *activator)
 	gi.WritePosition (ent->s.origin);
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
 	*/
-	G_FreeEdict (ent);
+	Edict_Free (ent);
 }
 
 void misc_blackhole_think (edict_t *self)
@@ -1218,7 +1218,7 @@ void SP_misc_gib_arm (edict_t *ent)
 	ent->avelocity[0] = random()*200;
 	ent->avelocity[1] = random()*200;
 	ent->avelocity[2] = random()*200;
-	ent->think = G_FreeEdict;
+	ent->think = Edict_Free;
 	ent->nextthink = level.time + 30;
 	gi.linkentity (ent);
 }
@@ -1239,7 +1239,7 @@ void SP_misc_gib_leg (edict_t *ent)
 	ent->avelocity[0] = random()*200;
 	ent->avelocity[1] = random()*200;
 	ent->avelocity[2] = random()*200;
-	ent->think = G_FreeEdict;
+	ent->think = Edict_Free;
 	ent->nextthink = level.time + 30;
 	gi.linkentity (ent);
 }
@@ -1260,7 +1260,7 @@ void SP_misc_gib_head (edict_t *ent)
 	ent->avelocity[0] = random()*200;
 	ent->avelocity[1] = random()*200;
 	ent->avelocity[2] = random()*200;
-	ent->think = G_FreeEdict;
+	ent->think = Edict_Free;
 	ent->nextthink = level.time + 30;
 	gi.linkentity (ent);
 }
@@ -1388,7 +1388,7 @@ void func_clock_think (edict_t *self)
 {
 	if (!self->enemy)
 	{
-		self->enemy = G_Find (NULL, FOFS(targetname), self->target);
+		self->enemy = Game_FindEdictByValue (NULL, FOFS(targetname), self->target);
 		if (!self->enemy)
 			return;
 	}
@@ -1432,7 +1432,7 @@ void func_clock_think (edict_t *self)
 			savemessage = self->message;
 			self->target = self->pathtarget;
 			self->message = NULL;
-			G_UseTargets (self, self->activator);
+			Edict_UseTargets (self, self->activator);
 			self->target = savetarget;
 			self->message = savemessage;
 		}
@@ -1464,14 +1464,14 @@ void SP_func_clock (edict_t *self)
 	if (!self->target)
 	{
 		gi.dprintf("%s with no target at %s\n", self->classname, vtos(self->s.origin));
-		G_FreeEdict (self);
+		Edict_Free (self);
 		return;
 	}
 
 	if ((self->spawnflags & 2) && (!self->count))
 	{
 		gi.dprintf("%s with no count at %s\n", self->classname, vtos(self->s.origin));
-		G_FreeEdict (self);
+		Edict_Free (self);
 		return;
 	}
 
@@ -1499,7 +1499,7 @@ void teleporter_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_
 
 	if (!other->client)
 		return;
-	dest = G_Find (NULL, FOFS(targetname), self->target);
+	dest = Game_FindEdictByValue (NULL, FOFS(targetname), self->target);
 	if (!dest)
 	{
 		gi.dprintf ("Couldn't find destination\n");
@@ -1533,7 +1533,7 @@ void teleporter_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_
 	VectorClear (other->client->v_angle);
 
 	// kill anything at the destination
-	G_KillBox (other);
+	Game_KillBox (other);
 
 	gi.linkentity (other);
 }
@@ -1548,7 +1548,7 @@ void SP_misc_teleporter (edict_t *ent)
 	if (!ent->target)
 	{
 		gi.dprintf ("teleporter without a target.\n");
-		G_FreeEdict (ent);
+		Edict_Free (ent);
 		return;
 	}
 
@@ -1562,7 +1562,7 @@ void SP_misc_teleporter (edict_t *ent)
 	VectorSet (ent->maxs, 32, 32, -16);
 	gi.linkentity (ent);
 
-	trig = G_Spawn ();
+	trig = Edict_Spawn ();
 	trig->touch = teleporter_touch;
 	trig->solid = SOLID_TRIGGER;
 	trig->target = ent->target;

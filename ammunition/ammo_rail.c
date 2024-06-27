@@ -60,7 +60,7 @@ void Ammo_Rail(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32
 				ignore = NULL;
 
 			if ((tr.ent != self) && (tr.ent->takedamage))
-				T_Damage(tr.ent, self, self, aimdir, tr.endpos, tr.plane.normal, damage, kick, 0, MOD_RAILGUN);
+				Player_Damage(tr.ent, self, self, aimdir, tr.endpos, tr.plane.normal, damage, kick, 0, MOD_RAILGUN);
 		}
 
 		VectorCopy(tr.endpos, from);

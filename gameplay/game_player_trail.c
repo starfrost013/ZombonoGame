@@ -53,7 +53,7 @@ void PlayerTrail_Init ()
 	int		n;
 	for (n = 0; n < TRAIL_LENGTH; n++)
 	{
-		trail[n] = G_Spawn();
+		trail[n] = Edict_Spawn();
 		trail[n]->classname = "player_trail";
 	}
 

@@ -23,26 +23,26 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 /*
 =====================
-ClientBegin
+Client_OnConnected
 
 A client has just connected to the server
 =====================
 */
-void ClientBegin(edict_t* ent)
+void Client_OnConnected(edict_t* ent)
 {
 	ent->client = game.clients + (ent - g_edicts - 1);
 
-	G_InitEdict(ent);
+	Edict_Init(ent);
 
-	InitClientResp(ent->client);
+	Client_InitRespawn(ent->client);
 
 	// locate ent at a spawn point
-	PutClientInServer(ent);
+	Client_JoinServer(ent);
 
 	if (level.intermissiontime)
 	{
 		player_team winning_team = (gamemode->value == GAMEMODE_TDM) ? Gamemode_TDMGetWinner() : 0;
-		MoveClientToIntermission(ent, winning_team);
+		Player_MoveToIntermission(ent, winning_team);
 	}
 	else
 	{
@@ -56,7 +56,7 @@ void ClientBegin(edict_t* ent)
 	gi.bprintf(PRINT_HIGH, "%s entered the game\n", ent->client->pers.netname);
 
 	// make sure all view stuff is valid
-	ClientEndServerFrame(ent);
+	Client_EndServerFrame(ent);
 }
 
 /*
@@ -69,7 +69,7 @@ The game can override any of the settings in place
 (forcing skins or names, etc) before copying it off.
 ============
 */
-void ClientUserinfoChanged(edict_t* ent, char* userinfo)
+void Client_UserinfoChanged(edict_t* ent, char* userinfo)
 {
 	char* s;
 	int32_t	playernum;
@@ -129,14 +129,14 @@ Changing levels will NOT cause this to be called again, but
 loadgames will.
 ============
 */
-bool ClientConnect(edict_t* ent, char* userinfo)
+bool Client_Connect(edict_t* ent, char* userinfo)
 {
 	char* value;
 
 	// check to see if they are on the banned IP list
 	value = Info_ValueForKey(userinfo, "ip");
 
-	if (SV_FilterPacket(value))
+	if (Server_IsClientAllowed(value))
 	{
 		Info_SetValueForKey(userinfo, "rejmsg", "Banned.");
 		return false;
@@ -190,12 +190,12 @@ bool ClientConnect(edict_t* ent, char* userinfo)
 	if (ent->inuse == false)
 	{
 		// clear the respawning variables
-		InitClientResp(ent->client);
+		Client_InitRespawn(ent->client);
 		if (!game.autosaved || !ent->client->pers.weapon)
-			InitClientPersistent(ent);
+			Client_InitPersistent(ent);
 	}
 
-	ClientUserinfoChanged(ent, userinfo);
+	Client_UserinfoChanged(ent, userinfo);
 
 	if (game.maxclients > 1)
 		gi.dprintf("%s connected\n", ent->client->pers.netname);
@@ -213,7 +213,7 @@ Called when a player drops from the server.
 Will not be called between levels.
 ============
 */
-void ClientDisconnect(edict_t* ent)
+void Client_Disconnect(edict_t* ent)
 {
 	int32_t	playernum;
 

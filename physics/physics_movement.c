@@ -192,7 +192,7 @@ bool SV_movestep (edict_t *ent, vec3_t move, bool relink)
 				if (relink)
 				{
 					gi.linkentity (ent);
-					G_TouchTriggers (ent);
+					Edict_TouchTriggers (ent);
 				}
 				return true;
 			}
@@ -249,7 +249,7 @@ bool SV_movestep (edict_t *ent, vec3_t move, bool relink)
 			if (relink)
 			{
 				gi.linkentity (ent);
-				G_TouchTriggers (ent);
+				Edict_TouchTriggers (ent);
 			}
 			ent->groundentity = NULL;
 			return true;
@@ -269,7 +269,7 @@ bool SV_movestep (edict_t *ent, vec3_t move, bool relink)
 			if (relink)
 			{
 				gi.linkentity (ent);
-				G_TouchTriggers (ent);
+				Edict_TouchTriggers (ent);
 			}
 			return true;
 		}
@@ -288,7 +288,7 @@ bool SV_movestep (edict_t *ent, vec3_t move, bool relink)
 	if (relink)
 	{
 		gi.linkentity (ent);
-		G_TouchTriggers (ent);
+		Edict_TouchTriggers (ent);
 	}
 	return true;
 }
@@ -373,11 +373,11 @@ bool SV_StepDirection (edict_t *ent, float yaw, float dist)
 			VectorCopy (oldorigin, ent->s.origin);
 		}
 		gi.linkentity (ent);
-		G_TouchTriggers (ent);
+		Edict_TouchTriggers (ent);
 		return true;
 	}
 	gi.linkentity (ent);
-	G_TouchTriggers (ent);
+	Edict_TouchTriggers (ent);
 	return false;
 }
 

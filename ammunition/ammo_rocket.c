@@ -40,7 +40,7 @@ void Ammo_Rocket_touch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t
 
 	if (surf && (surf->flags & SURF_SKY))
 	{
-		G_FreeEdict(ent);
+		Edict_Free(ent);
 		return;
 	}
 
@@ -52,7 +52,7 @@ void Ammo_Rocket_touch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t
 
 	if (other->takedamage)
 	{
-		T_Damage(other, ent, ent->owner, ent->velocity, ent->s.origin, plane->normal, ent->dmg, 0, 0, MOD_ROCKET);
+		Player_Damage(other, ent, ent->owner, ent->velocity, ent->s.origin, plane->normal, ent->dmg, 0, 0, MOD_ROCKET);
 	}
 	else
 	{
@@ -64,7 +64,7 @@ void Ammo_Rocket_touch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t
 		}
 	}
 
-	T_RadiusDamage(ent, ent->owner, ent->radius_dmg, other, ent->dmg_radius, MOD_R_SPLASH);
+	Player_RadiusDamage(ent, ent->owner, ent->radius_dmg, other, ent->dmg_radius, MOD_R_SPLASH);
 
 	gi.WriteByte(svc_temp_entity);
 	if (ent->waterlevel)
@@ -74,14 +74,14 @@ void Ammo_Rocket_touch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t
 	gi.WritePos(origin);
 	gi.multicast(ent->s.origin, MULTICAST_PHS);
 
-	G_FreeEdict(ent);
+	Edict_Free(ent);
 }
 
 void Ammo_Rocket(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_t speed, float damage_radius, int32_t radius_damage)
 {
 	edict_t* rocket;
 
-	rocket = G_Spawn();
+	rocket = Edict_Spawn();
 	VectorCopy(start, rocket->s.origin);
 	VectorCopy(dir, rocket->movedir);
 	vectoangles(dir, rocket->s.angles);
@@ -96,7 +96,7 @@ void Ammo_Rocket(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_
 	rocket->owner = self;
 	rocket->touch = Ammo_Rocket_touch;
 	rocket->nextthink = level.time + ROCKET_MAX_DISTANCE / speed;
-	rocket->think = G_FreeEdict;
+	rocket->think = Edict_Free;
 	rocket->dmg = damage;
 	rocket->radius_dmg = radius_damage;
 	rocket->dmg_radius = damage_radius;

@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <game_local.h>
 
 
-void G_ProjectSource(vec3_t point, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result)
+void Game_ProjectSource(vec3_t point, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result)
 {
 	result[0] = point[0] + forward[0] * distance[0] + right[0] * distance[1];
 	result[1] = point[1] + forward[1] * distance[0] + right[1] * distance[1];
@@ -43,7 +43,7 @@ NULL will be returned if the end of the list is reached.
 
 =============
 */
-edict_t* G_Find(edict_t* from, int32_t fieldofs, char* match)
+edict_t* Game_FindEdictByValue(edict_t* from, int32_t fieldofs, char* match)
 {
 	char* s;
 
@@ -76,7 +76,7 @@ Returns entities that have origins within a spherical area
 findradius (origin, radius)
 =================
 */
-edict_t* G_FindRadius(edict_t* from, vec3_t org, float rad)
+edict_t* Game_FindEdictsWithinRadius(edict_t* from, vec3_t org, float rad)
 {
 	vec3_t	eorg;
 	int32_t	j;
@@ -115,10 +115,10 @@ NULL will be returned if the end of the list is reached.
 */
 #define MAXCHOICES	8
 
-edict_t* G_PickTarget(char* targetname)
+edict_t* Edict_PickTarget(char* targetname)
 {
 	edict_t* ent = NULL;
-	int		num_choices = 0;
+	int32_t	num_choices = 0;
 	edict_t* choice[MAXCHOICES];
 
 	if (!targetname)
@@ -129,7 +129,7 @@ edict_t* G_PickTarget(char* targetname)
 
 	while (1)
 	{
-		ent = G_Find(ent, FOFS(targetname), targetname);
+		ent = Game_FindEdictByValue(ent, FOFS(targetname), targetname);
 		if (!ent)
 			break;
 		choice[num_choices++] = ent;
@@ -148,8 +148,8 @@ edict_t* G_PickTarget(char* targetname)
 
 void Think_Delay(edict_t* ent)
 {
-	G_UseTargets(ent, ent->activator);
-	G_FreeEdict(ent);
+	Edict_UseTargets(ent, ent->activator);
+	Edict_Free(ent);
 }
 
 /*
@@ -168,7 +168,7 @@ match (string)self.target and call their .use function
 
 ==============================
 */
-void G_UseTargets(edict_t* ent, edict_t* activator)
+void Edict_UseTargets(edict_t* ent, edict_t* activator)
 {
 	edict_t* t;
 
@@ -178,7 +178,7 @@ void G_UseTargets(edict_t* ent, edict_t* activator)
 	if (ent->delay)
 	{
 		// create a temp object to fire at a later time
-		t = G_Spawn();
+		t = Edict_Spawn();
 		t->classname = "DelayedUse";
 		t->nextthink = level.time + ent->delay;
 		t->think = Think_Delay;
@@ -210,9 +210,9 @@ void G_UseTargets(edict_t* ent, edict_t* activator)
 	if (ent->killtarget)
 	{
 		t = NULL;
-		while ((t = G_Find(t, FOFS(targetname), ent->killtarget)))
+		while ((t = Game_FindEdictByValue(t, FOFS(targetname), ent->killtarget)))
 		{
-			G_FreeEdict(t);
+			Edict_Free(t);
 			if (!ent->inuse)
 			{
 				gi.dprintf("entity was removed while using killtargets\n");
@@ -227,7 +227,7 @@ void G_UseTargets(edict_t* ent, edict_t* activator)
 	if (ent->target)
 	{
 		t = NULL;
-		while ((t = G_Find(t, FOFS(targetname), ent->target)))
+		while ((t = Game_FindEdictByValue(t, FOFS(targetname), ent->target)))
 		{
 			// doors fire area portals in a specific way
 			if (!Q_stricmp(t->classname, "func_areaportal") &&
@@ -309,7 +309,7 @@ vec3_t MOVEDIR_UP = { 0, 0, 1 };
 vec3_t VEC_DOWN = { 0, -2, 0 };
 vec3_t MOVEDIR_DOWN = { 0, 0, -1 };
 
-void G_SetMovedir(vec3_t angles, vec3_t movedir)
+void Edict_SetMovedir(vec3_t angles, vec3_t movedir)
 {
 	if (VectorCompare(angles, VEC_UP))
 	{
@@ -386,7 +386,7 @@ void vectoangles(vec3_t value1, vec3_t angles)
 	angles[ROLL] = 0;
 }
 
-char* G_CopyString(char* in)
+char* Game_CopyString(char* in)
 {
 	char* out;
 
@@ -396,7 +396,7 @@ char* G_CopyString(char* in)
 }
 
 
-void G_InitEdict(edict_t* e)
+void Edict_Init(edict_t* e)
 {
 	e->inuse = true;
 	e->classname = "noclass";
@@ -415,7 +415,7 @@ instead of being removed and recreated, which can cause interpolated
 angles and bad trails.
 =================
 */
-edict_t* G_Spawn()
+edict_t* Edict_Spawn()
 {
 	int32_t	i;
 	edict_t* e;
@@ -427,7 +427,7 @@ edict_t* G_Spawn()
 		// freeing and allocating, so relax the replacement policy
 		if (!e->inuse && (e->freetime < 2 || level.time - e->freetime > 0.5))
 		{
-			G_InitEdict(e);
+			Edict_Init(e);
 			return e;
 		}
 	}
@@ -436,7 +436,7 @@ edict_t* G_Spawn()
 		gi.error("ED_Alloc: no free edicts");
 
 	globals.num_edicts++;
-	G_InitEdict(e);
+	Edict_Init(e);
 	return e;
 }
 
@@ -447,7 +447,7 @@ G_FreeEdict
 Marks the edict as free
 =================
 */
-void G_FreeEdict(edict_t* ed)
+void Edict_Free(edict_t* ed)
 {
 	gi.unlinkentity(ed);		// unlink from world
 
@@ -470,17 +470,16 @@ G_TouchTriggers
 
 ============
 */
-void	G_TouchTriggers(edict_t* ent)
+void Edict_TouchTriggers(edict_t* ent)
 {
-	int			i, num;
+	int32_t  i, num;
 	edict_t* touch[MAX_EDICTS], * hit;
 
 	// dead things don't activate triggers!
 	if ((ent->client || (ent->svflags & SVF_MONSTER)) && (ent->health <= 0))
 		return;
 
-	num = gi.BoxEdicts(ent->absmin, ent->absmax, touch
-		, MAX_EDICTS, AREA_TRIGGERS);
+	num = gi.BoxEdicts(ent->absmin, ent->absmax, touch, MAX_EDICTS, AREA_TRIGGERS);
 
 	// be careful, it is possible to have an entity in this
 	// list removed before we get to it (killtriggered)
@@ -503,13 +502,12 @@ Call after linking a new trigger in during gameplay
 to force all entities it covers to immediately touch it
 ============
 */
-void	G_TouchSolids(edict_t* ent)
+void Edict_TouchSolids(edict_t* ent)
 {
 	int32_t		i, num;
 	edict_t* touch[MAX_EDICTS], * hit;
 
-	num = gi.BoxEdicts(ent->absmin, ent->absmax, touch
-		, MAX_EDICTS, AREA_SOLID);
+	num = gi.BoxEdicts(ent->absmin, ent->absmax, touch, MAX_EDICTS, AREA_SOLID);
 
 	// be careful, it is possible to have an entity in this
 	// list removed before we get to it (killtriggered)
@@ -541,7 +539,7 @@ Kills all entities that would touch the proposed new positioning
 of ent.  Ent should be unlinked before calling this!
 =================
 */
-bool G_KillBox(edict_t* ent)
+bool Game_KillBox(edict_t* ent)
 {
 	trace_t		tr;
 
@@ -552,7 +550,7 @@ bool G_KillBox(edict_t* ent)
 			break;
 
 		// nail it
-		T_Damage(tr.ent, ent, ent, vec3_origin, ent->s.origin, vec3_origin, 100000, 0, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
+		Player_Damage(tr.ent, ent, ent, vec3_origin, ent->s.origin, vec3_origin, 100000, 0, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 
 		// if we didn't kill it, fail
 		if (tr.ent->solid)
@@ -565,7 +563,7 @@ bool G_KillBox(edict_t* ent)
 //
 // G_CountClients: Counts the number of clients currently playing the game, regardless of their status (alive, dead, spectating, etc)
 //
-int32_t G_CountClients()
+int32_t Game_CountClients()
 {
 	edict_t* client_edict;
 	int32_t	 real_client_count = 0;
@@ -591,7 +589,7 @@ ZombonoUI-related utilities
 */
 
 // Sends a UI. ent NULL = multicast
-void G_UISend(edict_t* ent, char* ui_name, bool enabled, bool activated, bool reliable)
+void GameUI_Send(edict_t* ent, char* ui_name, bool enabled, bool activated, bool reliable)
 {
 	gi.WriteByte(svc_uidraw);
 	gi.WriteString(ui_name);
@@ -615,7 +613,7 @@ void G_UISend(edict_t* ent, char* ui_name, bool enabled, bool activated, bool re
 	}
 }
 
-void G_UISetText(edict_t* ent, char* ui_name, char* control_name, char* text, bool reliable)
+void GameUI_SetText(edict_t* ent, char* ui_name, char* control_name, char* text, bool reliable)
 {
 	gi.WriteByte(svc_uisettext);
 	gi.WriteString(ui_name);
@@ -639,7 +637,7 @@ void G_UISetText(edict_t* ent, char* ui_name, char* control_name, char* text, bo
 	}
 }
 
-void G_UISetImage(edict_t* ent, char* ui_name, char* control_name, char* image_path, bool reliable)
+void GameUI_SetImage(edict_t* ent, char* ui_name, char* control_name, char* image_path, bool reliable)
 {
 	gi.WriteByte(svc_uisetimage);
 	gi.WriteString(ui_name);

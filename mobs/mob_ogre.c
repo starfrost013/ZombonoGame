@@ -671,7 +671,7 @@ void ogre_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t dama
 			ThrowGib(self, "models/objects/gibs/ogre/ogre_hand.md2", damage, GIB_ORGANIC);
 		ThrowGib(self, "models/objects/gibs/ogre/ogre_main.md2", damage, GIB_ORGANIC);
 		self->deadflag = DEAD_DEAD;
-		G_FreeEdict(self);
+		Edict_Free(self);
 		return;
 	}
 
@@ -688,7 +688,7 @@ void ogre_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t dama
 	if (fabs((self->s.origin[2] + self->viewheight) - point[2]) <= 4)
 	{
 		// head shot
-		G_FreeEdict(self);
+		Edict_Free(self);
 		return;
 	}
 
@@ -699,7 +699,7 @@ void ogre_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t dama
 		self->monsterinfo.currentmove = &ogre_move_death2;
 
 	// TODO: temp until not fucked animations
-	G_FreeEdict(self);
+	Edict_Free(self);
 }
 
 //

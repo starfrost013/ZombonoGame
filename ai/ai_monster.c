@@ -149,7 +149,7 @@ void M_WorldEffects (edict_t *ent)
 					dmg = 2 + 2 * floor(level.time - ent->air_finished);
 					if (dmg > 15)
 						dmg = 15;
-					T_Damage (ent, world, world, vec3_origin, ent->s.origin, vec3_origin, dmg, 0, DAMAGE_NO_ARMOR, MOD_WATER);
+					Player_Damage (ent, world, world, vec3_origin, ent->s.origin, vec3_origin, dmg, 0, DAMAGE_NO_ARMOR, MOD_WATER);
 					ent->pain_debounce_time = level.time + 1;
 				}
 			}
@@ -167,7 +167,7 @@ void M_WorldEffects (edict_t *ent)
 					dmg = 2 + 2 * floor(level.time - ent->air_finished);
 					if (dmg > 15)
 						dmg = 15;
-					T_Damage (ent, world, world, vec3_origin, ent->s.origin, vec3_origin, dmg, 0, DAMAGE_NO_ARMOR, MOD_WATER);
+					Player_Damage (ent, world, world, vec3_origin, ent->s.origin, vec3_origin, dmg, 0, DAMAGE_NO_ARMOR, MOD_WATER);
 					ent->pain_debounce_time = level.time + 1;
 				}
 			}
@@ -189,7 +189,7 @@ void M_WorldEffects (edict_t *ent)
 		if (ent->damage_debounce_time < level.time)
 		{
 			ent->damage_debounce_time = level.time + 0.2;
-			T_Damage (ent, world, world, vec3_origin, ent->s.origin, vec3_origin, 10*ent->waterlevel, 0, 0, MOD_LAVA);
+			Player_Damage (ent, world, world, vec3_origin, ent->s.origin, vec3_origin, 10*ent->waterlevel, 0, 0, MOD_LAVA);
 		}
 	}
 	if ((ent->watertype & CONTENTS_SLIME) && !(ent->flags & FL_IMMUNE_SLIME))
@@ -197,7 +197,7 @@ void M_WorldEffects (edict_t *ent)
 		if (ent->damage_debounce_time < level.time)
 		{
 			ent->damage_debounce_time = level.time + 1;
-			T_Damage (ent, world, world, vec3_origin, ent->s.origin, vec3_origin, 4*ent->waterlevel, 0, 0, MOD_SLIME);
+			Player_Damage (ent, world, world, vec3_origin, ent->s.origin, vec3_origin, 4*ent->waterlevel, 0, 0, MOD_SLIME);
 		}
 	}
 	
@@ -368,7 +368,7 @@ void monster_start_go (edict_t *self);
 void monster_triggered_spawn (edict_t *self)
 {
 	self->s.origin[2] += 1;
-	G_KillBox (self);
+	Game_KillBox (self);
 
 	self->solid = SOLID_BBOX;
 	self->movetype = MOVETYPE_STEP;
@@ -423,7 +423,7 @@ void monster_death_use (edict_t *self)
 
 	if (self->item)
 	{
-		Drop_Item (self, self->item);
+		Item_Drop (self, self->item);
 		self->item = NULL;
 	}
 
@@ -433,7 +433,7 @@ void monster_death_use (edict_t *self)
 	if (!self->target)
 		return;
 
-	G_UseTargets (self, self->enemy);
+	Edict_UseTargets (self, self->enemy);
 }
 
 
@@ -470,7 +470,7 @@ bool monster_start (edict_t *self)
 
 	if (st.item)
 	{
-		self->item = FindItemByClassname (st.item);
+		self->item = Item_FindByClassname (st.item);
 		if (!self->item)
 			gi.dprintf("%s at %s has bad item: %s\n", self->classname, vtos(self->s.origin), st.item);
 	}
@@ -499,7 +499,7 @@ void monster_start_go (edict_t *self)
 		target = NULL;
 		notcombat = false;
 		fixup = false;
-		while ((target = G_Find (target, FOFS(targetname), self->target)) != NULL)
+		while ((target = Game_FindEdictByValue (target, FOFS(targetname), self->target)) != NULL)
 		{
 			if (strcmp(target->classname, "point_combat") == 0)
 			{
@@ -523,7 +523,7 @@ void monster_start_go (edict_t *self)
 		edict_t		*target;
 
 		target = NULL;
-		while ((target = G_Find (target, FOFS(targetname), self->combattarget)) != NULL)
+		while ((target = Game_FindEdictByValue (target, FOFS(targetname), self->combattarget)) != NULL)
 		{
 			if (strcmp(target->classname, "point_combat") != 0)
 			{
@@ -537,7 +537,7 @@ void monster_start_go (edict_t *self)
 
 	if (self->target)
 	{
-		self->goalentity = self->movetarget = G_PickTarget(self->target);
+		self->goalentity = self->movetarget = Edict_PickTarget(self->target);
 		if (!self->movetarget)
 		{
 			gi.dprintf ("%s can't find target %s at %s\n", self->classname, self->target, vtos(self->s.origin));

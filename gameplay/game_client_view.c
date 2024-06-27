@@ -40,7 +40,7 @@ SV_CalcRoll
 
 ===============
 */
-float SV_CalcRoll(vec3_t angles, vec3_t velocity)
+float Client_CalcRoll(vec3_t angles, vec3_t velocity)
 {
 	float	sign;
 	float	side;
@@ -68,16 +68,16 @@ P_DamageFeedback
 Handles color blends and view kicks
 ===============
 */
-void P_DamageFeedback(edict_t* player)
+void Player_DamageFeedback(edict_t* player)
 {
 	gclient_t* client;
 	float	side;
 	float	realcount, count, kick;
 	vec3_t	v;
 	int32_t	r, l;
-	static vec3_t	power_color = { 0.0, 1.0, 0.0 };
-	static vec3_t	acolor = { 1.0, 1.0, 1.0 };
-	static vec3_t	bcolor = { 1.0, 0.0, 0.0 };
+	static vec3_t power_color = { 0.0, 1.0, 0.0 };
+	static vec3_t acolor = { 1.0, 1.0, 1.0 };
+	static vec3_t bcolor = { 1.0, 0.0, 0.0 };
 
 	client = player->client;
 
@@ -219,7 +219,7 @@ Auto pitching on slopes?
 
 ===============
 */
-void SV_CalcViewOffset(edict_t* ent)
+void Client_CalcViewOffset(edict_t* ent)
 {
 	float*	angles;
 	float	bob;
@@ -229,8 +229,8 @@ void SV_CalcViewOffset(edict_t* ent)
 
 
 	//===================================
+	// base angles
 
-		// base angles
 	angles = ent->client->ps.kick_angles;
 
 	// if dead, fix the angle and don't add any kick
@@ -342,7 +342,7 @@ void SV_CalcViewOffset(edict_t* ent)
 SV_CalcGunOffset
 ==============
 */
-void SV_CalcGunOffset(edict_t* ent)
+void Client_CalcGunOffset(edict_t* ent)
 {
 	int32_t	i;
 	float	delta;
@@ -415,7 +415,7 @@ void SV_AddBlend(float r, float g, float b, float a, float* v_blend)
 SV_CalcBlend
 =============
 */
-void SV_CalcBlend(edict_t* ent)
+void Client_CalcBlend(edict_t* ent)
 {
 	int32_t	contents;
 	vec3_t	vieworg;
@@ -498,7 +498,7 @@ void SV_CalcBlend(edict_t* ent)
 P_WorldEffects
 =============
 */
-void P_WorldEffects()
+void Player_WorldEffects()
 {
 	bool	breather;
 	bool	envirosuit;
@@ -614,7 +614,7 @@ void P_WorldEffects()
 
 				current_player->pain_debounce_time = level.time;
 
-				T_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, current_player->dmg, 0, DAMAGE_NO_ARMOR, MOD_WATER);
+				Player_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, current_player->dmg, 0, DAMAGE_NO_ARMOR, MOD_WATER);
 			}
 		}
 	}
@@ -643,16 +643,16 @@ void P_WorldEffects()
 			}
 
 			if (envirosuit)	// take 1/3 damage with envirosuit
-				T_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 1 * waterlevel, 0, 0, MOD_LAVA);
+				Player_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 1 * waterlevel, 0, 0, MOD_LAVA);
 			else
-				T_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 3 * waterlevel, 0, 0, MOD_LAVA);
+				Player_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 3 * waterlevel, 0, 0, MOD_LAVA);
 		}
 
 		if (current_player->watertype & CONTENTS_SLIME)
 		{
 			if (!envirosuit)
 			{	// no damage from slime with envirosuit
-				T_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 1 * waterlevel, 0, 0, MOD_SLIME);
+				Player_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 1 * waterlevel, 0, 0, MOD_SLIME);
 			}
 		}
 	}
@@ -664,7 +664,7 @@ void P_WorldEffects()
 G_SetClientEffects
 ===============
 */
-void G_SetClientEffects(edict_t* ent)
+void Client_SetEffects(edict_t* ent)
 {
 	int32_t	pa_type;
 	int32_t	remaining;
@@ -678,7 +678,7 @@ void G_SetClientEffects(edict_t* ent)
 	if (ent->powerarmor_time > level.time
 		&& pa_type == POWER_ARMOR_SHIELD)
 	{
-		pa_type = GetCurrentPowerArmor(ent);
+		pa_type = Armor_GetCurrentPowerArmor(ent);
 
 		ent->s.effects |= EF_COLOR_SHELL;
 		ent->s.renderfx |= RF_SHELL_GREEN;
@@ -712,7 +712,7 @@ void G_SetClientEffects(edict_t* ent)
 G_SetClientEvent
 ===============
 */
-void G_SetClientEvent(edict_t* ent)
+void Client_SetEvent(edict_t* ent)
 {
 	if (ent->s.event)
 		return;
@@ -729,7 +729,7 @@ void G_SetClientEvent(edict_t* ent)
 G_SetClientSound
 ===============
 */
-void G_SetClientSound(edict_t* ent)
+void Client_SetSound(edict_t* ent)
 {
 	char* weap;
 
@@ -768,7 +768,7 @@ void G_SetClientSound(edict_t* ent)
 G_SetClientFrame
 ===============
 */
-void G_SetClientFrame(edict_t* ent)
+void Client_SetFrame(edict_t* ent)
 {
 	gclient_t* client;
 	bool		duck, run;

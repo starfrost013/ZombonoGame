@@ -31,7 +31,7 @@ This is only called when the game first initializes in single player,
 but is called after each death and level change in deathmatch
 ==============
 */
-void InitClientPersistent(edict_t* client_edict)
+void Client_InitPersistent(edict_t* client_edict)
 {
 	gclient_t* client = client_edict->client;
 
@@ -46,7 +46,7 @@ void InitClientPersistent(edict_t* client_edict)
 
 	// Give them the default weapon!
 
-	GiveBaseWeaponForTeam(client_edict);
+	Player_GiveBaseWeaponForTeam(client_edict);
 
 	client->pers.health = 100;
 	client->pers.max_health = 100;
@@ -62,32 +62,32 @@ void InitClientPersistent(edict_t* client_edict)
 }
 
 
-void GiveBaseWeaponForTeam(edict_t* client_edict)
+void Player_GiveBaseWeaponForTeam(edict_t* client_edict)
 {
 	gclient_t* client = client_edict->client;
 
 	if (client_edict->team == team_director)
 	{
 		// add the bamfuslicator
-		client->newweapon = FindItem("Director - Bamfuslicator");
+		client->newweapon = Item_FindByPickupName("Director - Bamfuslicator");
 		Loadout_AddItem(client_edict, client->newweapon->pickup_name, client->newweapon->icon, loadout_entry_type_weapon, 1);
 
 		// and the tangfuslicator...
-		gitem_t* tangfuslicator = FindItem("Director - Tangfuslicator");
+		gitem_t* tangfuslicator = Item_FindByPickupName("Director - Tangfuslicator");
 		Loadout_AddItem(client_edict, tangfuslicator->pickup_name, tangfuslicator->icon, loadout_entry_type_weapon, 1);
 
-		ChangeWeapon(client_edict);
+		Player_WeaponChange(client_edict);
 
 	}
 	else
 	{
-		client->newweapon = FindItem("Blaster");
+		client->newweapon = Item_FindByPickupName("Blaster");
 		Loadout_AddItem(client_edict, client->newweapon->pickup_name, client->newweapon->icon, loadout_entry_type_weapon, 1);
-		ChangeWeapon(client_edict);
+		Player_WeaponChange(client_edict);
 	}
 }
 
-void InitClientResp(gclient_t* client)
+void Client_InitRespawn(gclient_t* client)
 {
 	memset(&client->resp, 0, sizeof(client->resp));
 	client->resp.enterframe = level.framenum;
@@ -182,11 +182,11 @@ SelectSpawnPoint
 Chooses a player start for zombono debugging
 ============
 */
-edict_t* SelectUnassignedSpawnPoint()
+edict_t* Player_SpawnSelectUnassigned()
 {
 	edict_t* spot = NULL;
 
-	while ((spot = G_Find(spot, FOFS(classname), "info_player_start")) != NULL)
+	while ((spot = Game_FindEdictByValue(spot, FOFS(classname), "info_player_start")) != NULL)
 	{
 		if (!game.spawnpoint[0] && !spot->targetname)
 			return spot;
@@ -202,7 +202,7 @@ edict_t* SelectUnassignedSpawnPoint()
 	{
 		if (!game.spawnpoint[0])
 		{	// there wasn't a spawnpoint without a target, so use any
-			spot = G_Find(spot, FOFS(classname), "info_player_start");
+			spot = Game_FindEdictByValue(spot, FOFS(classname), "info_player_start");
 		}
 
 		// if it's still not there, die
@@ -223,7 +223,7 @@ go to a random point, but NOT the two points closest
 to other players
 ================
 */
-edict_t* SelectRandomSpawnPoint(char* spawn_class_name)
+edict_t* Player_SpawnSelectRandom(char* spawn_class_name)
 {
 	edict_t* spot, * spot1, * spot2;
 	int		count = 0;
@@ -234,7 +234,7 @@ edict_t* SelectRandomSpawnPoint(char* spawn_class_name)
 	range1 = range2 = 99999;
 	spot1 = spot2 = NULL;
 
-	while ((spot = G_Find(spot, FOFS(classname), spawn_class_name)) != NULL)
+	while ((spot = Game_FindEdictByValue(spot, FOFS(classname), spawn_class_name)) != NULL)
 	{
 		count++;
 		range = PlayersRangeFromSpot(spot);
@@ -254,7 +254,7 @@ edict_t* SelectRandomSpawnPoint(char* spawn_class_name)
 	if (!count)
 	{
 		gi.bprintf(PRINT_ALL, "Failed to spawn %s (mode: random), trying unassigned", spawn_class_name);
-		return SelectUnassignedSpawnPoint();
+		return Player_SpawnSelectUnassigned();
 	}
 
 	// is it one of the two closest to other players?
@@ -270,7 +270,7 @@ edict_t* SelectRandomSpawnPoint(char* spawn_class_name)
 	spot = NULL;
 	do
 	{
-		spot = G_Find(spot, FOFS(classname), spawn_class_name);
+		spot = Game_FindEdictByValue(spot, FOFS(classname), spawn_class_name);
 		if (spot == spot1 || spot == spot2)
 			selection++;
 	} while (selection--);
@@ -283,7 +283,7 @@ edict_t* SelectRandomSpawnPoint(char* spawn_class_name)
 SelectFarthestSpawnPoint
 ================
 */
-edict_t* SelectFarthestSpawnPoint(char* spawn_class_name)
+edict_t* Player_SpawnSelectFarthest(char* spawn_class_name)
 {
 	edict_t* bestspot;
 	float	bestdistance, bestplayerdistance;
@@ -298,7 +298,7 @@ edict_t* SelectFarthestSpawnPoint(char* spawn_class_name)
 	spot = NULL;
 	bestspot = NULL;
 	bestdistance = 0;
-	while ((spot = G_Find(spot, FOFS(classname), spawn_class_name)) != NULL)
+	while ((spot = Game_FindEdictByValue(spot, FOFS(classname), spawn_class_name)) != NULL)
 	{
 		bestplayerdistance = PlayersRangeFromSpot(spot);
 
@@ -314,13 +314,13 @@ edict_t* SelectFarthestSpawnPoint(char* spawn_class_name)
 
 	// if there is a player just spawned on each and every start spot
 	// we have no choice to turn one into a telefrag meltdown
-	spot = G_Find(NULL, FOFS(classname), spawn_class_name);
+	spot = Game_FindEdictByValue(NULL, FOFS(classname), spawn_class_name);
 
 	// still null? try unassigned
 	if (spot == NULL)
 	{
 		gi.bprintf(PRINT_ALL, "Failed to spawn %s (mode: furthest), trying unassigned", spawn_class_name);
-		return SelectUnassignedSpawnPoint();
+		return Player_SpawnSelectUnassigned();
 	}
 
 	return spot;
@@ -333,25 +333,25 @@ SelectSpawnPoint
 Chooses a player start, gamemode-specific start, etc
 ============
 */
-void SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles)
+void Player_SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles)
 {
 	edict_t* spot = NULL;
 
 	// TODO: Change this for zombono.
 	if (gamemode->value == GAMEMODE_TDM)
 	{
-		spot = SelectTeamSpawnPoint(ent);
+		spot = Player_SpawnSelectTeam(ent);
 	}
 	else
 	{
 		gi.bprintf(PRINT_DEVELOPER, "Tried to spawn for unimplemented gamemode %d! Trying unassigned...", gamemode->value);
-		spot = SelectUnassignedSpawnPoint();
+		spot = Player_SpawnSelectUnassigned();
 	}
 
 	// find a single player start spot
 	if (!spot)
 	{
-		spot = SelectUnassignedSpawnPoint();
+		spot = Player_SpawnSelectUnassigned();
 	}
 
 	VectorCopy(spot->s.origin, origin);
@@ -363,7 +363,7 @@ void SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles)
 //======================================================================
 
 
-void InitBodyQue()
+void Client_InitBodyQue()
 {
 	int		i;
 	edict_t* ent;
@@ -371,14 +371,14 @@ void InitBodyQue()
 	level.body_que = 0;
 	for (i = 0; i < BODY_QUEUE_SIZE; i++)
 	{
-		ent = G_Spawn();
+		ent = Edict_Spawn();
 		ent->classname = "bodyque";
 	}
 }
 
 void body_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t damage, vec3_t point)
 {
-	int	n;
+	int32_t n;
 
 	if (self->health < -40)
 	{
@@ -391,7 +391,7 @@ void body_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t dama
 	}
 }
 
-void CopyToBodyQue(edict_t* ent)
+void Player_CopyToBodyQue(edict_t* ent)
 {
 	edict_t* body;
 
@@ -429,9 +429,9 @@ void Client_Respawn(edict_t* self)
 {
 	// spectator's don't leave bodies
 	if (self->movetype != MOVETYPE_NOCLIP)
-		CopyToBodyQue(self);
+		Player_CopyToBodyQue(self);
 	self->svflags &= ~SVF_NOCLIENT;
-	PutClientInServer(self);
+	Client_JoinServer(self);
 
 	// add a teleportation effect
 	self->s.event = EV_PLAYER_TELEPORT;
@@ -503,7 +503,7 @@ void Client_RespawnSpectator(edict_t* ent)
 	ent->client->resp.score = 0;
 
 	ent->svflags &= ~SVF_NOCLIENT;
-	PutClientInServer(ent);
+	Client_JoinServer(ent);
 
 	// add a teleportation effect
 	if (!ent->client->pers.spectator) {
@@ -537,7 +537,7 @@ Called when a player connects to a server or respawns in
 a deathmatch.
 ============
 */
-void PutClientInServer(edict_t* ent)
+void Client_JoinServer(edict_t* ent)
 {
 	vec3_t	mins = { -16, -16, -24 };
 	vec3_t	maxs = { 16, 16, 32 };
@@ -551,12 +551,12 @@ void PutClientInServer(edict_t* ent)
 	// TEMPORARY HACK FOR PLAYTEST - TODO: THIS *WILL* BREAK FOR EXISTING CLIENTS IF THE TIMELIMIT OR FRAGLIMIT IS CHANGED AFTER SERVER CREATION UNTIL YOU RESPAWN
 
 	if (timelimit->value)
-		G_UISend(ent, "TimeUI", true, false, true);
+		GameUI_Send(ent, "TimeUI", true, false, true);
 
-	G_UISend(ent, "ScoreUI", true, false, true);
+	GameUI_Send(ent, "ScoreUI", true, false, true);
 
 	// HACK: THIS MUST BE THE LAST ONE OTHERWISE IT WILL NOT BE SET AS THE CURRENT UI AND YOU CAN'T SPAWN
-	G_UISend(ent, "TeamUI", true, true, true);
+	GameUI_Send(ent, "TeamUI", true, true, true);
 
 	// tell the client to wipe its loadout information
 	gi.WriteByte(svc_loadout_clear);
@@ -569,7 +569,7 @@ void PutClientInServer(edict_t* ent)
 	// start by finding a spawn point
 	// do it before setting health back up, so farthest
 	// ranging doesn't count this client
-	SelectSpawnPoint(ent, spawn_origin, spawn_angles);
+	Player_SelectSpawnPoint(ent, spawn_origin, spawn_angles);
 
 	index = ent - g_edicts - 1;
 	client = ent->client;
@@ -578,15 +578,15 @@ void PutClientInServer(edict_t* ent)
 
 	resp = client->resp;
 	memcpy(userinfo, client->pers.userinfo, sizeof(userinfo));
-	InitClientPersistent(ent);
-	ClientUserinfoChanged(ent, userinfo);
+	Client_InitPersistent(ent);
+	Client_UserinfoChanged(ent, userinfo);
 
 	// clear everything but the persistant data
 	saved = client->pers;
 	memset(client, 0, sizeof(*client));
 	client->pers = saved;
 	if (client->pers.health <= 0)
-		InitClientPersistent(ent);
+		Client_InitPersistent(ent);
 	client->resp = resp;
 
 	// copy some data from the client to the entity
@@ -658,7 +658,8 @@ void PutClientInServer(edict_t* ent)
 	VectorCopy(ent->s.angles, client->v_angle);
 
 	// spawn a spectator
-	if (client->pers.spectator) {
+	if (client->pers.spectator) 
+	{
 		client->chase_target = NULL;
 
 		client->resp.spectator = true;
@@ -673,7 +674,7 @@ void PutClientInServer(edict_t* ent)
 	else
 		client->resp.spectator = false;
 
-	if (!G_KillBox(ent))
+	if (!Game_KillBox(ent))
 	{	// could't spawn in?
 	}
 
@@ -681,7 +682,7 @@ void PutClientInServer(edict_t* ent)
 
 	// force the current weapon up
 	client->newweapon = client->pers.weapon;
-	ChangeWeapon(ent);
+	Player_WeaponChange(ent);
 }
 
 /* Dummy spawns go HERE */

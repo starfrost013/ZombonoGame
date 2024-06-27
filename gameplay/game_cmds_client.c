@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <game_local.h>
 #include <mobs/mob_player.h>
 
-void SelectNextItem(edict_t* ent, int32_t itflags)
+void Player_SelectNextItem(edict_t* ent, int32_t itflags)
 {
 	gclient_t* cl;
 	gitem_t* it;
@@ -48,7 +48,7 @@ void SelectNextItem(edict_t* ent, int32_t itflags)
 	{
 		loadout_entry_t* loadout_entry_ptr = &cl->loadout.items[item_num];
 
-		it = FindItem(loadout_entry_ptr->item_name);
+		it = Item_FindByPickupName(loadout_entry_ptr->item_name);
 
 		if (it == NULL)
 			continue;
@@ -72,7 +72,7 @@ void SelectNextItem(edict_t* ent, int32_t itflags)
 	}
 }
 
-void SelectPrevItem (edict_t *ent, int32_t itflags)
+void Player_SelectPrevItem (edict_t *ent, int32_t itflags)
 {
 	gclient_t* cl;
 	gitem_t* it;
@@ -98,7 +98,7 @@ void SelectPrevItem (edict_t *ent, int32_t itflags)
 	{
 		loadout_entry_t* loadout_entry_ptr = &cl->loadout.items[item_num];
 
-		it = FindItem(loadout_entry_ptr->item_name);
+		it = Item_FindByPickupName(loadout_entry_ptr->item_name);
 
 		if (it == NULL)
 			continue;
@@ -132,7 +132,7 @@ Cmd_Give_f
 Give items to a client
 ==================
 */
-void Cmd_Give_f (edict_t *ent)
+void Client_CommandGive (edict_t *ent)
 {
 	char*		name;
 	gitem_t*	it;
@@ -193,7 +193,7 @@ void Cmd_Give_f (edict_t *ent)
 				continue;
 			if (!(it->flags & IT_AMMO))
 				continue;
-			Add_Ammo (ent, it, 1000);
+			Ammo_Add (ent, it, 1000);
 		}
 		if (!give_all)
 			return;
@@ -206,7 +206,7 @@ void Cmd_Give_f (edict_t *ent)
 		Loadout_DeleteItem(ent, "Jacket Armor");
 		Loadout_DeleteItem(ent, "Combat Armor");
 		
-		it = FindItem("Body Armor");
+		it = Item_FindByPickupName("Body Armor");
 		info = (gitem_armor_t *)it->info;
 
 		// see if you already have it
@@ -228,13 +228,13 @@ void Cmd_Give_f (edict_t *ent)
 
 	if (give_all || Q_stricmp(name, "Power Shield") == 0)
 	{
-		it = FindItem("Power Shield");
-		it_ent = G_Spawn();
+		it = Item_FindByPickupName("Power Shield");
+		it_ent = Edict_Spawn();
 		it_ent->classname = it->classname;
-		SpawnItem (it_ent, it);
-		Touch_Item (it_ent, ent, NULL, NULL);
+		Item_Spawn (it_ent, it);
+		Item_OnTouch (it_ent, ent, NULL, NULL);
 		if (it_ent->inuse)
-			G_FreeEdict(it_ent);
+			Edict_Free(it_ent);
 
 		if (!give_all)
 			return;
@@ -255,11 +255,11 @@ void Cmd_Give_f (edict_t *ent)
 		return;
 	}
 
-	it = FindItem (name);
+	it = Item_FindByPickupName (name);
 	if (!it)
 	{
 		name = gi.argv(1);
-		it = FindItem (name);
+		it = Item_FindByPickupName (name);
 		if (!it)
 		{
 			gi.cprintf (ent, PRINT_HIGH, "unknown item\n");
@@ -284,12 +284,12 @@ void Cmd_Give_f (edict_t *ent)
 	}
 	else
 	{
-		it_ent = G_Spawn();
+		it_ent = Edict_Spawn();
 		it_ent->classname = it->classname;
-		SpawnItem (it_ent, it);
-		Touch_Item (it_ent, ent, NULL, NULL);
+		Item_Spawn (it_ent, it);
+		Item_OnTouch (it_ent, ent, NULL, NULL);
 		if (it_ent->inuse)
-			G_FreeEdict(it_ent);
+			Edict_Free(it_ent);
 	}
 }
 
@@ -303,7 +303,7 @@ Sets client to godmode
 argv(0) god
 ==================
 */
-void Cmd_God_f (edict_t *ent)
+void Client_CommandGod (edict_t *ent)
 {
 	char	*msg;
 
@@ -334,7 +334,7 @@ Sets client to notarget
 argv(0) notarget
 ==================
 */
-void Cmd_Notarget_f (edict_t *ent)
+void Client_CommandNotarget (edict_t *ent)
 {
 	char	*msg;
 
@@ -363,7 +363,7 @@ Cmd_Noclip_f
 argv(0) noclip
 ==================
 */
-void Cmd_Noclip_f (edict_t *ent)
+void Client_CommandNoclip (edict_t *ent)
 {
 	char	*msg;
 
@@ -397,10 +397,10 @@ Cmd_Use_f
 Use an inventory item
 ==================
 */
-void Cmd_Use_f (edict_t *ent)
+void Client_CommandUse (edict_t *ent)
 {
 	char*	 s = gi.args();
-	gitem_t* it = FindItem(s);
+	gitem_t* it = Item_FindByPickupName(s);
 
 	if (!it)
 	{
@@ -426,7 +426,7 @@ void Cmd_Use_f (edict_t *ent)
 }
 
 #define MAX_UI_STRLEN_GAME 256	// CHANGE!!!!
-void Cmd_Loadout_f(edict_t* ent)
+void Client_CommandLoadout(edict_t* ent)
 {
 	// don't bother if there are no items
 	if (ent->client->loadout.num_items == 0)
@@ -525,14 +525,14 @@ void Cmd_Loadout_f(edict_t* ent)
 		if (&ent->client->loadout.items[index] != ent->client->loadout_current_weapon)
 		{
 			ent->client->loadout_current_weapon = &ent->client->loadout.items[index];
-			ent->client->newweapon = FindItem(&ent->client->loadout.items[index].item_name);
-			ChangeWeapon(ent);
+			ent->client->newweapon = Item_FindByPickupName(&ent->client->loadout.items[index].item_name);
+			Player_WeaponChange(ent);
 		}
 	}
 
 
 	// tell the client to turn on the loadout UI
-	G_UISend(ent, "LoadoutUI", true, true, false);
+	GameUI_Send(ent, "LoadoutUI", true, true, false);
 }
 
 /*
@@ -542,7 +542,7 @@ Cmd_Drop_f
 Drop an inventory item
 ==================
 */
-void Cmd_Drop_f (edict_t *ent)
+void Client_CommandDrop (edict_t *ent)
 {
 	gitem_t*	it;
 	char*		s;
@@ -550,7 +550,7 @@ void Cmd_Drop_f (edict_t *ent)
 	loadout_entry_t* loadout_entry_ptr = Loadout_GetItem(ent, it->pickup_name);
 
 	s = gi.args();
-	it = FindItem (s);
+	it = Item_FindByPickupName (s);
 	if (!it)
 	{
 		gi.cprintf (ent, PRINT_HIGH, "unknown item: %s\n", s);
@@ -576,7 +576,7 @@ void Cmd_Drop_f (edict_t *ent)
 Cmd_InvUse_f
 =================
 */
-void Cmd_InvUse_f (edict_t *ent)
+void Client_CommandInvUse (edict_t *ent)
 {
 	gitem_t* it;
 
@@ -600,7 +600,7 @@ void Cmd_InvUse_f (edict_t *ent)
 Cmd_WeapPrev_f
 =================
 */
-void Cmd_WeapPrev_f (edict_t *ent)
+void Client_CommandWeapPrev (edict_t *ent)
 {
 	gclient_t*	cl;
 	gitem_t*	it;
@@ -617,7 +617,7 @@ void Cmd_WeapPrev_f (edict_t *ent)
 	{
 		loadout_entry_t* loadout_entry_ptr = &cl->loadout.items[item_num];
 
-		it = FindItem(loadout_entry_ptr->item_name);
+		it = Item_FindByPickupName(loadout_entry_ptr->item_name);
 
 		if (it == NULL)
 			continue;
@@ -647,7 +647,7 @@ void Cmd_WeapPrev_f (edict_t *ent)
 Cmd_WeapNext_f
 =================
 */
-void Cmd_WeapNext_f (edict_t *ent)
+void Client_CommandWeapNext (edict_t *ent)
 {
 	gclient_t*	cl;
 	gitem_t*	it;
@@ -665,7 +665,7 @@ void Cmd_WeapNext_f (edict_t *ent)
 	{
 		loadout_entry_t* loadout_entry_ptr = &cl->loadout.items[item_num];
 
-		it = FindItem(loadout_entry_ptr->item_name);
+		it = Item_FindByPickupName(loadout_entry_ptr->item_name);
 
 		if (it == NULL)
 			continue;
@@ -695,7 +695,7 @@ void Cmd_WeapNext_f (edict_t *ent)
 Cmd_WeapLast_f
 =================
 */
-void Cmd_WeapLast_f (edict_t *ent)
+void Client_CommandWeapLast (edict_t *ent)
 {
 	gclient_t*	cl;
 	int32_t		index;
@@ -708,7 +708,7 @@ void Cmd_WeapLast_f (edict_t *ent)
 
 	loadout_entry_t* loadout_entry_ptr = Loadout_GetItem(ent, cl->pers.lastweapon->pickup_name);
 
-	it = FindItem(cl->pers.lastweapon->pickup_name);
+	it = Item_FindByPickupName(cl->pers.lastweapon->pickup_name);
 	if (!it->use)
 		return;
 	if (! (it->flags & IT_WEAPON) )
@@ -721,7 +721,7 @@ void Cmd_WeapLast_f (edict_t *ent)
 Cmd_InvDrop_f
 =================
 */
-void Cmd_InvDrop_f (edict_t *ent)
+void Command_ClientInvDrop (edict_t *ent)
 {
 	gitem_t* it;
 
@@ -745,7 +745,7 @@ void Cmd_InvDrop_f (edict_t *ent)
 Cmd_Kill_f
 =================
 */
-void Cmd_Kill_f (edict_t *ent)
+void Client_CommandKill (edict_t *ent)
 {
 	if((level.time - ent->client->respawn_time) < 5)
 		return;
@@ -754,16 +754,6 @@ void Cmd_Kill_f (edict_t *ent)
 	ent->health = 0;
 	meansOfDeath = MOD_SUICIDE;
 	player_die (ent, ent, ent, 100000, vec3_origin);
-}
-
-/*
-=================
-Cmd_PutAway_f
-=================
-*/
-void Cmd_PutAway_f (edict_t *ent)
-{
-	ent->client->showhelp = false;
 }
 
 
@@ -789,7 +779,7 @@ int32_t PlayerSort (void const *a, void const *b)
 Cmd_Players_f
 =================
 */
-void Cmd_Players_f (edict_t *ent)
+void Client_CommandPlayers (edict_t *ent)
 {
 	int32_t	i;
 	int32_t	count;
@@ -836,7 +826,7 @@ void Cmd_Players_f (edict_t *ent)
 Cmd_Wave_f
 =================
 */
-void Cmd_Wave_f (edict_t *ent)
+void Client_CommandWave (edict_t *ent)
 {
 	int32_t i;
 
@@ -888,7 +878,7 @@ Cmd_SetTeam_f
 (noconsole)
 ==================
 */
-void Cmd_SetTeam_f(edict_t* ent, player_team team)
+void Client_CommandSetTeam(edict_t* ent, player_team team)
 {
 	// anti cheating:
 	// on TDM mode, unassigneds are invincible (for spectating, and also for )
@@ -913,16 +903,16 @@ void Cmd_SetTeam_f(edict_t* ent, player_team team)
 	if (team == team_player)
 	{
 		// TDM mode only?
-		G_UISend(ent, "BamfuslicatorUI", false, false, false);
+		GameUI_Send(ent, "BamfuslicatorUI", false, false, false);
 	}
 
 	ent->team = team;
 
 	// teleport the player to the spanw point
-	SelectSpawnPoint(ent, spawn_origin, spawn_angles);
-	GiveBaseWeaponForTeam(ent);
+	Player_SelectSpawnPoint(ent, spawn_origin, spawn_angles);
+	Player_GiveBaseWeaponForTeam(ent);
 	ent->client->newweapon = ent->client->pers.weapon;
-	ChangeWeapon(ent);
+	Player_WeaponChange(ent);
 
 	VectorCopy(spawn_origin, ent->s.origin);
 	VectorCopy(spawn_angles, ent->s.angles);
@@ -933,7 +923,7 @@ void Cmd_SetTeam_f(edict_t* ent, player_team team)
 Cmd_Say_f
 ==================
 */
-void Cmd_Say_f (edict_t *ent, bool team, bool arg0)
+void Client_CommandSay (edict_t *ent, bool team, bool arg0)
 {
 	int32_t		i, j;
 	edict_t*	other;
@@ -1025,7 +1015,7 @@ void Cmd_Say_f (edict_t *ent, bool team, bool arg0)
 	}
 }
 
-void Cmd_PlayerList_f(edict_t *ent)
+void Client_CommandPlayerList(edict_t *ent)
 {
 	int32_t i;
 	char	st[80];
@@ -1064,7 +1054,7 @@ void Cmd_PlayerList_f(edict_t *ent)
 ClientCommand
 =================
 */
-void ClientCommand (edict_t *ent)
+void Client_Command (edict_t *ent)
 {
 	char* cmd;
 
@@ -1077,22 +1067,22 @@ void ClientCommand (edict_t *ent)
 
 	if (!Q_stricmp (cmd, "players"))
 	{
-		Cmd_Players_f (ent);
+		Client_CommandPlayers (ent);
 		return;
 	}
 	else if (!Q_stricmp (cmd, "say"))
 	{
-		Cmd_Say_f (ent, false, false);
+		Client_CommandSay (ent, false, false);
 		return;
 	}
 	else if (!Q_stricmp (cmd, "say_team"))
 	{
-		Cmd_Say_f (ent, true, false);
+		Client_CommandSay (ent, true, false);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "leaderboard"))
 	{
-		Cmd_Leaderboard_f(ent);
+		Client_CommandLeaderboard(ent);
 		return;
 	}
 
@@ -1102,121 +1092,116 @@ void ClientCommand (edict_t *ent)
 	// commands below here can not be used during intermission
 	if (!Q_stricmp(cmd, "use"))
 	{
-		Cmd_Use_f(ent);
+		Client_CommandUse(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "drop"))
 	{
-		Cmd_Drop_f(ent);
+		Client_CommandDrop(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "give"))
 	{
-		Cmd_Give_f(ent);
+		Client_CommandGive(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "god"))
 	{
-		Cmd_God_f(ent);
+		Client_CommandGod(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "notarget"))
 	{
-		Cmd_Notarget_f(ent);
+		Client_CommandNotarget(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "noclip"))
 	{
-		Cmd_Noclip_f(ent);
+		Client_CommandNoclip(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "invnext"))
 	{
-		SelectNextItem(ent, -1);
+		Player_SelectNextItem(ent, -1);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "invprev"))
 	{
-		SelectPrevItem(ent, -1);
+		Player_SelectPrevItem(ent, -1);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "invnextw"))
 	{
-		SelectNextItem(ent, IT_WEAPON);
+		Player_SelectNextItem(ent, IT_WEAPON);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "invprevw"))
 	{
-		SelectPrevItem(ent, IT_WEAPON);
+		Player_SelectPrevItem(ent, IT_WEAPON);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "invnextp"))
 	{
-		SelectNextItem(ent, IT_POWERUP);
+		Player_SelectNextItem(ent, IT_POWERUP);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "invprevp"))
 	{
-		SelectPrevItem(ent, IT_POWERUP);
+		Player_SelectPrevItem(ent, IT_POWERUP);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "invuse"))
 	{
-		Cmd_InvUse_f(ent);
+		Client_CommandInvUse(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "invdrop"))
 	{
-		Cmd_InvDrop_f(ent);
+		Command_ClientInvDrop(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "weapprev"))
 	{
-		Cmd_WeapPrev_f(ent);
+		Client_CommandWeapPrev(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "weapnext"))
 	{
-		Cmd_WeapNext_f(ent);
+		Client_CommandWeapNext(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "weaplast"))
 	{
-		Cmd_WeapLast_f(ent);
+		Client_CommandWeapLast(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "kill"))
 	{
-		Cmd_Kill_f(ent);
-		return;
-	}
-	else if (!Q_stricmp(cmd, "putaway"))
-	{
-		Cmd_PutAway_f(ent);
+		Client_CommandKill(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "wave"))
 	{
-		Cmd_Wave_f(ent);
+		Client_CommandWave(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "playerlist"))
 	{
-		Cmd_PlayerList_f(ent);
+		Client_CommandPlayerList(ent);
 		return;
 	}
 	else if (!Q_stricmp(cmd, "loadout"))
 	{
-		Cmd_Loadout_f(ent);
+		Client_CommandLoadout(ent);
 		return;
 	}
 
 	// anything that doesn't match a command will be a chat
-	Cmd_Say_f (ent, false, true);
+	Client_CommandSay (ent, false, true);
 }
 
 // ClientCommands that cannot be entered from teh console.
-void ClientCommand_NoConsole(edict_t* ent)
+void Client_CommandNoConsole(edict_t* ent)
 {
 	char* cmd;
 
@@ -1227,6 +1212,6 @@ void ClientCommand_NoConsole(edict_t* ent)
 
 	if (!Q_stricmp(cmd, "setteam"))
 	{
-		Cmd_SetTeam_f(ent, atoi(gi.argv(1)));
+		Client_CommandSetTeam(ent, atoi(gi.argv(1)));
 	}
 }

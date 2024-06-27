@@ -37,7 +37,7 @@ void P_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t right
 		_distance[1] *= -1;
 	else if (client->pers.hand == CENTER_HANDED)
 		_distance[1] = 0;
-	G_ProjectSource(point, _distance, forward, right, result);
+	Game_ProjectSource(point, _distance, forward, right, result);
 
 	// Berserker: fix - now the projectile hits exactly where the scope is pointing.
 	if (aimfix->value)
@@ -86,7 +86,7 @@ void PlayerNoise(edict_t* who, vec3_t where, int32_t type)
 
 	if (!who->mynoise)
 	{
-		noise = G_Spawn();
+		noise = Edict_Spawn();
 		noise->classname = "player_noise";
 		VectorSet(noise->mins, -8, -8, -8);
 		VectorSet(noise->maxs, 8, 8, 8);
@@ -94,7 +94,7 @@ void PlayerNoise(edict_t* who, vec3_t where, int32_t type)
 		noise->svflags = SVF_NOCLIENT;
 		who->mynoise = noise;
 
-		noise = G_Spawn();
+		noise = Edict_Spawn();
 		noise->classname = "player_noise";
 		VectorSet(noise->mins, -8, -8, -8);
 		VectorSet(noise->maxs, 8, 8, 8);
@@ -124,7 +124,7 @@ void PlayerNoise(edict_t* who, vec3_t where, int32_t type)
 }
 
 
-bool Pickup_Weapon(edict_t* ent, edict_t* other)
+bool Weapon_Pickup(edict_t* ent, edict_t* other)
 {
 	int32_t		index;
 	gitem_t*	ammo;
@@ -154,21 +154,21 @@ bool Pickup_Weapon(edict_t* ent, edict_t* other)
 	if (!(ent->spawnflags & DROPPED_ITEM))
 	{
 		// give them some ammo with it
-		ammo = FindItem(ent->item->ammo);
+		ammo = Item_FindByPickupName(ent->item->ammo);
 
 		if (ammo)
 		{
 			if ((int32_t)gameflags->value & GF_INFINITE_AMMO)
-				Add_Ammo(other, ammo, 1000);
+				Ammo_Add(other, ammo, 1000);
 			else
-				Add_Ammo(other, ammo, ammo->quantity);
+				Ammo_Add(other, ammo, ammo->quantity);
 
 			if (!(ent->spawnflags & DROPPED_PLAYER_ITEM))
 			{
 				if ((int32_t)(gameflags->value) & GF_WEAPONS_STAY)
 					ent->flags |= FL_RESPAWN;
 				else
-					SetRespawn(ent, 30);
+					Item_SetRespawn(ent, 30);
 			}
 		}
 	}
@@ -176,7 +176,7 @@ bool Pickup_Weapon(edict_t* ent, edict_t* other)
 	// wtf does this do?
 	if (other->client->pers.weapon != ent->item &&
 		//(other->client->pers.inventory[index] == 1) && doesn't work with new loadout system
-		(other->client->pers.weapon == FindItem("blaster")))
+		(other->client->pers.weapon == Item_FindByPickupName("blaster")))
 		other->client->newweapon = ent->item;
 
 	return true;
@@ -191,7 +191,7 @@ The old weapon has been dropped all the way, so make the new one
 current
 ===============
 */
-void ChangeWeapon(edict_t* ent)
+void Player_WeaponChange(edict_t* ent)
 {
 	int32_t i;
 
@@ -199,7 +199,7 @@ void ChangeWeapon(edict_t* ent)
 	{
 		ent->client->grenade_time = level.time;
 		ent->client->weapon_sound = 0;
-		Weapon_grenade_fire(ent, false);
+		Weapon_Grenade_fire(ent, false);
 		ent->client->grenade_time = 0;
 	}
 
@@ -211,14 +211,14 @@ void ChangeWeapon(edict_t* ent)
 		// toggle the UI depending on if we are switching into or out of the bamfuslicator (TODO: HACK!!!!)
 		if (!strcmp(ent->client->newweapon->classname, "weapon_bamfuslicator"))
 		{
-			G_UISend(ent, "BamfuslicatorUI", true, false, false);
+			GameUI_Send(ent, "BamfuslicatorUI", true, false, false);
 			ent->client->pers.weapon->spawn_type = -1; // another hack, settype increments it so it will be set to 0
 			Weapon_Bamfuslicator_SetType(ent);
 		}
 		else if (ent->client->pers.lastweapon != NULL
 			&& !strcmp(ent->client->pers.lastweapon->classname, "weapon_bamfuslicator")) // switching out
 		{
-			G_UISend(ent, "BamfuslicatorUI", false, false, false);
+			GameUI_Send(ent, "BamfuslicatorUI", false, false, false);
 		}
 	}
 
@@ -236,7 +236,7 @@ void ChangeWeapon(edict_t* ent)
 
 	if (ent->client->pers.weapon && ent->client->pers.weapon->ammo)
 	{
-		gitem_t* item_ammo = FindItem(ent->client->pers.weapon->ammo);
+		gitem_t* item_ammo = Item_FindByPickupName(ent->client->pers.weapon->ammo);
 
 		loadout_entry_t* item_ammo_loadout_ptr = Loadout_GetItem(ent, item_ammo->pickup_name);
 
@@ -285,28 +285,28 @@ void NoAmmoWeaponChange(edict_t* ent)
 	if (Loadout_GetItem(ent, "slugs")
 		&& Loadout_GetItem(ent, "railgun"))
 	{
-		ent->client->newweapon = FindItem("railgun");
+		ent->client->newweapon = Item_FindByPickupName("railgun");
 		return;
 	}
 
 	if (Loadout_GetItem(ent, "cells")
 		&& Loadout_GetItem(ent, "hyperblaster"))
 	{
-		ent->client->newweapon = FindItem("hyperblaster");
+		ent->client->newweapon = Item_FindByPickupName("hyperblaster");
 		return;
 	}
 
 	if (Loadout_GetItem(ent, "bullets")
 		&& Loadout_GetItem(ent, "chaingun"))
 	{
-		ent->client->newweapon = FindItem("chaingun");
+		ent->client->newweapon = Item_FindByPickupName("chaingun");
 		return;
 	}
 
 	if (Loadout_GetItem(ent, "bullets")
 		&& Loadout_GetItem(ent, "machinegun"))
 	{
-		ent->client->newweapon = FindItem("machinegun");
+		ent->client->newweapon = Item_FindByPickupName("machinegun");
 		return;
 	}
 
@@ -317,18 +317,18 @@ void NoAmmoWeaponChange(edict_t* ent)
 		&& bullets->amount >= 2
 		&& Loadout_GetItem(ent, "super shotgun"))
 	{
-		ent->client->newweapon = FindItem("super shotgun");
+		ent->client->newweapon = Item_FindByPickupName("super shotgun");
 		return;
 	}
 
 	if (Loadout_GetItem(ent, "shells")
 		&& Loadout_GetItem(ent, "shotgun"))
 	{
-		ent->client->newweapon = FindItem("shotgun");
+		ent->client->newweapon = Item_FindByPickupName("shotgun");
 		return;
 	}
 
-	ent->client->newweapon = FindItem("blaster");
+	ent->client->newweapon = Item_FindByPickupName("blaster");
 }
 
 /*
@@ -338,13 +338,13 @@ Think_Weapon
 Called by ClientBeginServerFrame and ClientThink
 =================
 */
-void Think_Weapon(edict_t* ent)
+void Weapon_Think(edict_t* ent)
 {
 	// if just died, put the weapon away
 	if (ent->health < 1)
 	{
 		ent->client->newweapon = NULL;
-		ChangeWeapon(ent);
+		Player_WeaponChange(ent);
 	}
 
 	// call active weapon think routine
@@ -367,7 +367,7 @@ Use_Weapon
 Make the weapon ready if there is ammo
 ================
 */
-void Use_Weapon(edict_t* ent, gitem_t* item)
+void Weapon_Use(edict_t* ent, gitem_t* item)
 {
 	gitem_t* ammo_item;
 
@@ -377,7 +377,7 @@ void Use_Weapon(edict_t* ent, gitem_t* item)
 
 	if (item->ammo && !g_select_empty->value && !(item->flags & IT_AMMO))
 	{
-		ammo_item = FindItem(item->ammo);
+		ammo_item = Item_FindByPickupName(item->ammo);
 		loadout_entry_t* ammo_item_loadout_ptr = Loadout_GetItem(ent, ammo_item->pickup_name);
 
 		if (ammo_item_loadout_ptr == NULL
@@ -405,7 +405,7 @@ void Use_Weapon(edict_t* ent, gitem_t* item)
 Drop_Weapon
 ================
 */
-void Drop_Weapon(edict_t* ent, gitem_t* item)
+void Weapon_Drop(edict_t* ent, gitem_t* item)
 {
 
 	if ((int32_t)(gameflags->value) & GF_WEAPONS_STAY)
@@ -420,7 +420,7 @@ void Drop_Weapon(edict_t* ent, gitem_t* item)
 		return;
 	}
 
-	Drop_Item(ent, item);
+	Item_Drop(ent, item);
 	ent->client->loadout.num_items--;
 }
 
@@ -451,7 +451,7 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 	{
 		if (ent->client->ps.gunframe == FRAME_DEACTIVATE_LAST)
 		{
-			ChangeWeapon(ent);
+			Player_WeaponChange(ent);
 			return;
 		}
 		else if ((FRAME_DEACTIVATE_LAST - ent->client->ps.gunframe) == 4)

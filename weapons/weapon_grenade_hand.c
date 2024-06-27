@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define GRENADE_MINSPEED	400
 #define GRENADE_MAXSPEED	800
 
-void Weapon_grenade_fire(edict_t* ent, bool held)
+void Weapon_Grenade_fire(edict_t* ent, bool held)
 {
 	vec3_t	offset = { 0 };
 	vec3_t	forward, right;
@@ -83,7 +83,7 @@ void Weapon_Grenade(edict_t* ent)
 
 	if ((ent->client->newweapon) && (ent->client->weaponstate == WEAPON_READY))
 	{
-		ChangeWeapon(ent);
+		Player_WeaponChange(ent);
 		return;
 	}
 
@@ -152,7 +152,7 @@ void Weapon_Grenade(edict_t* ent)
 			if (!ent->client->grenade_blew_up && level.time >= ent->client->grenade_time)
 			{
 				ent->client->weapon_sound = 0;
-				Weapon_grenade_fire(ent, true);
+				Weapon_Grenade_fire(ent, true);
 				ent->client->grenade_blew_up = true;
 			}
 
@@ -176,7 +176,7 @@ void Weapon_Grenade(edict_t* ent)
 		if (ent->client->ps.gunframe == 12)
 		{
 			ent->client->weapon_sound = 0;
-			Weapon_grenade_fire(ent, false);
+			Weapon_Grenade_fire(ent, false);
 		}
 
 		if ((ent->client->ps.gunframe == 15) && (level.time < ent->client->grenade_time))

@@ -121,7 +121,7 @@ static void Ammo_Bullet_generic(edict_t* self, vec3_t start, vec3_t aimdir, int3
 		{
 			if (tr.ent->takedamage)
 			{
-				T_Damage(tr.ent, self, self, aimdir, tr.endpos, tr.plane.normal, damage, kick, DAMAGE_BULLET, mod);
+				Player_Damage(tr.ent, self, self, aimdir, tr.endpos, tr.plane.normal, damage, kick, DAMAGE_BULLET, mod);
 			}
 			else
 			{

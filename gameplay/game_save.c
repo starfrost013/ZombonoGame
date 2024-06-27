@@ -170,7 +170,7 @@ only happens when a new game is started or a save game
 is loaded.
 ============
 */
-void InitGame ()
+void Game_Init ()
 {
 	gi.dprintf("==== InitGame ====\n");
 
@@ -231,7 +231,7 @@ void InitGame ()
 	aimfix = gi.cvar("aimfix", "0", CVAR_ARCHIVE);
 
 	// items
-	InitItems();
+	Items_Init();
 
 	Com_sprintf(game.helpmessage1, sizeof(game.helpmessage1), "");
 
@@ -306,7 +306,7 @@ void WriteField1 (FILE *f, field_t *field, uint8_t *base)
 		if (*(uint8_t**)p == NULL)
 			index = 0;
 		else
-			index = *(uint8_t**)p - ((uint8_t *)InitGame);
+			index = *(uint8_t**)p - ((uint8_t *)Game_Init);
 		*(int32_t *)p = index;
 		break;
 
@@ -407,7 +407,7 @@ void ReadField (FILE *f, field_t *field, uint8_t *base)
 		if ( index == 0 )
 			*(uint8_t **)p = NULL;
 		else
-			*(uint8_t**)p = ((uint8_t*)InitGame) + index;
+			*(uint8_t**)p = ((uint8_t*)Game_Init) + index;
 		break;
 
 	//relative to data segment
@@ -490,7 +490,7 @@ A single player death will automatically restore from the
 last save position.
 ============
 */
-void WriteGame (char *filename, bool autosave)
+void Game_Write (char *filename, bool autosave)
 {
 	FILE*	f;
 	int32_t	i;
@@ -517,7 +517,7 @@ void WriteGame (char *filename, bool autosave)
 	fclose (f);
 }
 
-void ReadGame (char *filename)
+void Game_Read (char *filename)
 {
 	FILE*	f;
 	int32_t	i;
@@ -658,7 +658,7 @@ WriteLevel
 
 =================
 */
-void WriteLevel (char *filename)
+void Level_Write (char *filename)
 {
 	int		i;
 	edict_t	*ent;
@@ -674,7 +674,7 @@ void WriteLevel (char *filename)
 	fwrite (&i, sizeof(i), 1, f);
 
 	// write out a function pointer for checking
-	base = (void *)InitGame;
+	base = (void *)Game_Init;
 	fwrite (&base, sizeof(base), 1, f);
 
 	// write out level_locals_t
@@ -712,7 +712,7 @@ calling ReadLevel.
 No clients are connected yet.
 =================
 */
-void ReadLevel (char *filename)
+void Level_Read (char *filename)
 {
 	int32_t	entnum;
 	FILE*	f;

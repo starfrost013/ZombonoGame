@@ -190,27 +190,27 @@ typedef struct
 	void		(*Shutdown) ();
 
 	// each new level entered will cause a call to SpawnEntities
-	void		(*SpawnEntities) (char *mapname, char *entstring, char *spawnpoint);
+	void		(*Game_SpawnEntities) (char *mapname, char *entstring, char *spawnpoint);
 
 	// Read/Write Game is for storing persistant cross level information
 	// about the world state and the clients.
 	// WriteGame is called every time a level is exited.
 	// ReadGame is called on a loadgame.
-	void		(*WriteGame) (char *filename, bool autosave);
-	void		(*ReadGame) (char *filename);
+	void		(*Game_Write) (char *filename, bool autosave);
+	void		(*Game_Read) (char *filename);
 
 	// ReadLevel is called after the default map information has been
 	// loaded with SpawnEntities
-	void		(*WriteLevel) (char *filename);
-	void		(*ReadLevel) (char *filename);
+	void		(*Level_Write) (char *filename);
+	void		(*Level_Read) (char *filename);
 
-	bool		(*ClientConnect) (edict_t *ent, char *userinfo);
-	void		(*ClientBegin) (edict_t *ent);
-	void		(*ClientUserinfoChanged) (edict_t *ent, char *userinfo);
-	void		(*ClientDisconnect) (edict_t *ent);
-	void		(*ClientCommand) (edict_t *ent);
-	void		(*ClientCommand_NoConsole) (edict_t* ent);
-	void		(*ClientThink) (edict_t *ent, usercmd_t *cmd);
+	bool		(*Client_Connect) (edict_t *ent, char *userinfo);
+	void		(*Client_OnConnected) (edict_t *ent);
+	void		(*Client_UserinfoChanged) (edict_t *ent, char *userinfo);
+	void		(*Client_Disconnect) (edict_t *ent);
+	void		(*Client_Command) (edict_t *ent);
+	void		(*Client_CommandNoConsole) (edict_t* ent);
+	void		(*Client_Think) (edict_t *ent, usercmd_t *cmd);
 
 	void		(*RunFrame) ();
 
@@ -218,7 +218,7 @@ typedef struct
 	// server console.
 	// The game can issue gi.argc() / gi.argv() commands to get the rest
 	// of the parameters
-	void		(*ServerCommand) ();
+	void		(*Server_Command) ();
 
 	//
 	// global variables shared between game and server

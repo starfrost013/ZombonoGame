@@ -30,7 +30,7 @@ INTERMISSION
 ======================================================================
 */
 
-void MoveClientToIntermission(edict_t* ent, player_team winning_team)
+void Player_MoveToIntermission(edict_t* ent, player_team winning_team)
 {
 
 	VectorCopy(level.intermission_origin, ent->s.origin);
@@ -63,7 +63,7 @@ void MoveClientToIntermission(edict_t* ent, player_team winning_team)
 	// tell the client to display the leaderboard
 	// 
 	// send the leaderboard info
-	G_LeaderboardSend(ent);
+	GameUI_SendLeaderboard(ent);
 
 	// make it draw the leaderboard (hack, reliable)
 	gi.WriteByte(svc_leaderboarddraw);
@@ -95,35 +95,36 @@ void MoveClientToIntermission(edict_t* ent, player_team winning_team)
 		{
 			if (player_won)
 			{
-				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_win_director", true);
+				GameUI_SetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_win_director", true);
 			}
 			else
 			{
-				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_lose_director", true);
+				GameUI_SetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_lose_director", true);
 			}
 		}
 		else if (winning_team == team_player)
 		{
 			if (player_won)
 			{
-				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_win_player", true);
+				GameUI_SetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_win_player", true);
 
 				
 			}
 			else
 			{
-				G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_win_player", true);
+				GameUI_SetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_win_player", true);
 			}
 		}
 		else
 		{
-			G_UISetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_draw", true);
+			GameUI_SetImage(ent, "LeaderboardUI", "LeaderboardUI_Header", "2d/ui/leaderboardui_draw", true);
 		}
 	}
 
 }
 
-void BeginIntermission (edict_t *targ)
+// Run when the gamemode exit conditions are satisfied
+void Game_TransitionToNextMatch (edict_t *targ)
 {
 	int32_t	i, n;
 	edict_t	*ent, *client;
@@ -150,21 +151,21 @@ void BeginIntermission (edict_t *targ)
 	level.exitintermission = 0;
 
 	// find an intermission spot
-	ent = G_Find (NULL, FOFS(classname), "info_player_intermission");
+	ent = Game_FindEdictByValue (NULL, FOFS(classname), "info_player_intermission");
 	if (!ent)
 	{	// the map creator forgot to put in an intermission point, so use the unassigned MP start...
-		ent = G_Find (NULL, FOFS(classname), "info_player_start");
+		ent = Game_FindEdictByValue (NULL, FOFS(classname), "info_player_start");
 		if (!ent)
-			ent = G_Find (NULL, FOFS(classname), "info_player_deathmatch");
+			ent = Game_FindEdictByValue (NULL, FOFS(classname), "info_player_deathmatch");
 	}
 	else
 	{	// chose one of four spots
 		i = rand() & 3;
 		while (i--)
 		{
-			ent = G_Find (ent, FOFS(classname), "info_player_intermission");
+			ent = Game_FindEdictByValue (ent, FOFS(classname), "info_player_intermission");
 			if (!ent)	// wrap around the list
-				ent = G_Find (ent, FOFS(classname), "info_player_intermission");
+				ent = Game_FindEdictByValue (ent, FOFS(classname), "info_player_intermission");
 		}
 	}
 
@@ -181,11 +182,11 @@ void BeginIntermission (edict_t *targ)
 		if (gamemode->value == GAMEMODE_TDM)
 		{
 			winning_team = Gamemode_TDMGetWinner();
-			MoveClientToIntermission(client, winning_team);
+			Player_MoveToIntermission(client, winning_team);
 		}
 		else // indicate no winner as non-TDM gamemode
 		{
-			MoveClientToIntermission(client, 0);
+			Player_MoveToIntermission(client, 0);
 		}
 	}
 }
@@ -197,7 +198,7 @@ G_LeaderboardSend
 Sends over the leaderboard
 ==================
 */
-void G_LeaderboardSend(edict_t* ent)
+void GameUI_SendLeaderboard(edict_t* ent)
 {
 	// don't send leaderboard during intermission (there is no reason to do so as the game has stopped)
 	if (level.intermissiontime)
@@ -209,7 +210,7 @@ void G_LeaderboardSend(edict_t* ent)
 	// tell the client there is a leaderboard update coming
 	gi.WriteByte(svc_leaderboard);
 
-	int32_t client_count = G_CountClients();
+	int32_t client_count = Game_CountClients();
 	int32_t total = 0, score = 0;
 	int32_t j, k;
 
@@ -278,54 +279,9 @@ void G_LeaderboardSend(edict_t* ent)
 	gi.unicast(ent, false); // make it false? it's still not very common...(only when the user presses TAB)
 }
 
-void Cmd_Leaderboard_f(edict_t* ent)
+void Client_CommandLeaderboard(edict_t* ent)
 {
-	ent->client->showhelp = false;
-
-	G_LeaderboardSend(ent);
-}
-
-/*
-==================
-HelpComputer
-
-Draw help computer.
-==================
-*/
-void HelpComputer (edict_t *ent)
-{
-	char	string[1024];
-	char	*sk;
-
-	if (skill->value == 0)
-		sk = "easy";
-	else if (skill->value == 1)
-		sk = "medium";
-	else if (skill->value == 2)
-		sk = "hard";
-	else
-		sk = "hard+";
-
-	// send the layout
-	Com_sprintf (string, sizeof(string),
-		"xv 32 yv 8 picn help "			// background
-		"xv 202 yv 12 string \"%s\" "		// skill
-		"xv 0 yv 24 cstring \"^2%s^7\" "		// level name
-		"xv 0 yv 54 cstring \"^2%s^7\" "		// help 1
-		"xv 0 yv 110 cstring \"^2%s^7\" "		// help 2
-		"xv 50 yv 164 string \"^2 kills     goals    secrets\"^7 "
-		"xv 50 yv 172 string \"^2%3i/%3i     %i/%i       %i/%i\"^7 ", 
-		sk,
-		level.level_name,
-		game.helpmessage1,
-		game.helpmessage2,
-		level.killed_monsters, level.total_monsters, 
-		level.found_goals, level.total_goals,
-		level.found_secrets, level.total_secrets);
-
-	gi.WriteByte (svc_layout);
-	gi.WriteString (string);
-	gi.unicast (ent, true);
+	GameUI_SendLeaderboard(ent);
 }
 
 /*
@@ -333,11 +289,11 @@ void HelpComputer (edict_t *ent)
 G_SetStats
 ===============
 */
-void G_SetStats (edict_t *ent)
+void GameUI_SetStats (edict_t *ent)
 {
 	gitem_t			*item;
 	loadout_entry_t* cells = Loadout_GetItem(ent, "cells");
-	loadout_entry_t* armor = GetCurrentArmor(ent);
+	loadout_entry_t* armor = Armor_GetCurrent(ent);
 
 	int32_t			power_armor_type;
 
@@ -357,7 +313,7 @@ void G_SetStats (edict_t *ent)
 	}
 	else
 	{
-		item = FindItem(ent->client->loadout_current_ammo->item_name);
+		item = Item_FindByPickupName(ent->client->loadout_current_ammo->item_name);
 		
 		if (!item)
 		{
@@ -374,7 +330,7 @@ void G_SetStats (edict_t *ent)
 	//
 	// armor
 	//
-	power_armor_type = GetCurrentPowerArmor (ent);
+	power_armor_type = Armor_GetCurrentPowerArmor (ent);
 
 	if (power_armor_type)
 	{
@@ -484,7 +440,7 @@ void G_SetStats (edict_t *ent)
 G_CheckChaseStats
 ===============
 */
-void G_CheckChaseStats (edict_t *ent)
+void GameUI_CheckChaseStats (edict_t *ent)
 {
 	int32_t i;
 	gclient_t *cl;
@@ -494,7 +450,7 @@ void G_CheckChaseStats (edict_t *ent)
 		if (!g_edicts[i].inuse || cl->chase_target != ent)
 			continue;
 		memcpy(cl->ps.stats, ent->client->ps.stats, sizeof(cl->ps.stats));
-		G_SetSpectatorStats(g_edicts + i);
+		GameUI_SetStatsSpectator(g_edicts + i);
 	}
 }
 
@@ -503,12 +459,12 @@ void G_CheckChaseStats (edict_t *ent)
 G_SetSpectatorStats
 ===============
 */
-void G_SetSpectatorStats (edict_t *ent)
+void GameUI_SetStatsSpectator (edict_t *ent)
 {
 	gclient_t *cl = ent->client;
 
 	if (!cl->chase_target)
-		G_SetStats (ent);
+		GameUI_SetStats (ent);
 
 	cl->ps.stats[STAT_SPECTATOR] = 1;
 

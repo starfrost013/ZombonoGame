@@ -9,7 +9,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -115,9 +115,9 @@ typedef enum
 	DAMAGE_AIM			// auto targeting recognizes this
 } damage_t;
 
-typedef enum 
+typedef enum
 {
-	WEAPON_READY, 
+	WEAPON_READY,
 	WEAPON_ACTIVATING,
 	WEAPON_DROPPING,
 	WEAPON_FIRING_PRIMARY,
@@ -129,7 +129,7 @@ extern uint8_t	is_silenced;
 
 // STUPID hack
 void P_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
-void Weapon_grenade_fire(edict_t* ent, bool held);
+void Weapon_Grenade_fire(edict_t* ent, bool held);
 void Weapon_Bamfuslicator_SetType(edict_t* ent);
 
 typedef enum
@@ -220,17 +220,17 @@ typedef enum
 // edict->movetype values
 typedef enum movetype
 {
-MOVETYPE_NONE,			// never moves
-MOVETYPE_NOCLIP,		// origin and angles change with no interaction
-MOVETYPE_PUSH,			// no clip to world, push on box contact
-MOVETYPE_STOP,			// no clip to world, stops on box contact
+	MOVETYPE_NONE,			// never moves
+	MOVETYPE_NOCLIP,		// origin and angles change with no interaction
+	MOVETYPE_PUSH,			// no clip to world, push on box contact
+	MOVETYPE_STOP,			// no clip to world, stops on box contact
 
-MOVETYPE_WALK,			// gravity
-MOVETYPE_STEP,			// gravity, special edge handling
-MOVETYPE_FLY,
-MOVETYPE_TOSS,			// gravity
-MOVETYPE_FLYMISSILE,	// extra size to monsters
-MOVETYPE_BOUNCE
+	MOVETYPE_WALK,			// gravity
+	MOVETYPE_STEP,			// gravity, special edge handling
+	MOVETYPE_FLY,
+	MOVETYPE_TOSS,			// gravity
+	MOVETYPE_FLYMISSILE,	// extra size to monsters
+	MOVETYPE_BOUNCE
 } movetype_t;
 
 typedef struct gitem_armor_s
@@ -269,31 +269,31 @@ typedef struct gitem_armor_s
 
 typedef struct gitem_s
 {
-	char*		classname;	// spawning name
+	char* classname;	// spawning name
 	bool		(*pickup)(struct edict_s* ent, struct edict_s* other);
 	void		(*use)(struct edict_s* ent, struct gitem_s* item);
 	void		(*drop)(struct edict_s* ent, struct gitem_s* item);
 	void		(*weaponthink)(struct edict_s* ent);
-	char*		pickup_sound;
-	char*		world_model;
+	char* pickup_sound;
+	char* world_model;
 	int32_t		world_model_flags;
-	char*		view_model;
+	char* view_model;
 
 	// client side info
-	char*		icon;
-	char*		pickup_name;	// for printing on pickup
+	char* icon;
+	char* pickup_name;	// for printing on pickup
 	int32_t		count_width;		// number of digits to display by icon
 
 	int32_t		quantity;		// for ammo how much, for weapons how much is used per shot
-	char*		ammo;			// for weapons
+	char* ammo;			// for weapons
 	int32_t		flags;			// IT_* flags
 
 	int32_t		weapmodel;		// weapon model index (for weapons)
 
-	void*		info;
+	void* info;
 	int32_t		tag;
 
-	char*		precaches;		// string of all models, sounds, and images this item will use
+	char* precaches;		// string of all models, sounds, and images this item will use
 
 	int32_t		allowed_teams;	// The teams that are allowed for this item.
 	int32_t		spawn_type;		// Type of entity to spawn (item-specific)
@@ -314,7 +314,7 @@ typedef struct game_locals_s
 	int32_t		helpchanged;	// flash F1 icon if non 0, play sound
 	// and increment only if 1, 2, or 3
 
-	gclient_t*	clients;		// [maxclients]
+	gclient_t* clients;		// [maxclients]
 
 	// can't store spawnpoint in level, because
 	// it would get overwritten by the savegame restore
@@ -349,18 +349,18 @@ typedef struct level_locals_s
 
 	// intermission state
 	float		intermissiontime;		// time the intermission was started
-	char*		changemap;
+	char* changemap;
 	int32_t		exitintermission;
 	vec3_t		intermission_origin;
 	vec3_t		intermission_angle;
 
-	edict_t*	sight_client;	// changed once each frame for coop games
+	edict_t* sight_client;	// changed once each frame for coop games
 
-	edict_t*	sight_entity;
+	edict_t* sight_entity;
 	int32_t		sight_entity_framenum;
-	edict_t*	sound_entity;
+	edict_t* sound_entity;
 	int32_t		sound_entity_framenum;
-	edict_t*	sound2_entity;
+	edict_t* sound2_entity;
 	int32_t		sound2_entity_framenum;
 
 	int32_t		pic_health;
@@ -374,7 +374,7 @@ typedef struct level_locals_s
 	int32_t		total_monsters;
 	int32_t		killed_monsters;
 
-	edict_t*	current_entity;	// entity running from G_RunFrame
+	edict_t* current_entity;	// entity running from G_RunFrame
 	int32_t		body_que;			// dead bodies
 
 	int32_t		power_cubes;		// ugly necessity for coop
@@ -387,18 +387,18 @@ typedef struct level_locals_s
 typedef struct spawn_temp_s
 {
 	// world vars
-	char*	sky;
+	char* sky;
 	float	skyrotate;
 	vec3_t	skyaxis;
-	char*	nextmap;
+	char* nextmap;
 
 	int32_t	lip;
 	int32_t	distance;
 	int32_t	height;
-	char*	noise;
+	char* noise;
 	float	pausetime;
-	char*	item;
-	char*	gravity;
+	char* item;
+	char* gravity;
 
 	float	minyaw;
 	float	maxyaw;
@@ -440,17 +440,17 @@ typedef struct moveinfo_s
 
 typedef struct mframe_s
 {
-	void	(*aifunc)(edict_t *self, float dist);
+	void	(*aifunc)(edict_t* self, float dist);
 	float	dist;
-	void	(*thinkfunc)(edict_t *self);
+	void	(*thinkfunc)(edict_t* self);
 } mframe_t;
 
 typedef struct mmove_s
 {
 	int32_t		firstframe;
 	int32_t		lastframe;
-	mframe_t	*frame;
-	void		(*endfunc)(edict_t *self);
+	mframe_t* frame;
+	void		(*endfunc)(edict_t* self);
 } mmove_t;
 
 typedef struct monsterinfo_s
@@ -460,16 +460,16 @@ typedef struct monsterinfo_s
 	int32_t	nextframe;
 	float	scale;
 
-	void	(*stand)(edict_t *self);
-	void	(*idle)(edict_t *self);
-	void	(*search)(edict_t *self);
-	void	(*walk)(edict_t *self);
-	void	(*run)(edict_t *self);
-	void	(*dodge)(edict_t *self, edict_t *other, float eta);
-	void	(*attack)(edict_t *self);
-	void	(*melee)(edict_t *self);
-	void	(*sight)(edict_t *self, edict_t *other);
-	bool	(*checkattack)(edict_t *self);
+	void	(*stand)(edict_t* self);
+	void	(*idle)(edict_t* self);
+	void	(*search)(edict_t* self);
+	void	(*walk)(edict_t* self);
+	void	(*run)(edict_t* self);
+	void	(*dodge)(edict_t* self, edict_t* other, float eta);
+	void	(*attack)(edict_t* self);
+	void	(*melee)(edict_t* self);
+	void	(*sight)(edict_t* self, edict_t* other);
+	bool	(*checkattack)(edict_t* self);
 
 	float	pausetime;
 	float	attack_finished;
@@ -541,7 +541,7 @@ extern int32_t	snd_fry;
 extern int32_t	meansOfDeath;
 
 
-extern edict_t*	g_edicts;
+extern edict_t* g_edicts;
 
 #define	FOFS(x) (intptr_t)&(((edict_t *)0)->x)
 #define	STOFS(x) (intptr_t)&(((spawn_temp_t *)0)->x)
@@ -586,7 +586,7 @@ extern cvar_t* bob_roll;
 
 extern cvar_t* sv_cheats;
 extern cvar_t* maxclients;
-extern cvar_t* maxspectators; 
+extern cvar_t* maxspectators;
 extern cvar_t* flood_msgs;
 extern cvar_t* flood_persecond;
 extern cvar_t* flood_waitdelay;
@@ -614,7 +614,7 @@ extern cvar_t* aimfix;
 #define FFL_NOSPAWN			2
 
 typedef enum fieldtype_e {
-	F_INT, 
+	F_INT,
 	F_FLOAT,
 	F_LSTRING,			// string on disk, pointer in memory, TAG_LEVEL
 	F_GSTRING,			// string on disk, pointer in memory, TAG_GAME
@@ -631,7 +631,7 @@ typedef enum fieldtype_e {
 
 typedef struct field_s
 {
-	char*		name;
+	char* name;
 	int32_t		ofs;
 	fieldtype_t	type;
 	int32_t		flags;
@@ -680,55 +680,57 @@ typedef enum zombie_type_e
 //
 // g_cmds.c
 //
-void Cmd_Leaderboard_f(edict_t* ent);
+void Client_CommandLeaderboard(edict_t* ent);
 
 //
-// g_items.c
+// item_* c
 //
-void PrecacheItem(gitem_t* it);
-void InitItems();
-void SetItemNames();
-gitem_t* FindItem(char* pickup_name);
-gitem_t* FindItemByClassname(char* classname);
 #define	ITEM_INDEX(x) ((x)-itemlist)
-edict_t* Drop_Item(edict_t* ent, gitem_t* item);
-void SetRespawn(edict_t* ent, float delay);
-void ChangeWeapon(edict_t* ent);
-void SpawnItem(edict_t* ent, gitem_t* item);
-void Think_Weapon(edict_t* ent);
-loadout_entry_t* GetCurrentArmor(edict_t* ent);
-int32_t GetCurrentPowerArmor(edict_t* ent);
-gitem_t* GetItemByIndex(int32_t index);
-bool Add_Ammo(edict_t* ent, gitem_t* item, int32_t count);
-void Touch_Item(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t* surf);
+
+void Items_Init();
+
+void Item_Precache(gitem_t* it);
+void Item_SetName();
+gitem_t* Item_FindByPickupName(char* pickup_name);
+gitem_t* Item_FindByClassname(char* classname);
+edict_t* Item_Drop(edict_t* ent, gitem_t* item);
+void Item_Spawn(edict_t* ent, gitem_t* item);
+void Item_SetRespawn(edict_t* ent, float delay);
+void Item_OnTouch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t* surf);
+void Player_WeaponChange(edict_t* ent);
+void Weapon_Think(edict_t* ent);
+loadout_entry_t* Armor_GetCurrent(edict_t* ent);
+int32_t Armor_GetCurrentPowerArmor(edict_t* ent);
+bool Ammo_Add(edict_t* ent, gitem_t* item, int32_t count);
+
 
 //
 // g_utils.c
 //
-bool	G_KillBox(edict_t* ent);
-void	G_ProjectSource(vec3_t point, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
-edict_t* G_Find(edict_t* from, int32_t fieldofs, char* match);
-edict_t* G_FindRadius(edict_t* from, vec3_t org, float rad);
-edict_t* G_PickTarget(char* targetname);
-void	G_UseTargets(edict_t* ent, edict_t* activator);
-void	G_SetMovedir(vec3_t angles, vec3_t movedir);
+bool	Game_KillBox(edict_t* ent);
+void	Game_ProjectSource(vec3_t point, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
+edict_t* Game_FindEdictByValue(edict_t* from, int32_t fieldofs, char* match);
+edict_t* Game_FindEdictsWithinRadius(edict_t* from, vec3_t org, float rad);
+edict_t* Edict_PickTarget(char* targetname);
+void	Edict_UseTargets(edict_t* ent, edict_t* activator);
+void	Edict_SetMovedir(vec3_t angles, vec3_t movedir);
 
-void	G_InitEdict(edict_t* e);
-edict_t* G_Spawn();
-void	G_FreeEdict(edict_t* e);
+void	Edict_Init(edict_t* e);
+edict_t* Edict_Spawn();
+void	Edict_Free(edict_t* e);
 
-void	G_TouchTriggers(edict_t* ent);
-void	G_TouchSolids(edict_t* ent);
+void	Edict_TouchTriggers(edict_t* ent);
+void	Edict_TouchSolids(edict_t* ent);
 
-void	G_UISend(edict_t* ent, char* ui_name, bool enabled, bool activated, bool reliable);
-void	G_UISetText(edict_t* ent, char* ui_name, char* control_name, char* text, bool reliable);
-void	G_UISetImage(edict_t* ent, char* ui_name, char* control_name, char* image_path, bool reliable);
+void	GameUI_Send(edict_t* ent, char* ui_name, bool enabled, bool activated, bool reliable);
+void	GameUI_SetText(edict_t* ent, char* ui_name, char* control_name, char* text, bool reliable);
+void	GameUI_SetImage(edict_t* ent, char* ui_name, char* control_name, char* image_path, bool reliable);
 
-int32_t		G_CountClients();
+int32_t		Game_CountClients();
 
-void	G_LeaderboardSend(edict_t* ent);
+void	GameUI_SendLeaderboard(edict_t* ent);
 
-char* G_CopyString(char* in);
+char* Game_CopyString(char* in);
 
 float* tv(float x, float y, float z);
 char* vtos(vec3_t v);
@@ -752,17 +754,17 @@ team_scores_t Gamemode_TDMGetScores();
 //
 // game_combat.c
 //
-bool CanDamage (edict_t *targ, edict_t *inflictor);
-void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir, vec3_t point, vec3_t normal, int32_t damage, int32_t knockback, int32_t dflags, int32_t mod);
-void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_t *ignore, float radius, int32_t mod);
-void P_FallingDamage(edict_t* ent);
-void P_DamageFeedback(edict_t* player);
+bool Player_CanDamage(edict_t* targ, edict_t* inflictor);
+void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t dir, vec3_t point, vec3_t normal, int32_t damage, int32_t knockback, int32_t dflags, int32_t mod);
+void Player_RadiusDamage(edict_t* inflictor, edict_t* attacker, float damage, edict_t* ignore, float radius, int32_t mod);
+void Player_FallDamage(edict_t* ent);
+void Player_DamageFeedback(edict_t* player);
 
 //
 // p_client.c
 // 
-void SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles);
-void GiveBaseWeaponForTeam(edict_t* client_edict);
+void Player_SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles);
+void Player_GiveBaseWeaponForTeam(edict_t* client_edict);
 
 // damage flags
 #define DAMAGE_RADIUS			0x00000001	// damage was indirect
@@ -782,50 +784,50 @@ void GiveBaseWeaponForTeam(edict_t* client_edict);
 //
 // ai_monster.c
 //
-void Ammo_Bullet_monster (edict_t *self, vec3_t start, vec3_t dir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t flashtype);
-void Ammo_Shotgun_monster (edict_t *self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t count, int32_t flashtype);
-void Ammo_Blaster_monster (edict_t *self, vec3_t start, vec3_t dir, int32_t damage, int32_t speed, int32_t flashtype, int32_t effect);
-void Ammo_Grenade_monster (edict_t *self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, int32_t flashtype);
-void Ammo_Rocket_monster (edict_t *self, vec3_t start, vec3_t dir, int32_t damage, int32_t speed, int32_t flashtype);
-void Ammo_Rail_monster (edict_t *self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t flashtype);
-void M_droptofloor (edict_t *ent);
-void monster_think (edict_t *self);
+void Ammo_Bullet_monster(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t flashtype);
+void Ammo_Shotgun_monster(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t count, int32_t flashtype);
+void Ammo_Blaster_monster(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_t speed, int32_t flashtype, int32_t effect);
+void Ammo_Grenade_monster(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, int32_t flashtype);
+void Ammo_Rocket_monster(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_t speed, int32_t flashtype);
+void Ammo_Rail_monster(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t flashtype);
+void M_droptofloor(edict_t* ent);
+void monster_think(edict_t* self);
 void monster_check_dodge(edict_t* self, vec3_t start, vec3_t dir, int32_t speed);
-void walkmonster_start (edict_t *self);
-void swimmonster_start (edict_t *self);
-void flymonster_start (edict_t *self);
-void AttackFinished (edict_t *self, float time);
-void monster_death_use (edict_t *self);
-void M_CategorizePosition (edict_t *ent);
-bool M_CheckAttack (edict_t *self);
-void M_FlyCheck (edict_t *self);
-void M_CheckGround (edict_t *ent);
+void walkmonster_start(edict_t* self);
+void swimmonster_start(edict_t* self);
+void flymonster_start(edict_t* self);
+void AttackFinished(edict_t* self, float time);
+void monster_death_use(edict_t* self);
+void M_CategorizePosition(edict_t* ent);
+bool M_CheckAttack(edict_t* self);
+void M_FlyCheck(edict_t* self);
+void M_CheckGround(edict_t* ent);
 
 //
 // g_misc.c
 //
-void ThrowHead (edict_t *self, char *gibname, int32_t damage, int32_t type);
-void ThrowClientHead (edict_t *self, int32_t damage);
-void ThrowGib (edict_t *self, char *gibname, int32_t damage, int32_t type);
-void BecomeExplosion1(edict_t *self);
+void ThrowHead(edict_t* self, char* gibname, int32_t damage, int32_t type);
+void ThrowClientHead(edict_t* self, int32_t damage);
+void ThrowGib(edict_t* self, char* gibname, int32_t damage, int32_t type);
+void BecomeExplosion1(edict_t* self);
 
 //
 // ai_base.c
 //
-void AI_SetSightClient ();
+void AI_SetSightClient();
 
-void ai_stand (edict_t *self, float dist);
-void ai_move (edict_t *self, float dist);
-void ai_walk (edict_t *self, float dist);
-void ai_turn (edict_t *self, float dist);
-void ai_run (edict_t *self, float dist);
-void ai_charge (edict_t *self, float dist);
-int32_t range (edict_t *self, edict_t *other);
+void ai_stand(edict_t* self, float dist);
+void ai_move(edict_t* self, float dist);
+void ai_walk(edict_t* self, float dist);
+void ai_turn(edict_t* self, float dist);
+void ai_run(edict_t* self, float dist);
+void ai_charge(edict_t* self, float dist);
+int32_t range(edict_t* self, edict_t* other);
 
-void FoundTarget (edict_t *self);
-bool infront (edict_t *self, edict_t *other);
-bool visible (edict_t *self, edict_t *other);
-bool FacingIdeal(edict_t *self);
+void FoundTarget(edict_t* self);
+bool infront(edict_t* self, edict_t* other);
+bool visible(edict_t* self, edict_t* other);
+bool FacingIdeal(edict_t* self);
 
 bool M_CheckBottom(edict_t* ent);
 bool M_walkmove(edict_t* ent, float yaw, float dist);
@@ -837,24 +839,24 @@ void M_ChangeYaw(edict_t* ent);
 // Ammo_*.c
 //
 
-void ThrowDebris (edict_t *self, char *modelname, float speed, vec3_t origin);
-bool Ammo_Melee (edict_t *self, vec3_t aim, int32_t damage, int32_t kick);
-void Ammo_Bullet (edict_t *self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t mod);
-void Ammo_Bullet_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t count, int32_t mod);
-void Ammo_Blaster (edict_t *self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, int32_t effect, bool hyper);
-void Ammo_Grenade (edict_t *self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, float timer, float damage_radius);
-void Ammo_Grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, float timer, float damage_radius, bool held);
-void Ammo_Rocket (edict_t *self, vec3_t start, vec3_t dir, int32_t damage, int32_t speed, float damage_radius, int32_t radius_damage);
-void Ammo_Rail (edict_t *self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick);
-void Ammo_Bamfuslicator (edict_t* self, vec3_t start, vec3_t aimdir, zombie_type zombie_type);
-void Ammo_Tangfuslicator (edict_t* self, vec3_t start, vec3_t aimdir); //todo: recoil
+void ThrowDebris(edict_t* self, char* modelname, float speed, vec3_t origin);
+bool Ammo_Melee(edict_t* self, vec3_t aim, int32_t damage, int32_t kick);
+void Ammo_Bullet(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t mod);
+void Ammo_Bullet_shotgun(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t count, int32_t mod);
+void Ammo_Blaster(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, int32_t effect, bool hyper);
+void Ammo_Grenade(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, float timer, float damage_radius);
+void Ammo_Grenade2(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, float timer, float damage_radius, bool held);
+void Ammo_Rocket(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_t speed, float damage_radius, int32_t radius_damage);
+void Ammo_Rail(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick);
+void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type zombie_type);
+void Ammo_Tangfuslicator(edict_t* self, vec3_t start, vec3_t aimdir); //todo: recoil
 
 //
 // game_player_trail.c
 //
-void PlayerTrail_Init ();
-void PlayerTrail_Add (vec3_t spot);
-void PlayerTrail_New (vec3_t spot);
+void PlayerTrail_Init();
+void PlayerTrail_Add(vec3_t spot);
+void PlayerTrail_New(vec3_t spot);
 edict_t* PlayerTrail_PickFirst(edict_t* self);
 edict_t* PlayerTrail_PickNext(edict_t* self);
 edict_t* PlayerTrail_LastSpot();
@@ -864,81 +866,82 @@ edict_t* PlayerTrail_LastSpot();
 //
 void Client_Respawn(edict_t* ent);
 void Client_RespawnSpectator(edict_t* ent);
-void BeginIntermission(edict_t* targ);
-void PutClientInServer(edict_t* ent);
-void InitClientPersistent(edict_t* client_edict);
-void InitClientResp(gclient_t* client);
-void InitBodyQue();
-void ClientBeginServerFrame(edict_t* ent);
-void ClientUserinfoChanged(edict_t* ent, char* userinfo);
-float SV_CalcRoll(vec3_t angles, vec3_t velocity);
-
+void Game_TransitionToNextMatch(edict_t* targ);
+void Client_JoinServer(edict_t* ent);
+void Client_InitPersistent(edict_t* client_edict);
+void Client_InitRespawn(gclient_t* client);
+void Client_InitBodyQue();
+void Client_BeginServerFrame(edict_t* ent);
+void Client_UserinfoChanged(edict_t* ent, char* userinfo);
+float Client_CalcRoll(vec3_t angles, vec3_t velocity);
 
 //
-// files that use mob_player.h
+// functions in files that use mob_player.h
 //
-void player_pain (edict_t *self, edict_t *other, float kick, int32_t damage);
-void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int32_t damage, vec3_t point);
+void player_pain(edict_t* self, edict_t* other, float kick, int32_t damage);
+void player_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t damage, vec3_t point);
 
 //
 // game_cmds_server.c
 //
-void ServerCommand ();
-bool SV_FilterPacket (char *from);
+void Server_Command();
+bool Server_IsClientAllowed(char* from);
 
 //
 // game_client_view.c
 //
-void ClientEndServerFrame (edict_t *ent);
-void SV_CalcViewOffset(edict_t* ent);
-void SV_CalcGunOffset(edict_t* ent);
-void SV_CalcBlend(edict_t* ent);
-void G_SetClientEvent(edict_t* ent);
-void G_SetClientEffects(edict_t* ent);
-void G_SetClientSound(edict_t* ent);
-void G_SetClientFrame(edict_t* ent);
-void P_WorldEffects();
+void Client_EndServerFrame(edict_t* ent);
+void Client_CalcViewOffset(edict_t* ent);
+void Client_CalcGunOffset(edict_t* ent);
+void Client_CalcBlend(edict_t* ent);
+void Client_SetEvent(edict_t* ent);
+void Client_SetEffects(edict_t* ent);
+void Client_SetSound(edict_t* ent);
+void Client_SetFrame(edict_t* ent);
+void Player_WorldEffects();
 
 //
 // game_client_spawn.c 
 // 
-edict_t* SelectFarthestSpawnPoint(char* spawn_class_name);
-edict_t* SelectRandomSpawnPoint(char* spawn_class_name);
-edict_t* SelectUnassignedSpawnPoint();
-edict_t* SelectTeamSpawnPoint(edict_t* player);
+edict_t* Player_SpawnSelectFarthest(char* spawn_class_name);
+edict_t* Player_SpawnSelectRandom(char* spawn_class_name);
+edict_t* Player_SpawnSelectUnassigned();
+edict_t* Player_SpawnSelectTeam(edict_t* player);
 
 //
 // game_ui.c
 //
-void MoveClientToIntermission (edict_t *ent, player_team winning_team);
-void G_SetStats (edict_t *ent);
-void G_SetSpectatorStats (edict_t *ent);
-void G_CheckChaseStats (edict_t *ent);
+void Player_MoveToIntermission(edict_t* ent, player_team winning_team);
+void GameUI_SetStats(edict_t* ent);
+void GameUI_SetStatsSpectator(edict_t* ent);
+void GameUI_CheckChaseStats(edict_t* ent);
 
 //
 // weapon_base.c
 //
-void PlayerNoise(edict_t *who, vec3_t where, int32_t type);
+void PlayerNoise(edict_t* who, vec3_t where, int32_t type);
 
 //
 // physics_base.c
 //
-void G_RunEntity (edict_t *ent);
+void Physics_RunEntity(edict_t* ent);
 
 //
 // game_save.c
 //
-void SaveClientData ();
-void FetchClientEntData (edict_t *ent);
+void SaveClientData();
+void FetchClientEntData(edict_t* ent);
 
 //
 // game_chase_camera.c
 //
-void UpdateChaseCam(edict_t *ent);
-void ChaseNext(edict_t *ent);
-void ChasePrev(edict_t *ent);
-void GetChaseTarget(edict_t *ent);
+void UpdateChaseCam(edict_t* ent);
+void ChaseNext(edict_t* ent);
+void ChasePrev(edict_t* ent);
+void GetChaseTarget(edict_t* ent);
 
+// end of match
+void Game_EndMatch();
 
 //============================================================================
 
@@ -959,9 +962,9 @@ typedef struct client_persistant_s
 	int32_t		hand;
 
 	bool		connected;			// a loadgame will leave valid entities that
-									// just don't have a connection yet
+	// just don't have a connection yet
 
-	// values saved and restored from edicts when changing levels
+// values saved and restored from edicts when changing levels
 	int32_t		health;
 	int32_t		max_health;
 	int32_t		savedFlags;
@@ -976,8 +979,8 @@ typedef struct client_persistant_s
 	int32_t		max_cells;
 	int32_t		max_slugs;
 
-	gitem_t		*weapon;
-	gitem_t		*lastweapon;
+	gitem_t* weapon;
+	gitem_t* lastweapon;
 
 	//restore this if we have resumable co-op games or that 6-level single player campaign.
 	//int32_t		coop_score;
@@ -1016,9 +1019,6 @@ typedef struct gclient_s
 	loadout_t	loadout;
 	loadout_entry_t* loadout_current_weapon;
 	loadout_entry_t* loadout_current_ammo;
-
-	bool		showhelp;
-	bool		showhelpicon;
 
 	int32_t		buttons;
 	int32_t		oldbuttons;
@@ -1082,7 +1082,7 @@ typedef struct gclient_s
 
 	float		respawn_time;		// can respawn when time > this
 
-	edict_t		*chase_target;		// player we are chasing
+	edict_t* chase_target;		// player we are chasing
 	bool		update_chase;		// need to update chase info? 
 } gclient_t;
 
@@ -1221,7 +1221,7 @@ struct edict_s
 	int32_t		particle_lifetime;	// func_particle_effect lifetime (ignored if spawnflags & 2)
 	int32_t		particle_magnitude;	// func_particle_effect magnitude
 	int32_t		particles_next_frame;	// func_particle_effect next frame particles
-			
+
 	float		alphavel;			// func_particle_effect alphavel
 
 	// timing variables
@@ -1244,7 +1244,6 @@ struct edict_s
 
 	int32_t		style;			// also used as areaportal number
 
-
 	gitem_t*	item;			// for bonus items
 
 	// common data blocks
@@ -1252,22 +1251,24 @@ struct edict_s
 	monsterinfo_t	monsterinfo;
 };
 
+// Gamemode-specific stuff
+void Gamemode_TDMCheckRules();
 
 // /weapons/weapon_base.c
 
 void P_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
 void PlayerNoise(edict_t* who, vec3_t where, int32_t type);
-bool Pickup_Weapon(edict_t* ent, edict_t* other);
-void ChangeWeapon(edict_t* ent);
+bool Weapon_Pickup(edict_t* ent, edict_t* other);
+void Player_WeaponChange(edict_t* ent);
 void NoAmmoWeaponChange(edict_t* ent);
-void Think_Weapon(edict_t* ent);
-void Use_Weapon(edict_t* ent, gitem_t* item);
-void Drop_Weapon(edict_t* ent, gitem_t* item);
+void Weapon_Think(edict_t* ent);
+void Weapon_Use(edict_t* ent, gitem_t* item);
+void Weapon_Drop(edict_t* ent, gitem_t* item);
 void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIRE_LAST, int32_t FRAME_IDLE_LAST, int32_t FRAME_DEACTIVATE_LAST,
 	int32_t* pause_frames, int32_t* fire_frames_primary, int32_t* fire_frames_secondary, void (*fire_primary)(edict_t* ent), void(*fire_secondary)(edict_t* ent));
 
 // game_loadout.c
 loadout_entry_t* Loadout_AddItem(edict_t* ent, const char* item_name, const char* icon, loadout_entry_type type, int32_t amount);		// Adds the loadout item with the name name, the icon icon and the amount amount. Returns the new loadout item
-void Loadout_DeleteItem(edict_t* ent, const char* item_name);				// Deletes the loadout item with the name name.
+void			Loadout_DeleteItem(edict_t* ent, const char* item_name);				// Deletes the loadout item with the name name.
 loadout_entry_t* Loadout_GetItem(edict_t* ent, const char* item_name);		// Returns the loadout item with the name item_name.
-bool Loadout_EntryIsItem(loadout_entry_t* entry, const char* item_name);	// Determines if the loadout entry entry is the item with the name item_name.
+bool			Loadout_EntryIsItem(loadout_entry_t* entry, const char* item_name);	// Determines if the loadout entry entry is the item with the name item_name.

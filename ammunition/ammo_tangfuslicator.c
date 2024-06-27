@@ -50,7 +50,7 @@ void Ammo_Tangfuslicator_Touch(edict_t* self, edict_t* other, cplane_t* plane, c
 		// spawn a zombie where the player is starting
 		
 		// spawn the zombie
-		zombie = G_Spawn();
+		zombie = Edict_Spawn();
 
 		// move the zombie to where the player spawned it
 		// the zombie is on director team (this is used so they don't harm directors unless the requisite gameflag is set)
@@ -66,7 +66,7 @@ void Ammo_Tangfuslicator_Touch(edict_t* self, edict_t* other, cplane_t* plane, c
 		SP_monster_zombie(zombie);
 
 		// kill the fucker
-		T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 200, 0, 0, MOD_ZOMBIFIED);
+		Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 200, 0, 0, MOD_ZOMBIFIED);
 	}
 	else
 	{
@@ -75,7 +75,7 @@ void Ammo_Tangfuslicator_Touch(edict_t* self, edict_t* other, cplane_t* plane, c
 			return;
 
 		// hurt other enemies by TANGFUSLICATOR_NON_HUMAN_DAMAGE_PERCENT of their health if we accidentlaly hit them
-		T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, other->max_health * TANGFUSLICATOR_NON_HUMAN_DAMAGE_PERCENT, 0, 0, MOD_ZOMBIE);
+		Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, other->max_health * TANGFUSLICATOR_NON_HUMAN_DAMAGE_PERCENT, 0, 0, MOD_ZOMBIE);
 	}
 }
 
@@ -102,11 +102,11 @@ void Ammo_Tangfuslicator(edict_t* self, vec3_t trace_start, vec3_t aimdir)
 	trace_result = gi.trace(trace_start, NULL, NULL, trace_end, self, CONTENTS_SOLID | CONTENTS_MONSTER | CONTENTS_SLIME | CONTENTS_LAVA | CONTENTS_WINDOW | CONTENTS_WATER); // maybe remove water?
 
 	// spawn the (invisible) bolt
-	lightning_bolt = G_Spawn();
+	lightning_bolt = Edict_Spawn();
 	lightning_bolt->classname = "ammo_tangfuslicator";
 	lightning_bolt->movetype = MOVETYPE_FLYMISSILE; // is this good?
 	lightning_bolt->nextthink = level.time + (TANGFUSLICATOR_MAX_DISTANCE / lightning_velocity);
-	lightning_bolt->think = G_FreeEdict;
+	lightning_bolt->think = Edict_Free;
 	lightning_bolt->clipmask = MASK_SHOT;
 	lightning_bolt->s.effects |= EF_LIGHTNING; // see cl_ents.c
 	VectorCopy(trace_start, lightning_bolt->s.origin);

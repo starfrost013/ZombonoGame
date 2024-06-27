@@ -20,9 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include <game_local.h>
 
-bool	Pickup_Weapon(edict_t *ent, edict_t *other);
-void	Use_Weapon(edict_t *ent, gitem_t *inv);
-void	Drop_Weapon(edict_t *ent, gitem_t *inv);
+bool Weapon_Pickup(edict_t *ent, edict_t *other);
+void Weapon_Use(edict_t *ent, gitem_t *inv);
+void Weapon_Drop(edict_t *ent, gitem_t *inv);
 
 
 void Weapon_Blaster(edict_t *ent);
@@ -46,22 +46,9 @@ gitem_armor_t bodyarmor_info	= {100, 200, .80, .60, ARMOR_BODY};
 #define HEALTH_TIMED		2
 
 void Use_Quad (edict_t *ent, gitem_t *item);
-static int	quad_drop_timeout_hack;
+static int32_t quad_drop_timeout_hack;
 
 //======================================================================
-
-/*
-===============
-GetItemByIndex
-===============
-*/
-gitem_t	*GetItemByIndex (int32_t index)
-{
-	if (index == 0 || index >= game.num_items)
-		return NULL;
-
-	return &itemlist[index];
-}
 
 
 /*
@@ -70,9 +57,9 @@ FindItemByClassname
 
 ===============
 */
-gitem_t	*FindItemByClassname (char *classname)
+gitem_t	*Item_FindByClassname (char *classname)
 {
-	int		i;
+	int32_t i;
 	gitem_t	*it;
 
 	it = itemlist;
@@ -93,7 +80,7 @@ FindItem
 
 ===============
 */
-gitem_t	*FindItem (char *pickup_name)
+gitem_t	*Item_FindByPickupName (char *pickup_name)
 {
 	if (!pickup_name)
 		return NULL;
@@ -142,7 +129,7 @@ void DoRespawn (edict_t *ent)
 	ent->s.event = EV_ITEM_RESPAWN;
 }
 
-void SetRespawn (edict_t *ent, float delay)
+void Item_SetRespawn (edict_t *ent, float delay)
 {
 	ent->flags |= FL_RESPAWN;
 	ent->svflags |= SVF_NOCLIENT;
@@ -171,7 +158,7 @@ bool Pickup_Powerup (edict_t *ent, edict_t *other)
 	loadout_entry->amount++;
 
 	if (!(ent->spawnflags & DROPPED_ITEM))
-		SetRespawn(ent, ent->item->quantity);
+		Item_SetRespawn(ent, ent->item->quantity);
 	if (((int32_t)gameflags->value & GF_INSTANT_ITEMS) || ((ent->item->use == Use_Quad) && (ent->spawnflags & DROPPED_PLAYER_ITEM)))
 	{
 		if ((ent->item->use == Use_Quad) && (ent->spawnflags & DROPPED_PLAYER_ITEM))
@@ -186,7 +173,7 @@ void Drop_General (edict_t *ent, gitem_t *item)
 {
 	loadout_entry_t* loadout_entry = Loadout_GetItem(ent, item->pickup_name);
 
-	Drop_Item (ent, item);
+	Item_Drop (ent, item);
 	
 	loadout_entry->amount--;
 
@@ -209,14 +196,14 @@ bool Pickup_Adrenaline (edict_t *ent, edict_t *other)
 		other->health = other->max_health;
 
 	if (!(ent->spawnflags & DROPPED_ITEM))
-		SetRespawn (ent, ent->item->quantity);
+		Item_SetRespawn (ent, ent->item->quantity);
 
 	return true;
 }
 
 bool Pickup_Bandolier (edict_t *ent, edict_t *other)
 {
-	gitem_t* item = FindItem("Bullets");
+	gitem_t* item = Item_FindByPickupName("Bullets");
 	loadout_entry_t* loadout_item = Loadout_GetItem(ent, "Bullets");
 
 	if (other->client->pers.max_bullets < 250)
@@ -236,7 +223,7 @@ bool Pickup_Bandolier (edict_t *ent, edict_t *other)
 			loadout_item->amount = other->client->pers.max_bullets;
 	}
 
-	item = FindItem("Shells");
+	item = Item_FindByPickupName("Shells");
 	if (item)
 	{
 		loadout_item->amount += item->quantity;
@@ -245,14 +232,14 @@ bool Pickup_Bandolier (edict_t *ent, edict_t *other)
 	}
 
 	if (!(ent->spawnflags & DROPPED_ITEM))
-		SetRespawn (ent, ent->item->quantity);
+		Item_SetRespawn (ent, ent->item->quantity);
 
 	return true;
 }
 
 bool Pickup_Pack (edict_t *ent, edict_t *other)
 {
-	gitem_t* item = FindItem("Bullets");
+	gitem_t* item = Item_FindByPickupName("Bullets");
 	loadout_entry_t* loadout_item_ptr = Loadout_GetItem(other, "Bullets");
 
 	// quantity is later
@@ -272,7 +259,7 @@ bool Pickup_Pack (edict_t *ent, edict_t *other)
 	if (other->client->pers.max_slugs < 100)
 		other->client->pers.max_slugs = 100;
 
-	item = FindItem("Bullets");
+	item = Item_FindByPickupName("Bullets");
 	if (item)
 	{
 		loadout_item_ptr->amount += item->quantity;
@@ -280,7 +267,7 @@ bool Pickup_Pack (edict_t *ent, edict_t *other)
 			loadout_item_ptr->amount = other->client->pers.max_bullets;
 	}
 
-	item = FindItem("Shells");
+	item = Item_FindByPickupName("Shells");
 	if (item)
 	{
 		loadout_item_ptr->amount += item->quantity;
@@ -288,7 +275,7 @@ bool Pickup_Pack (edict_t *ent, edict_t *other)
 			loadout_item_ptr->amount = other->client->pers.max_shells;
 	}
 
-	item = FindItem("Cells");
+	item = Item_FindByPickupName("Cells");
 	if (item)
 	{
 		loadout_item_ptr->amount += item->quantity;
@@ -296,7 +283,7 @@ bool Pickup_Pack (edict_t *ent, edict_t *other)
 			loadout_item_ptr->amount = other->client->pers.max_cells;
 	}
 
-	item = FindItem("Grenades");
+	item = Item_FindByPickupName("Grenades");
 	if (item)
 	{
 		loadout_item_ptr->amount += item->quantity;
@@ -304,7 +291,7 @@ bool Pickup_Pack (edict_t *ent, edict_t *other)
 			loadout_item_ptr->amount = other->client->pers.max_grenades;
 	}
 
-	item = FindItem("Rockets");
+	item = Item_FindByPickupName("Rockets");
 	if (item)
 	{
 		loadout_item_ptr->amount += item->quantity;
@@ -312,7 +299,7 @@ bool Pickup_Pack (edict_t *ent, edict_t *other)
 			loadout_item_ptr->amount = other->client->pers.max_rockets;
 	}
 
-	item = FindItem("Slugs");
+	item = Item_FindByPickupName("Slugs");
 	if (item)
 	{
 		loadout_item_ptr->amount += item->quantity;
@@ -321,7 +308,7 @@ bool Pickup_Pack (edict_t *ent, edict_t *other)
 	}
 
 	if (!(ent->spawnflags & DROPPED_ITEM))
-		SetRespawn (ent, ent->item->quantity);
+		Item_SetRespawn (ent, ent->item->quantity);
 
 	return true;
 }
@@ -404,7 +391,7 @@ void Use_Silencer (edict_t *ent, gitem_t *item)
 
 //======================================================================
 
-bool Add_Ammo (edict_t *ent, gitem_t *item, int32_t count)
+bool Ammo_Add (edict_t *ent, gitem_t *item, int32_t count)
 {
 	int32_t		index;
 	int32_t		max;
@@ -469,7 +456,7 @@ bool Pickup_Ammo (edict_t *ent, edict_t *other)
 		oldcount = 0;
 	}
 
-	if (!Add_Ammo (other, ent->item, count))
+	if (!Ammo_Add (other, ent->item, count))
 		return false;
 
 	if (weapon && !oldcount)
@@ -479,7 +466,7 @@ bool Pickup_Ammo (edict_t *ent, edict_t *other)
 	}
 
 	if (!(ent->spawnflags & (DROPPED_ITEM | DROPPED_PLAYER_ITEM)))
-		SetRespawn (ent, 30);
+		Item_SetRespawn (ent, 30);
 	return true;
 }
 
@@ -489,7 +476,7 @@ void Drop_Ammo (edict_t *ent, gitem_t *item)
 
 	loadout_entry_t* loadout_entry_ptr = Loadout_GetItem(ent, item->pickup_name);
 
-	dropped = Drop_Item (ent, item);
+	dropped = Item_Drop (ent, item);
 	if (loadout_entry_ptr->amount >= item->quantity)
 		dropped->count = item->quantity;
 	else
@@ -500,7 +487,7 @@ void Drop_Ammo (edict_t *ent, gitem_t *item)
 		item->tag == AMMO_GRENADES &&
 		loadout_entry_ptr->amount - dropped->count <= 0) {
 		gi.cprintf (ent, PRINT_HIGH, "Can't drop current weapon\n");
-		G_FreeEdict(dropped);
+		Edict_Free(dropped);
 		return;
 	}
 
@@ -530,9 +517,9 @@ void MegaHealth_think (edict_t *self)
 	}
 
 	if (!(self->spawnflags & DROPPED_ITEM))
-		SetRespawn (self, 20);
+		Item_SetRespawn (self, 20);
 	else
-		G_FreeEdict (self);
+		Edict_Free (self);
 }
 
 bool Pickup_Health (edict_t *ent, edict_t *other)
@@ -561,7 +548,7 @@ bool Pickup_Health (edict_t *ent, edict_t *other)
 	else
 	{
 		if (!(ent->spawnflags & DROPPED_ITEM))
-			SetRespawn (ent, 30);
+			Item_SetRespawn (ent, 30);
 	}
 
 	return true;
@@ -569,7 +556,7 @@ bool Pickup_Health (edict_t *ent, edict_t *other)
 
 //======================================================================
 
-loadout_entry_t* GetCurrentArmor(edict_t* ent)
+loadout_entry_t* Armor_GetCurrent(edict_t* ent)
 {
 	if (!ent->client)
 		return 0;
@@ -608,9 +595,9 @@ loadout_entry_t* GetCurrentArmor(edict_t* ent)
 
 bool Pickup_Armor (edict_t *ent, edict_t *other)
 {
-	loadout_entry_t*	loadout_ptr_old = GetCurrentArmor(other);
-	gitem_t*			loadout_ptr_jacket = FindItem("Jacket Armor");
-	gitem_t*			loadout_ptr_combat = FindItem("Combat Armor");
+	loadout_entry_t*	loadout_ptr_old = Armor_GetCurrent(other);
+	gitem_t*			loadout_ptr_jacket = Item_FindByPickupName("Jacket Armor");
+	gitem_t*			loadout_ptr_combat = Item_FindByPickupName("Combat Armor");
 	loadout_entry_t*	loadout_ptr_new = Loadout_GetItem(other, ent->item->pickup_name);
 	gitem_armor_t*		oldinfo;
 	gitem_armor_t*		newinfo;
@@ -680,14 +667,14 @@ bool Pickup_Armor (edict_t *ent, edict_t *other)
 	}
 
 	if (!(ent->spawnflags & DROPPED_ITEM))
-		SetRespawn (ent, 20);
+		Item_SetRespawn (ent, 20);
 
 	return true;
 }
 
 //======================================================================
 
-int32_t GetCurrentPowerArmor (edict_t *ent)
+int32_t Armor_GetCurrentPowerArmor (edict_t *ent)
 {// Power screen, Power shield
 	if (!ent->client)
 		return POWER_ARMOR_NONE;
@@ -735,7 +722,7 @@ bool Pickup_PowerArmor (edict_t *ent, edict_t *other)
 	loadout_entry_ptr->amount++;
 
 	if (!(ent->spawnflags & DROPPED_ITEM))
-		SetRespawn(ent, ent->item->quantity);
+		Item_SetRespawn(ent, ent->item->quantity);
 	// auto-use for DM only if we didn't already have one
 	if (!loadout_entry_ptr)
 		ent->item->use(other, ent->item);
@@ -765,7 +752,7 @@ void Drop_PowerArmor (edict_t *ent, gitem_t *item)
 Touch_Item
 ===============
 */
-void Touch_Item (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+void Item_OnTouch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
 {
 	bool	taken;
 
@@ -813,7 +800,7 @@ void Touch_Item (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf
 
 	if (!(ent->spawnflags & ITEM_TARGETS_USED))
 	{
-		G_UseTargets (ent, other);
+		Edict_UseTargets (ent, other);
 		ent->spawnflags |= ITEM_TARGETS_USED;
 	}
 
@@ -825,7 +812,7 @@ void Touch_Item (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf
 		if (ent->flags & FL_RESPAWN)
 			ent->flags &= ~FL_RESPAWN;
 		else
-			G_FreeEdict (ent);
+			Edict_Free (ent);
 	}
 }
 
@@ -836,24 +823,24 @@ static void drop_temp_touch (edict_t *ent, edict_t *other, cplane_t *plane, csur
 	if (other == ent->owner)
 		return;
 
-	Touch_Item (ent, other, plane, surf);
+	Item_OnTouch (ent, other, plane, surf);
 }
 
 static void drop_make_touchable (edict_t *ent)
 {
-	ent->touch = Touch_Item;
+	ent->touch = Item_OnTouch;
 
 	ent->nextthink = level.time + 29;
-	ent->think = G_FreeEdict;
+	ent->think = Edict_Free;
 }
 
-edict_t *Drop_Item (edict_t *ent, gitem_t *item)
+edict_t *Item_Drop (edict_t *ent, gitem_t *item)
 {
 	edict_t	*dropped;
 	vec3_t	forward, right;
 	vec3_t	offset;
 
-	dropped = G_Spawn();
+	dropped = Edict_Spawn();
 
 	dropped->classname = item->classname;
 	dropped->item = item;
@@ -874,7 +861,7 @@ edict_t *Drop_Item (edict_t *ent, gitem_t *item)
 
 		AngleVectors (ent->client->v_angle, forward, right, NULL);
 		VectorSet(offset, 24, 0, -16);
-		G_ProjectSource (ent->s.origin, offset, forward, right, dropped->s.origin);
+		Game_ProjectSource (ent->s.origin, offset, forward, right, dropped->s.origin);
 		trace = gi.trace (ent->s.origin, dropped->mins, dropped->maxs,
 			dropped->s.origin, ent, CONTENTS_SOLID);
 		VectorCopy (trace.endpos, dropped->s.origin);
@@ -909,7 +896,7 @@ void Use_Item (edict_t *ent, edict_t *other, edict_t *activator)
 	else
 	{
 		ent->solid = SOLID_TRIGGER;
-		ent->touch = Touch_Item;
+		ent->touch = Item_OnTouch;
 	}
 
 	gi.linkentity (ent);
@@ -939,7 +926,7 @@ void droptofloor (edict_t *ent)
 		gi.setmodel (ent, ent->item->world_model);
 	ent->solid = SOLID_TRIGGER;
 	ent->movetype = MOVETYPE_TOSS;  
-	ent->touch = Touch_Item;
+	ent->touch = Item_OnTouch;
 
 	v = tv(0,0,-128);
 	VectorAdd (ent->s.origin, v, dest);
@@ -948,7 +935,7 @@ void droptofloor (edict_t *ent)
 	if (tr.startsolid)
 	{
 		gi.dprintf ("droptofloor: %s startsolid at %s\n", ent->classname, vtos(ent->s.origin));
-		G_FreeEdict (ent);
+		Edict_Free (ent);
 		return;
 	}
 
@@ -997,7 +984,7 @@ This will be called for each item spawned in a level,
 and for each item in each client's inventory.
 ===============
 */
-void PrecacheItem (gitem_t *it)
+void Item_Precache (gitem_t *it)
 {
 	char	*s, *start;
 	char	data[MAX_QPATH];
@@ -1019,9 +1006,9 @@ void PrecacheItem (gitem_t *it)
 	// parse everything for its ammo
 	if (it->ammo && it->ammo[0])
 	{
-		ammo = FindItem (it->ammo);
+		ammo = Item_FindByPickupName (it->ammo);
 		if (ammo != it)
-			PrecacheItem (ammo);
+			Item_Precache (ammo);
 	}
 
 	// parse the space seperated precache string for other items
@@ -1065,9 +1052,9 @@ Items can't be immediately dropped to floor, because they might
 be on an entity that hasn't spawned yet. 
 ============
 */
-void SpawnItem (edict_t *ent, gitem_t *item)
+void Item_Spawn (edict_t *ent, gitem_t *item)
 {
-	PrecacheItem (item);
+	Item_Precache (item);
 
 	if (ent->spawnflags)
 	{
@@ -1082,7 +1069,7 @@ void SpawnItem (edict_t *ent, gitem_t *item)
 	{
 		if (item->pickup == Pickup_Armor || item->pickup == Pickup_PowerArmor)
 		{
-			G_FreeEdict(ent);
+			Edict_Free(ent);
 			return;
 		}
 	}
@@ -1090,7 +1077,7 @@ void SpawnItem (edict_t *ent, gitem_t *item)
 	{
 		if (item->pickup == Pickup_Powerup)
 		{
-			G_FreeEdict(ent);
+			Edict_Free(ent);
 			return;
 		}
 	}
@@ -1098,7 +1085,7 @@ void SpawnItem (edict_t *ent, gitem_t *item)
 	{
 		if (item->pickup == Pickup_Health || item->pickup == Pickup_Adrenaline)
 		{
-			G_FreeEdict(ent);
+			Edict_Free(ent);
 			return;
 		}
 	}
@@ -1106,7 +1093,7 @@ void SpawnItem (edict_t *ent, gitem_t *item)
 	{
 		if ((item->flags == IT_AMMO))
 		{
-			G_FreeEdict(ent);
+			Edict_Free(ent);
 			return;
 		}
 	}
@@ -1259,7 +1246,7 @@ always owned, never in the world
 	{
 		"weapon_blaster", 
 		NULL,
-		Use_Weapon,
+		Weapon_Use,
 		NULL,
 		Weapon_Blaster,
 		"misc/w_pkup.wav",
@@ -1281,9 +1268,9 @@ always owned, never in the world
 */
 	{
 		"weapon_shotgun", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		Weapon_Pickup,
+		Weapon_Use,
+		Weapon_Drop,
 		Weapon_Shotgun,
 		"misc/w_pkup.wav",
 		"models/weapons/g_shotg/tris.md2", EF_ROTATE,
@@ -1304,9 +1291,9 @@ always owned, never in the world
 */
 	{
 		"weapon_supershotgun", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		Weapon_Pickup,
+		Weapon_Use,
+		Weapon_Drop,
 		Weapon_SuperShotgun,
 		"misc/w_pkup.wav",
 		"models/weapons/g_shotg2/tris.md2", EF_ROTATE,
@@ -1327,9 +1314,9 @@ always owned, never in the world
 */
 	{
 		"weapon_machinegun", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		Weapon_Pickup,
+		Weapon_Use,
+		Weapon_Drop,
 		Weapon_Machinegun,
 		"misc/w_pkup.wav",
 		"models/weapons/g_machn/tris.md2", EF_ROTATE,
@@ -1350,9 +1337,9 @@ always owned, never in the world
 */
 	{
 		"weapon_chaingun", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		Weapon_Pickup,
+		Weapon_Use,
+		Weapon_Drop,
 		Weapon_Chaingun,
 		"misc/w_pkup.wav",
 		"models/weapons/g_chain/tris.md2", EF_ROTATE,
@@ -1374,7 +1361,7 @@ always owned, never in the world
 	{
 		"ammo_grenades",
 		Pickup_Ammo,
-		Use_Weapon,
+		Weapon_Use,
 		Drop_Ammo,
 		Weapon_Grenade,
 		"misc/am_pkup.wav",
@@ -1396,9 +1383,9 @@ always owned, never in the world
 */
 	{
 		"weapon_grenadelauncher",
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		Weapon_Pickup,
+		Weapon_Use,
+		Weapon_Drop,
 		Weapon_GrenadeLauncher,
 		"misc/w_pkup.wav",
 		"models/weapons/g_launch/tris.md2", EF_ROTATE,
@@ -1419,9 +1406,9 @@ always owned, never in the world
 */
 	{
 		"weapon_rocketlauncher",
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		Weapon_Pickup,
+		Weapon_Use,
+		Weapon_Drop,
 		Weapon_RocketLauncher,
 		"misc/w_pkup.wav",
 		"models/weapons/g_rocket/tris.md2", EF_ROTATE,
@@ -1442,9 +1429,9 @@ always owned, never in the world
 */
 	{
 		"weapon_hyperblaster", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		Weapon_Pickup,
+		Weapon_Use,
+		Weapon_Drop,
 		Weapon_HyperBlaster,
 		"misc/w_pkup.wav",
 		"models/weapons/g_hyperb/tris.md2", EF_ROTATE,
@@ -1465,9 +1452,9 @@ always owned, never in the world
 */
 	{
 		"weapon_railgun", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		Weapon_Pickup,
+		Weapon_Use,
+		Weapon_Drop,
 		Weapon_Railgun,
 		"misc/w_pkup.wav",
 		"models/weapons/g_rail/tris.md2", EF_ROTATE,
@@ -1490,9 +1477,9 @@ always owned, never in the world
 
 	{
 		"weapon_bamfuslicator",
-			Pickup_Weapon,
-			Use_Weapon,
-			Drop_Weapon,
+			Weapon_Pickup,
+			Weapon_Use,
+			Weapon_Drop,
 			Weapon_Bamfuslicator,
 			"misc/w_pkup.wav",
 			"models/weapons/g_bamfuslicator/tris.md2", EF_ROTATE,
@@ -1512,9 +1499,9 @@ always owned, never in the world
 
 	{
 		"weapon_planfuslicator",
-			Pickup_Weapon,
-			Use_Weapon,
-			Drop_Weapon,
+			Weapon_Pickup,
+			Weapon_Use,
+			Weapon_Drop,
 			Weapon_Bamfuslicator,
 			"misc/w_pkup.wav",
 			"models/weapons/g_shotg2/tris.md2", EF_ROTATE,
@@ -1533,9 +1520,9 @@ always owned, never in the world
 	},
 	{
 		"weapon_tangfuslicator",
-			Pickup_Weapon,
-			Use_Weapon,
-			Drop_Weapon,
+			Weapon_Pickup,
+			Weapon_Use,
+			Weapon_Drop,
 			Weapon_Tangfuslicator,
 			"misc/w_pkup.wav",
 			"models/weapons/g_tangfuslicator/tris.md2", EF_ROTATE,
@@ -1894,13 +1881,13 @@ void SP_item_health (edict_t *self)
 {
 	if (((int32_t)gameflags->value & GF_NO_HEALTH) )
 	{
-		G_FreeEdict (self);
+		Edict_Free (self);
 		return;
 	}
 
 	self->model = "models/items/healing/medium/tris.md2";
 	self->count = 10;
-	SpawnItem (self, FindItem ("Health"));
+	Item_Spawn (self, Item_FindByPickupName ("Health"));
 	gi.soundindex ("items/n_health.wav");
 }
 
@@ -1910,13 +1897,13 @@ void SP_item_health_small (edict_t *self)
 {
 	if (((int32_t)gameflags->value & GF_NO_HEALTH) )
 	{
-		G_FreeEdict (self);
+		Edict_Free (self);
 		return;
 	}
 
 	self->model = "models/items/healing/stimpack/tris.md2";
 	self->count = 2;
-	SpawnItem (self, FindItem ("Health"));
+	Item_Spawn (self, Item_FindByPickupName ("Health"));
 	self->style = HEALTH_IGNORE_MAX;
 	gi.soundindex ("items/s_health.wav");
 }
@@ -1927,13 +1914,13 @@ void SP_item_health_large (edict_t *self)
 {
 	if (((int32_t)gameflags->value & GF_NO_HEALTH) )
 	{
-		G_FreeEdict (self);
+		Edict_Free (self);
 		return;
 	}
 
 	self->model = "models/items/healing/large/tris.md2";
 	self->count = 25;
-	SpawnItem (self, FindItem ("Health"));
+	Item_Spawn (self, Item_FindByPickupName ("Health"));
 	gi.soundindex ("items/l_health.wav");
 }
 
@@ -1942,13 +1929,13 @@ void SP_item_health_super(edict_t* self)
 {
 	if (((int32_t)gameflags->value & GF_NO_HEALTH))
 	{
-		G_FreeEdict(self);
+		Edict_Free(self);
 		return;
 	}
 
 	self->model = "models/items/healing/large/tris.md2";
 	self->count = 50;
-	SpawnItem(self, FindItem("Health"));
+	Item_Spawn(self, Item_FindByPickupName("Health"));
 	gi.soundindex("items/m_health.wav");
 }
 
@@ -1958,19 +1945,19 @@ void SP_item_health_mega (edict_t *self)
 {
 	if (((int32_t)gameflags->value & GF_NO_HEALTH) )
 	{
-		G_FreeEdict (self);
+		Edict_Free (self);
 		return;
 	}
 
 	self->model = "models/items/mega_h/tris.md2";
 	self->count = 100;
-	SpawnItem (self, FindItem ("Health"));
+	Item_Spawn (self, Item_FindByPickupName ("Health"));
 	gi.soundindex ("items/m_health.wav");
 	self->style = HEALTH_IGNORE_MAX|HEALTH_TIMED;
 }
 
 
-void InitItems ()
+void Items_Init ()
 {
 	game.num_items = sizeof(itemlist)/sizeof(itemlist[0]) - 1;
 }
@@ -1984,7 +1971,7 @@ SetItemNames
 Called by worldspawn
 ===============
 */
-void SetItemNames ()
+void Item_SetName ()
 {
 	int		i;
 	gitem_t	*it;

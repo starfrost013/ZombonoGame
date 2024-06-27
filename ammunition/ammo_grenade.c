@@ -53,7 +53,7 @@ static void Ammo_Grenade_explode(edict_t* ent)
 		else
 			mod = MOD_GRENADE;
 
-		T_Damage(ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int32_t)points, (int32_t)points, DAMAGE_RADIUS, mod);
+		Player_Damage(ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int32_t)points, (int32_t)points, DAMAGE_RADIUS, mod);
 	}
 
 	if (ent->spawnflags & 2)
@@ -63,7 +63,7 @@ static void Ammo_Grenade_explode(edict_t* ent)
 	else
 		mod = MOD_G_SPLASH;
 
-	T_RadiusDamage(ent, ent->owner, ent->dmg, ent->enemy, ent->dmg_radius, mod);
+	Player_RadiusDamage(ent, ent->owner, ent->dmg, ent->enemy, ent->dmg_radius, mod);
 
 	VectorMA(ent->s.origin, -0.02, ent->velocity, origin);
 	gi.WriteByte(svc_temp_entity);
@@ -84,7 +84,7 @@ static void Ammo_Grenade_explode(edict_t* ent)
 	gi.WritePos(origin);
 	gi.multicast(ent->s.origin, MULTICAST_PHS);
 
-	G_FreeEdict(ent);
+	Edict_Free(ent);
 }
 
 static void Ammo_Grenade_touch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t* surf)
@@ -94,7 +94,7 @@ static void Ammo_Grenade_touch(edict_t* ent, edict_t* other, cplane_t* plane, cs
 
 	if (surf && (surf->flags & SURF_SKY))
 	{
-		G_FreeEdict(ent);
+		Edict_Free(ent);
 		return;
 	}
 
@@ -127,7 +127,7 @@ void Ammo_Grenade(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, in
 	vectoangles(aimdir, dir);
 	AngleVectors(dir, forward, right, up);
 
-	grenade = G_Spawn();
+	grenade = Edict_Spawn();
 	VectorCopy(start, grenade->s.origin);
 	VectorScale(aimdir, speed, grenade->velocity);
 	VectorMA(grenade->velocity, 200 + crandom() * 10.0, up, grenade->velocity);
@@ -160,7 +160,7 @@ void Ammo_Grenade2(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, i
 	vectoangles(aimdir, dir);
 	AngleVectors(dir, forward, right, up);
 
-	grenade = G_Spawn();
+	grenade = Edict_Spawn();
 	VectorCopy(start, grenade->s.origin);
 	VectorScale(aimdir, speed, grenade->velocity);
 	VectorMA(grenade->velocity, 200 + crandom() * 10.0, up, grenade->velocity);

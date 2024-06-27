@@ -375,7 +375,7 @@ retry:
 	}
 
 	if (ent->inuse)
-		G_TouchTriggers(ent);
+		Edict_TouchTriggers(ent);
 
 	return trace;
 }
@@ -546,7 +546,7 @@ bool SV_Push(edict_t* pusher, vec3_t move, vec3_t amove)
 	//FIXME: is there a better way to handle this?
 		// see if anything we moved has touched a trigger
 	for (p = pushed_p - 1; p >= pushed; p--)
-		G_TouchTriggers(p->ent);
+		Edict_TouchTriggers(p->ent);
 
 	return true;
 }
@@ -911,7 +911,7 @@ void SV_Physics_Step(edict_t* ent)
 
 		gi.linkentity(ent);
 
-		G_TouchTriggers(ent);
+		Edict_TouchTriggers(ent);
 
 		if (!ent->inuse)
 			return;
@@ -937,7 +937,7 @@ G_RunEntity
 
 ================
 */
-void G_RunEntity(edict_t* ent)
+void Physics_RunEntity(edict_t* ent)
 {
 	if (ent->prethink)
 		ent->prethink(ent);

@@ -654,7 +654,7 @@ void zombie_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t da
 			ThrowGib(self, "models/objects/gibs/zombie/zombie_hand.md2", damage, GIB_ORGANIC);
 		ThrowGib(self, "models/objects/gibs/zombie/zombie_main.md2", damage, GIB_ORGANIC);
 		self->deadflag = DEAD_DEAD;
-		G_FreeEdict(self);
+		Edict_Free(self);
 		return;
 	}
 
@@ -672,7 +672,7 @@ void zombie_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t da
 	if (fabs((self->s.origin[2] + self->viewheight) - point[2]) <= 4)
 	{
 		// head shot
-		G_FreeEdict(self);
+		Edict_Free(self);
 		return;
 	}
 
@@ -683,7 +683,7 @@ void zombie_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t da
 		self->monsterinfo.currentmove = &zombie_move_death2;
 
 	// TODO: temp until not fucked animations
-	G_FreeEdict(self);
+	Edict_Free(self);
 }
 
 //

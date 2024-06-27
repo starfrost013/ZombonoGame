@@ -110,7 +110,7 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 	}
 
 	// spawn the monster
-	monster = G_Spawn();
+	monster = Edict_Spawn();
 
 	// move the zombie to where the player spawned it
 	// the zombie is on director team (this is used so they don't harm directors unless the requisite gameflag is set)
@@ -144,7 +144,7 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 		{
 			gi.sound(self, CHAN_VOICE, gi.soundindex("weapons/bamfuslicator/spawn_failed.wav"), 1, ATTN_NORM, 0);
 			//todo: push out
-			G_FreeEdict(monster);
+			Edict_Free(monster);
 			return;
 		}
 	}
@@ -161,7 +161,7 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 		if (!strncmp(within_monster_bounds[edict]->classname, "worldspawn", 11))
 		{
 			gi.sound(self, CHAN_VOICE, gi.soundindex("weapons/bamfuslicator/spawn_failed.wav"), 1, ATTN_NORM, 0);
-			G_FreeEdict(monster);
+			Edict_Free(monster);
 			return;
 		}
 	}

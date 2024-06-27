@@ -25,6 +25,94 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "game_local.h"
 
+
+#define TIME_BUF_LENGTH		20
+#define SCORE_BUF_LENGTH	40
+
+void Gamemode_TDMCheckRules()
+{
+	int32_t		i;
+	gclient_t* cl;
+
+	if (timelimit->value)
+	{
+		if (level.time >= timelimit->value)
+		{
+			gi.bprintf(PRINT_HIGH, "Out of time!\n");
+			Game_EndMatch();
+			return;
+		}
+
+		// update every 1 second roughly
+		if (level.framenum % (int)(1 / FRAMETIME) == 0)
+		{
+			char text[TIME_BUF_LENGTH] = { 0 };
+
+			int32_t total_seconds = timelimit->value - (int32_t)level.time;
+			// convert remaining time to integer mm:ss
+			int32_t seconds = (int32_t)(total_seconds % 60);
+			int32_t minutes = (int32_t)(total_seconds / 60);
+
+			if (seconds < 10)
+			{
+				snprintf(&text, TIME_BUF_LENGTH, "Time: %d:0%d", minutes, seconds);
+			}
+			else
+			{
+				snprintf(&text, TIME_BUF_LENGTH, "Time: %d:%d", minutes, seconds);
+			}
+
+			// multicast time remaining to each client
+			GameUI_SetText(NULL, "TimeUI", "TimeUI_Text", text, false);
+		}
+
+	}
+
+	// every second update each team's score
+	if (level.framenum % (int)(1 / FRAMETIME) == 0)
+	{
+		team_scores_t team_scores = Gamemode_TDMGetScores();
+		char text[SCORE_BUF_LENGTH] = { 0 };
+
+		snprintf(text, SCORE_BUF_LENGTH, "Directors %d : Players %d", team_scores.director_score, team_scores.player_score);
+
+		GameUI_SetText(NULL, "ScoreUI", "ScoreUI_Text", text, false);
+	}
+
+	if (fraglimit->value)
+	{
+		for (i = 0; i < maxclients->value; i++)
+		{
+			if ((int32_t)gameflags->value & GF_INDIVIDUAL_FRAGLIMIT)
+			{
+				cl = game.clients + i;
+				if (!g_edicts[i + 1].inuse)
+					continue;
+
+				if (cl->resp.score >= fraglimit->value)
+				{
+					gi.bprintf(PRINT_HIGH, "Fraglimit hit!\n");
+					Game_EndMatch();
+					return;
+				}
+			}
+			else // if individual fraglimit is off, use the aggregate scores of either team instead
+			{
+				team_scores_t team_scores = Gamemode_TDMGetScores();
+
+				if (team_scores.director_score >= fraglimit->value
+					|| team_scores.player_score >= fraglimit->value)
+				{
+					gi.bprintf(PRINT_HIGH, "Fraglimit hit!\n");
+					Game_EndMatch();
+					return;
+				}
+			}
+
+		}
+	}
+}
+
 // Game_TDMGetScores: Gets the current scores for both teams in TDM mode.
 team_scores_t Gamemode_TDMGetScores()
 {
@@ -78,20 +166,20 @@ player_team Gamemode_TDMGetWinner()
 }
 
 // figure out if the other modes use this
-edict_t* SelectTeamSpawnPoint(edict_t* player)
+edict_t* Player_SpawnSelectTeam(edict_t* player)
 {
 	if ((int32_t)gamemode->value != 0)
 	{
 		gi.bprintf(PRINT_ALL, "Can't currently spawn for non-TDM gamemodes");
 
-		return SelectUnassignedSpawnPoint();
+		return Player_SpawnSelectUnassigned();
 	}
 	else
 	{
 		if (player->team == 0)
 		{
 			gi.bprintf(PRINT_ALL, "Error - Player Teamflag not set! Defaulting to info_player_start");
-			return SelectUnassignedSpawnPoint();
+			return Player_SpawnSelectUnassigned();
 		}
 		// Teamflags are used to allow items to be used with multiple teams, but not all
 		// 
@@ -106,16 +194,16 @@ edict_t* SelectTeamSpawnPoint(edict_t* player)
 		// Teamflag 4 - Unassigned
 		else if (player->team == team_unassigned)
 		{
-			return SelectUnassignedSpawnPoint();
+			return Player_SpawnSelectUnassigned();
 		}
 
 		if ((int32_t)(gameflags->value) & GF_SPAWN_FARTHEST)
 		{
-			return SelectFarthestSpawnPoint(spawn_class_name);
+			return Player_SpawnSelectFarthest(spawn_class_name);
 		}
 		else
 		{
-			return SelectRandomSpawnPoint(spawn_class_name);
+			return Player_SpawnSelectRandom(spawn_class_name);
 		}
 	}
 }

@@ -76,28 +76,26 @@ cvar_t* sv_maplist;
 
 cvar_t  *aimfix;
 
-void SpawnEntities (char *mapname, char *entities, char *spawnpoint);
-void ClientThink (edict_t *ent, usercmd_t *cmd);
-bool ClientConnect (edict_t *ent, char *userinfo);
-void ClientDisconnect (edict_t *ent);
-void ClientBegin (edict_t *ent);
-void ClientCommand (edict_t *ent);
-void ClientCommand_NoConsole (edict_t* ent);
-void WriteGame (char *filename, bool autosave);
-void ReadGame (char *filename);
-void WriteLevel (char *filename);
-void ReadLevel (char *filename);
-void InitGame ();
-void G_RunFrame ();
+void Game_SpawnEntities (char *mapname, char *entities, char *spawnpoint);
+void Client_Think (edict_t *ent, usercmd_t *cmd);
+bool Client_Connect (edict_t *ent, char *userinfo);
+void Client_Disconnect (edict_t *ent);
+void Client_OnConnected (edict_t *ent);
+void Client_Command (edict_t *ent);
+void Client_CommandNoConsole (edict_t* ent);
+void Game_Write (char *filename, bool autosave);
+void Game_Read (char *filename);
+void Level_Write (char *filename);
+void Level_Read (char *filename);
+void Game_Init ();
+void Game_RunFrame ();
 
-// Gamemode-specific stuff
 void CheckGamemodeRules();
-void CheckTDMRules();
 
 //===================================================================
 
 
-void ShutdownGame ()
+void Game_Shutdown ()
 {
 	gi.dprintf ("==== ShutdownGame ====\n");
 
@@ -119,26 +117,26 @@ game_export_t *GetGameAPI (game_import_t *import)
 	gi = *import;
 
 	globals.apiversion = GAME_API_VERSION;
-	globals.Init = InitGame;
-	globals.Shutdown = ShutdownGame;
-	globals.SpawnEntities = SpawnEntities;
+	globals.Init = Game_Init;
+	globals.Shutdown = Game_Shutdown;
+	globals.Game_SpawnEntities = Game_SpawnEntities;
 
-	globals.WriteGame = WriteGame;
-	globals.ReadGame = ReadGame;
-	globals.WriteLevel = WriteLevel;
-	globals.ReadLevel = ReadLevel;
+	globals.Game_Write = Game_Write;
+	globals.Game_Read = Game_Read;
+	globals.Level_Write = Level_Write;
+	globals.Level_Read = Level_Read;
 
-	globals.ClientThink = ClientThink;
-	globals.ClientConnect = ClientConnect;
-	globals.ClientUserinfoChanged = ClientUserinfoChanged;
-	globals.ClientDisconnect = ClientDisconnect;
-	globals.ClientBegin = ClientBegin;
-	globals.ClientCommand = ClientCommand;
-	globals.ClientCommand_NoConsole = ClientCommand_NoConsole;
+	globals.Client_Think = Client_Think;
+	globals.Client_Connect = Client_Connect;
+	globals.Client_UserinfoChanged = Client_UserinfoChanged;
+	globals.Client_Disconnect = Client_Disconnect;
+	globals.Client_OnConnected = Client_OnConnected;
+	globals.Client_Command = Client_Command;
+	globals.Client_CommandNoConsole = Client_CommandNoConsole;
 
-	globals.RunFrame = G_RunFrame;
+	globals.RunFrame = Game_RunFrame;
 
-	globals.ServerCommand = ServerCommand;
+	globals.Server_Command = Server_Command;
 
 	globals.edict_size = sizeof(edict_t);
 
@@ -193,7 +191,7 @@ void ClientEndServerFrames ()
 		ent = g_edicts + 1 + i;
 		if (!ent->inuse || !ent->client)
 			continue;
-		ClientEndServerFrame (ent);
+		Client_EndServerFrame (ent);
 	}
 
 }
@@ -209,7 +207,7 @@ edict_t *CreateTargetChangeLevel(char *map)
 {
 	edict_t *ent;
 
-	ent = G_Spawn ();
+	ent = Edict_Spawn ();
 	ent->classname = "target_changelevel";
 	Com_sprintf(level.nextmap, sizeof(level.nextmap), "%s", map);
 	ent->map = level.nextmap;
@@ -223,7 +221,7 @@ EndMatch
 The conditions to end the current gamemode have been reached.
 =================
 */
-void EndMatch ()
+void Game_EndMatch ()
 {
 	edict_t		*ent;
 	char *s, *t, *f;
@@ -232,7 +230,7 @@ void EndMatch ()
 	// stay on same level flag
 	if ((int32_t)gameflags->value & GF_SAME_LEVEL)
 	{
-		BeginIntermission (CreateTargetChangeLevel (level.mapname) );
+		Game_TransitionToNextMatch (CreateTargetChangeLevel (level.mapname) );
 		return;
 	}
 
@@ -247,11 +245,11 @@ void EndMatch ()
 				t = strtok(NULL, seps);
 				if (t == NULL) { // end of list, go to first one
 					if (f == NULL) // there isn't a first one, same level
-						BeginIntermission (CreateTargetChangeLevel (level.mapname) );
+						Game_TransitionToNextMatch (CreateTargetChangeLevel (level.mapname) );
 					else
-						BeginIntermission (CreateTargetChangeLevel (f) );
+						Game_TransitionToNextMatch (CreateTargetChangeLevel (f) );
 				} else
-					BeginIntermission (CreateTargetChangeLevel (t) );
+					Game_TransitionToNextMatch (CreateTargetChangeLevel (t) );
 				free(s);
 				return;
 			}
@@ -264,16 +262,16 @@ void EndMatch ()
 	}
 
 	if (level.nextmap[0]) // go to a specific map
-		BeginIntermission (CreateTargetChangeLevel (level.nextmap) );
+		Game_TransitionToNextMatch (CreateTargetChangeLevel (level.nextmap) );
 	else {	// search for a changelevel
-		ent = G_Find (NULL, FOFS(classname), "target_changelevel");
+		ent = Game_FindEdictByValue (NULL, FOFS(classname), "target_changelevel");
 		if (!ent)
 		{	// the map designer didn't include a changelevel,
 			// so create a fake ent that goes back to the same level
-			BeginIntermission (CreateTargetChangeLevel (level.mapname) );
+			Game_TransitionToNextMatch (CreateTargetChangeLevel (level.mapname) );
 			return;
 		}
-		BeginIntermission (ent);
+		Game_TransitionToNextMatch (ent);
 	}
 }
 
@@ -317,94 +315,7 @@ void CheckGamemodeRules ()
 	// todo: IMPLEMENT
 	if (gamemode->value == GAMEMODE_TDM)
 	{
-		CheckTDMRules();
-	}
-}
-
-#define TIME_BUF_LENGTH		20
-#define SCORE_BUF_LENGTH	40
-
-void CheckTDMRules()
-{
-	int32_t		i;
-	gclient_t* cl;
-
-	if (timelimit->value)
-	{
-		if (level.time >= timelimit->value)
-		{
-			gi.bprintf(PRINT_HIGH, "Out of time!\n");
-			EndMatch();
-			return;
-		}
-
-		// update every 1 second roughly
-		if (level.framenum % (int)(1/FRAMETIME) == 0)
-		{
-			char text[TIME_BUF_LENGTH] = { 0 };
-
-			int32_t total_seconds = timelimit->value - (int32_t)level.time;
-			// convert remaining time to integer mm:ss
-			int32_t seconds = (int32_t)(total_seconds % 60);
-			int32_t minutes = (int32_t)(total_seconds / 60);
-
-			if (seconds < 10)
-			{
-				snprintf(&text, TIME_BUF_LENGTH, "Time: %d:0%d", minutes, seconds);
-			}
-			else
-			{
-				snprintf(&text, TIME_BUF_LENGTH, "Time: %d:%d", minutes, seconds);
-			}
-
-			// multicast time remaining to each client
-			G_UISetText(NULL, "TimeUI", "TimeUI_Text", text, false);
-		}
-
-	}
-
-	// every second update each team's score
-	if (level.framenum % (int)(1 / FRAMETIME) == 0)
-	{
-		team_scores_t team_scores = Gamemode_TDMGetScores();
-		char text[SCORE_BUF_LENGTH] = { 0 };
-
-		snprintf(text, SCORE_BUF_LENGTH, "Directors %d : Players %d", team_scores.director_score, team_scores.player_score);
-
-		G_UISetText(NULL, "ScoreUI", "ScoreUI_Text", text, false);
-	}
-
-	if (fraglimit->value)
-	{
-		for (i = 0; i < maxclients->value; i++)
-		{
-			if ((int32_t)gameflags->value & GF_INDIVIDUAL_FRAGLIMIT)
-			{
-				cl = game.clients + i;
-				if (!g_edicts[i + 1].inuse)
-					continue;
-
-				if (cl->resp.score >= fraglimit->value)
-				{
-					gi.bprintf(PRINT_HIGH, "Fraglimit hit!\n");
-					EndMatch();
-					return;
-				}
-			}
-			else // if individual fraglimit is off, use the aggregate scores of either team instead
-			{
-				team_scores_t team_scores = Gamemode_TDMGetScores();
-
-				if (team_scores.director_score >= fraglimit->value
-					|| team_scores.player_score >= fraglimit->value)
-				{
-					gi.bprintf(PRINT_HIGH, "Fraglimit hit!\n");
-					EndMatch();
-					return;
-				}
-			}
-
-		}
+		Gamemode_TDMCheckRules();
 	}
 }
 
@@ -416,7 +327,7 @@ This runs after the end of a game
 */
 void ExitLevel ()
 {
-	int		i;
+	int32_t i;
 	edict_t	*ent;
 	char	command [256];
 
@@ -448,7 +359,7 @@ G_RunFrame
 Advances the world by (1/TICKRATE) seconds
 ================
 */
-void G_RunFrame ()
+void Game_RunFrame ()
 {
 	int		i;
 	edict_t	*ent;
@@ -493,11 +404,11 @@ void G_RunFrame ()
 
 		if (i > 0 && i <= maxclients->value)
 		{
-			ClientBeginServerFrame (ent);
+			Client_BeginServerFrame (ent);
 			continue;
 		}
 
-		G_RunEntity (ent);
+		Physics_RunEntity (ent);
 	}
 
 	// see if it is time to end a deathmatch

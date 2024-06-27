@@ -143,7 +143,7 @@ void ED_CallSpawn (edict_t *ent)
 			continue;
 		if (!strcmp(item->classname, ent->classname))
 		{	// found it
-			SpawnItem (ent, item);
+			Item_Spawn (ent, item);
 			return;
 		}
 	}
@@ -393,7 +393,7 @@ Creates a server's entity / program execution context by
 parsing textual entity definitions out of an ent file.
 ==============
 */
-void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
+void Game_SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 {
 	edict_t		*ent;
 	int			inhibit;
@@ -439,7 +439,7 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 		if (!ent)
 			ent = g_edicts;
 		else
-			ent = G_Spawn ();
+			ent = Edict_Spawn ();
 		entities = ED_ParseEdict (entities, ent);
 
 
@@ -473,7 +473,7 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 
 			if (killEntity)
 			{
-				G_FreeEdict(ent);
+				Edict_Free(ent);
 				inhibit++;
 				killEntity = false;
 				continue;
@@ -584,10 +584,10 @@ void SP_worldspawn (edict_t *ent)
 	//---------------
 
 	// reserve some spots for dead player bodies for coop / deathmatch
-	InitBodyQue ();
+	Client_InitBodyQue ();
 
 	// set configstrings for items
-	SetItemNames ();
+	Item_SetName ();
 
 	if (st.nextmap)
 		strcpy (level.nextmap, st.nextmap);
@@ -636,7 +636,7 @@ void SP_worldspawn (edict_t *ent)
 
 	snd_fry = gi.soundindex ("player/fry.wav");	// standing in lava / slime
 
-	PrecacheItem (FindItem ("Blaster"));
+	Item_Precache (Item_FindByPickupName ("Blaster"));
 
 	gi.soundindex ("player/lava1.wav");
 	gi.soundindex ("player/lava2.wav");

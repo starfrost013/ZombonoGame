@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 void InitTrigger(edict_t* self)
 {
 	if (!VectorCompare(self->s.angles, vec3_origin))
-		G_SetMovedir(self->s.angles, self->movedir);
+		Edict_SetMovedir(self->s.angles, self->movedir);
 
 	self->solid = SOLID_TRIGGER;
 	self->movetype = MOVETYPE_NONE;
@@ -47,7 +47,7 @@ void multi_trigger(edict_t* ent)
 	if (ent->nextthink)
 		return;		// already been triggered
 
-	G_UseTargets(ent, ent->activator);
+	Edict_UseTargets(ent, ent->activator);
 
 	if (ent->wait > 0)
 	{
@@ -59,7 +59,7 @@ void multi_trigger(edict_t* ent)
 		// called while looping through area links...
 		ent->touch = NULL;
 		ent->nextthink = level.time + FRAMETIME;
-		ent->think = G_FreeEdict;
+		ent->think = Edict_Free;
 	}
 }
 
@@ -143,7 +143,7 @@ void SP_trigger_multiple(edict_t* ent)
 	}
 
 	if (!VectorCompare(ent->s.angles, vec3_origin))
-		G_SetMovedir(ent->s.angles, ent->movedir);
+		Edict_SetMovedir(ent->s.angles, ent->movedir);
 
 	gi.setmodel(ent, ent->model);
 	gi.linkentity(ent);
@@ -188,7 +188,7 @@ This fixed size trigger cannot be touched, it can only be fired by other events.
 */
 void trigger_relay_use(edict_t* self, edict_t* other, edict_t* activator)
 {
-	G_UseTargets(self, activator);
+	Edict_UseTargets(self, activator);
 }
 
 void SP_trigger_relay(edict_t* self)
@@ -265,7 +265,7 @@ void SP_trigger_always(edict_t* ent)
 	// we must have some delay to make sure our use targets are present
 	if (ent->delay < 0.2)
 		ent->delay = 0.2;
-	G_UseTargets(ent, ent);
+	Edict_UseTargets(ent, ent);
 }
 
 
@@ -303,7 +303,7 @@ void trigger_push_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface
 		}
 	}
 	if (self->spawnflags & PUSH_ONCE)
-		G_FreeEdict(self);
+		Edict_Free(self);
 }
 
 
@@ -380,7 +380,7 @@ void hurt_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* surf
 		dflags = DAMAGE_NO_PROTECTION;
 	else
 		dflags = 0;
-	T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, self->dmg, dflags, MOD_TRIGGER_HURT);
+	Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, self->dmg, dflags, MOD_TRIGGER_HURT);
 }
 
 void SP_trigger_hurt(edict_t* self)
@@ -429,7 +429,7 @@ void SP_trigger_gravity(edict_t* self)
 	if (st.gravity == 0)
 	{
 		gi.dprintf("trigger_gravity without gravity set at %s\n", vtos(self->s.origin));
-		G_FreeEdict(self);
+		Edict_Free(self);
 		return;
 	}
 

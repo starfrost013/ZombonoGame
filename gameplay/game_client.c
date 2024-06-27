@@ -60,7 +60,7 @@ This will be called once for each client frame, which will
 usually be a couple times for each server frame.
 ==============
 */
-void ClientThink(edict_t* ent, usercmd_t* ucmd)
+void Client_Think(edict_t* ent, usercmd_t* ucmd)
 {
 	gclient_t*	client;
 	edict_t*	other;
@@ -211,7 +211,7 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 		gi.linkentity(ent);
 
 		if (ent->movetype != MOVETYPE_NOCLIP)
-			G_TouchTriggers(ent);
+			Edict_TouchTriggers(ent);
 
 		// touch other objects
 		for (i = 0; i < pm.numtouch; i++)
@@ -253,7 +253,7 @@ void ClientThink(edict_t* ent, usercmd_t* ucmd)
 		}
 		else if (!client->weapon_thunk) {
 			client->weapon_thunk = true;
-			Think_Weapon(ent);
+			Weapon_Think(ent);
 		}
 	}
 
@@ -289,7 +289,7 @@ This will be called once for each server frame, before running
 any other entities in the world.
 ==============
 */
-void ClientBeginServerFrame(edict_t* ent)
+void Client_BeginServerFrame(edict_t* ent)
 {
 	gclient_t*	client;
 	int32_t		buttonMask;
@@ -307,7 +307,7 @@ void ClientBeginServerFrame(edict_t* ent)
 
 	// run weapon animations if it hasn't been done by a ucmd_t
 	if (!client->weapon_thunk && !client->resp.spectator)
-		Think_Weapon(ent);
+		Weapon_Think(ent);
 	else
 		client->weapon_thunk = false;
 
@@ -345,7 +345,7 @@ Called for each player at the end of the server frame
 and right after spawning
 =================
 */
-void ClientEndServerFrame(edict_t* ent)
+void Client_EndServerFrame(edict_t* ent)
 {
 	float	bobtime;
 	int32_t	i;
@@ -376,14 +376,14 @@ void ClientEndServerFrame(edict_t* ent)
 		// FIXME: add view drifting here?
 		current_client->ps.blend[3] = 0;
 		current_client->ps.fov = 90;
-		G_SetStats(ent);
+		GameUI_SetStats(ent);
 		return;
 	}
 
 	AngleVectors(ent->client->v_angle, forward, right, up);
 
 	// burn from lava, etc
-	P_WorldEffects();
+	Player_WorldEffects();
 
 	//
 	// set model angles from view angles so other things in
@@ -395,7 +395,7 @@ void ClientEndServerFrame(edict_t* ent)
 		ent->s.angles[PITCH] = ent->client->v_angle[PITCH] / 3;
 	ent->s.angles[YAW] = ent->client->v_angle[YAW];
 	ent->s.angles[ROLL] = 0;
-	ent->s.angles[ROLL] = SV_CalcRoll(ent->s.angles, ent->velocity) * 4;
+	ent->s.angles[ROLL] = Client_CalcRoll(ent->s.angles, ent->velocity) * 4;
 
 	//
 	// calculate speed and cycle to be used for
@@ -427,39 +427,39 @@ void ClientEndServerFrame(edict_t* ent)
 	bobfracsin = fabs(sin(bobtime * M_PI));
 
 	// detect hitting the floor
-	P_FallingDamage(ent);
+	Player_FallDamage(ent);
 
 	// apply all the damage taken this frame
-	P_DamageFeedback(ent);
+	Player_DamageFeedback(ent);
 
 	// determine the view offsets
-	SV_CalcViewOffset(ent);
+	Client_CalcViewOffset(ent);
 
 	// determine the gun offsets
-	SV_CalcGunOffset(ent);
+	Client_CalcGunOffset(ent);
 
 	// determine the full screen color blend
 	// must be after viewoffset, so eye contents can be
 	// accurately determined
 	// FIXME: with client prediction, the contents
 	// should be determined by the client
-	SV_CalcBlend(ent);
+	Client_CalcBlend(ent);
 
 	// chase cam stuff
 	if (ent->client->resp.spectator)
-		G_SetSpectatorStats(ent);
+		GameUI_SetStatsSpectator(ent);
 	else
-		G_SetStats(ent);
+		GameUI_SetStats(ent);
 
-	G_CheckChaseStats(ent);
+	GameUI_CheckChaseStats(ent);
 
-	G_SetClientEvent(ent);
+	Client_SetEvent(ent);
 
-	G_SetClientEffects(ent);
+	Client_SetEffects(ent);
 
-	G_SetClientSound(ent);
+	Client_SetSound(ent);
 
-	G_SetClientFrame(ent);
+	Client_SetFrame(ent);
 
 	VectorCopy(ent->velocity, ent->client->oldvelocity);
 	VectorCopy(ent->client->ps.viewangles, ent->client->oldviewangles);
@@ -471,5 +471,5 @@ void ClientEndServerFrame(edict_t* ent)
 	// update the leaderboard every 10 ticks (1 second)
 	// BEFORE IT WAS UPDATING IT EVERY FRAME WHILE ACTIVE???
 	if ((level.framenum % (int32_t)(1 / FRAMETIME)) == 0)
-		G_LeaderboardSend(ent);
+		GameUI_SendLeaderboard(ent);
 }

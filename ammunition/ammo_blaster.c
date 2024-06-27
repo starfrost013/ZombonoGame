@@ -40,7 +40,7 @@ void Ammo_Blaster_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface
 
 	if (surf && (surf->flags & SURF_SKY))
 	{
-		G_FreeEdict(self);
+		Edict_Free(self);
 		return;
 	}
 
@@ -53,7 +53,7 @@ void Ammo_Blaster_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface
 			mod = MOD_HYPERBLASTER;
 		else
 			mod = MOD_BLASTER;
-		T_Damage(other, self, self->owner, self->velocity, self->s.origin, plane->normal, self->dmg, 1, DAMAGE_ENERGY, mod);
+		Player_Damage(other, self, self->owner, self->velocity, self->s.origin, plane->normal, self->dmg, 1, DAMAGE_ENERGY, mod);
 	}
 	else
 	{
@@ -67,7 +67,7 @@ void Ammo_Blaster_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface
 		gi.multicast(self->s.origin, MULTICAST_PVS);
 	}
 
-	G_FreeEdict(self);
+	Edict_Free(self);
 }
 
 void Ammo_Blaster(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_t speed, int32_t effect, bool hyper)
@@ -77,7 +77,7 @@ void Ammo_Blaster(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32
 
 	VectorNormalize(dir);
 
-	bolt = G_Spawn();
+	bolt = Edict_Spawn();
 	bolt->svflags = SVF_DEADMONSTER;
 	// yes, I know it looks weird that projectiles are deadmonsters
 	// what this means is that when prediction is used against the object
@@ -99,7 +99,7 @@ void Ammo_Blaster(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32
 	bolt->owner = self;
 	bolt->touch = Ammo_Blaster_touch;
 	bolt->nextthink = level.time + 2;
-	bolt->think = G_FreeEdict;
+	bolt->think = Edict_Free;
 	bolt->dmg = damage;
 	bolt->classname = "bolt";
 	if (hyper)

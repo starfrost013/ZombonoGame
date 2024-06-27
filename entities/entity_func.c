@@ -410,14 +410,14 @@ void plat_blocked(edict_t* self, edict_t* other)
 	if (!(other->svflags & SVF_MONSTER) && (!other->client))
 	{
 		// give it a chance to go away on it's own terms (like gibs)
-		T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 100000, 1, 0, MOD_CRUSH);
+		Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 100000, 1, 0, MOD_CRUSH);
 		// if it's still there, nuke it
 		if (other)
 			BecomeExplosion1(other);
 		return;
 	}
 
-	T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
+	Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
 
 	if (self->moveinfo.state == STATE_UP)
 		plat_go_down(self);
@@ -457,7 +457,7 @@ void plat_spawn_inside_trigger(edict_t* ent)
 	//
 	// middle trigger
 	//	
-	trigger = G_Spawn();
+	trigger = Edict_Spawn();
 	trigger->touch = Touch_Plat_Center;
 	trigger->movetype = MOVETYPE_NONE;
 	trigger->solid = SOLID_TRIGGER;
@@ -595,13 +595,13 @@ STOP mean it will stop moving instead of pushing entities
 
 void rotating_blocked(edict_t* self, edict_t* other)
 {
-	T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
+	Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
 }
 
 void rotating_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* surf)
 {
 	if (self->avelocity[0] || self->avelocity[1] || self->avelocity[2])
-		T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
+		Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
 }
 
 void rotating_use(edict_t* self, edict_t* other, edict_t* activator)
@@ -715,7 +715,7 @@ void button_wait(edict_t* self)
 	self->s.effects &= ~EF_ANIM01;
 	self->s.effects |= EF_ANIM23;
 
-	G_UseTargets(self, self->activator);
+	Edict_UseTargets(self, self->activator);
 	self->s.frame = 1;
 	if (self->moveinfo.wait >= 0)
 	{
@@ -766,7 +766,7 @@ void SP_func_button(edict_t* ent)
 	vec3_t	abs_movedir;
 	float	dist;
 
-	G_SetMovedir(ent->s.angles, ent->movedir);
+	Edict_SetMovedir(ent->s.angles, ent->movedir);
 	ent->movetype = MOVETYPE_STOP;
 	ent->solid = SOLID_BSP;
 	gi.setmodel(ent, ent->model);
@@ -857,7 +857,7 @@ void door_use_areaportals(edict_t* self, bool open)
 	if (!self->target)
 		return;
 
-	while ((t = G_Find(t, FOFS(targetname), self->target)))
+	while ((t = Game_FindEdictByValue(t, FOFS(targetname), self->target)))
 	{
 		if (Q_stricmp(t->classname, "func_areaportal") == 0)
 		{
@@ -943,7 +943,7 @@ void door_go_up(edict_t* self, edict_t* activator)
 	else if (strcmp(self->classname, "func_door_rotating") == 0)
 		AngleMove_Calc(self, door_hit_top);
 
-	G_UseTargets(self, activator);
+	Edict_UseTargets(self, activator);
 	door_use_areaportals(self, true);
 }
 
@@ -1059,7 +1059,7 @@ void Think_SpawnDoorTrigger(edict_t* ent)
 	maxs[0] += 60;
 	maxs[1] += 60;
 
-	other = G_Spawn();
+	other = Edict_Spawn();
 	VectorCopy(mins, other->mins);
 	VectorCopy(maxs, other->maxs);
 	other->owner = ent;
@@ -1081,14 +1081,14 @@ void door_blocked(edict_t* self, edict_t* other)
 	if (!(other->svflags & SVF_MONSTER) && (!other->client))
 	{
 		// give it a chance to go away on it's own terms (like gibs)
-		T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 100000, 1, 0, MOD_CRUSH);
+		Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 100000, 1, 0, MOD_CRUSH);
 		// if it's still there, nuke it
 		if (other)
 			BecomeExplosion1(other);
 		return;
 	}
 
-	T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
+	Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
 
 	if (self->spawnflags & DOOR_CRUSHER)
 		return;
@@ -1159,7 +1159,7 @@ void SP_func_door(edict_t* ent)
 		ent->moveinfo.sound_end = gi.soundindex("doors/dr1_end.wav");
 	}
 
-	G_SetMovedir(ent->s.angles, ent->movedir);
+	Edict_SetMovedir(ent->s.angles, ent->movedir);
 	ent->movetype = MOVETYPE_PUSH;
 	ent->solid = SOLID_BSP;
 	gi.setmodel(ent, ent->model);
@@ -1390,7 +1390,7 @@ void SP_func_water(edict_t* self)
 {
 	vec3_t	abs_movedir;
 
-	G_SetMovedir(self->s.angles, self->movedir);
+	Edict_SetMovedir(self->s.angles, self->movedir);
 	self->movetype = MOVETYPE_PUSH;
 	self->solid = SOLID_BSP;
 	gi.setmodel(self, self->model);
@@ -1474,7 +1474,7 @@ void train_blocked(edict_t* self, edict_t* other)
 	if (!(other->svflags & SVF_MONSTER) && (!other->client))
 	{
 		// give it a chance to go away on it's own terms (like gibs)
-		T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 100000, 1, 0, MOD_CRUSH);
+		Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 100000, 1, 0, MOD_CRUSH);
 		// if it's still there, nuke it
 		if (other)
 			BecomeExplosion1(other);
@@ -1487,7 +1487,7 @@ void train_blocked(edict_t* self, edict_t* other)
 	if (!self->dmg)
 		return;
 	self->touch_debounce_time = level.time + 0.5;
-	T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
+	Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
 }
 
 void train_wait(edict_t* self)
@@ -1500,7 +1500,7 @@ void train_wait(edict_t* self)
 		ent = self->target_ent;
 		savetarget = ent->target;
 		ent->target = ent->pathtarget;
-		G_UseTargets(ent, self->activator);
+		Edict_UseTargets(ent, self->activator);
 		ent->target = savetarget;
 
 		// make sure we didn't get killed by a killtarget
@@ -1551,7 +1551,7 @@ again:
 		return;
 	}
 
-	ent = G_PickTarget(self->target);
+	ent = Edict_PickTarget(self->target);
 	if (!ent)
 	{
 		gi.dprintf("train_next: bad target %s\n", self->target);
@@ -1624,7 +1624,7 @@ void func_train_find(edict_t* self)
 		gi.dprintf("train_find: no target\n");
 		return;
 	}
-	ent = G_PickTarget(self->target);
+	ent = Edict_PickTarget(self->target);
 	if (!ent)
 	{
 		gi.dprintf("train_find: target %s not found\n", self->target);
@@ -1728,7 +1728,7 @@ void trigger_elevator_use(edict_t* self, edict_t* other, edict_t* activator)
 		return;
 	}
 
-	target = G_PickTarget(other->pathtarget);
+	target = Edict_PickTarget(other->pathtarget);
 	if (!target)
 	{
 		gi.dprintf("elevator used with bad pathtarget: %s\n", other->pathtarget);
@@ -1746,7 +1746,7 @@ void trigger_elevator_init(edict_t* self)
 		gi.dprintf("trigger_elevator has no target\n");
 		return;
 	}
-	self->movetarget = G_PickTarget(self->target);
+	self->movetarget = Edict_PickTarget(self->target);
 	if (!self->movetarget)
 	{
 		gi.dprintf("trigger_elevator unable to find target %s\n", self->target);
@@ -1786,7 +1786,7 @@ These can used but not touched.
 */
 void func_timer_think(edict_t* self)
 {
-	G_UseTargets(self, self->activator);
+	Edict_UseTargets(self, self->activator);
 	self->nextthink = level.time + self->wait + crandom() * self->random;
 }
 
@@ -1959,7 +1959,7 @@ void door_secret_blocked(edict_t* self, edict_t* other)
 	if (!(other->svflags & SVF_MONSTER) && (!other->client))
 	{
 		// give it a chance to go away on it's own terms (like gibs)
-		T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 100000, 1, 0, MOD_CRUSH);
+		Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 100000, 1, 0, MOD_CRUSH);
 		// if it's still there, nuke it
 		if (other)
 			BecomeExplosion1(other);
@@ -1970,7 +1970,7 @@ void door_secret_blocked(edict_t* self, edict_t* other)
 		return;
 	self->touch_debounce_time = level.time + 0.5;
 
-	T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
+	Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
 }
 
 void door_secret_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t damage, vec3_t point)
@@ -2054,7 +2054,7 @@ Kills everything inside when fired, irrespective of protection.
 */
 void use_killbox(edict_t* self, edict_t* other, edict_t* activator)
 {
-	G_KillBox(self);
+	Game_KillBox(self);
 }
 
 void SP_func_killbox(edict_t* ent)
@@ -2079,11 +2079,11 @@ void func_trampoline_use(edict_t* self, edict_t* other, edict_t* activator)
 
 		if ((int32_t)self->spawnflags & 1) // Has Knockback (knockback is off for func_trampoline as it may cause unintended side-effects with movement
 		{
-			T_Damage(other, self, self, self->s.angles, other->s.origin, vec3_origin, self->dmg, self->dmg, dflags, 0);
+			Player_Damage(other, self, self, self->s.angles, other->s.origin, vec3_origin, self->dmg, self->dmg, dflags, 0);
 		}
 		else
 		{
-			T_Damage(other, self, self, self->s.angles, other->s.origin, vec3_origin, self->dmg, 0, dflags, 0);
+			Player_Damage(other, self, self, self->s.angles, other->s.origin, vec3_origin, self->dmg, 0, dflags, 0);
 		}
 	}
 
