@@ -826,15 +826,35 @@ static void drop_temp_touch (edict_t *ent, edict_t *other, cplane_t *plane, csur
 	Item_OnTouch (ent, other, plane, surf);
 }
 
-static void drop_make_touchable (edict_t *ent)
+static void Item_DropMakeTouchable (edict_t *ent)
 {
 	ent->touch = Item_OnTouch;
 
-	ent->nextthink = level.time + 29;
+	int32_t default_time = 29;
+
+	// stupid hack as we can't access the item directly here and classname is set to the item classname
+	gitem_t* item = Item_FindByClassname(ent->classname);
+
+	if (item->disappear_time > 0)
+	{
+		ent->nextthink = level.time + (item->disappear_time - item->touchable_time);
+
+		// make sure the user iddn't fuck up
+		if (ent->nextthink < level.time)
+		{
+			Com_Printf("Warning: Item touchable time was more than disappear. Setting disappear time to 29 seconds...");
+			ent->nextthink = level.time + 29;
+		}
+	}
+	else
+	{
+		ent->nextthink = level.time + 29;
+	}
+
 	ent->think = Edict_Free;
 }
 
-edict_t *Item_Drop (edict_t *ent, gitem_t *item)
+edict_t* Item_Drop (edict_t *ent, gitem_t *item)
 {
 	edict_t	*dropped;
 	vec3_t	forward, right;
@@ -875,8 +895,12 @@ edict_t *Item_Drop (edict_t *ent, gitem_t *item)
 	VectorScale (forward, 100, dropped->velocity);
 	dropped->velocity[2] = 300;
 
-	dropped->think = drop_make_touchable;
-	dropped->nextthink = level.time + 1;
+	dropped->think = Item_DropMakeTouchable;
+
+	if (item->touchable_time > 0)
+		dropped->nextthink = level.time + item->touchable_time;
+	else
+		dropped->nextthink = level.time + 1;
 
 	gi.linkentity (dropped);
 

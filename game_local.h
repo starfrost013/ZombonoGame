@@ -269,34 +269,37 @@ typedef struct gitem_armor_s
 
 typedef struct gitem_s
 {
-	char* classname;	// spawning name
+	char*		classname;	// spawning name
 	bool		(*pickup)(struct edict_s* ent, struct edict_s* other);
 	void		(*use)(struct edict_s* ent, struct gitem_s* item);
 	void		(*drop)(struct edict_s* ent, struct gitem_s* item);
 	void		(*weaponthink)(struct edict_s* ent);
-	char* pickup_sound;
-	char* world_model;
+	char*		pickup_sound;
+	char*		world_model;
 	int32_t		world_model_flags;
-	char* view_model;
+	char*		view_model;
 
 	// client side info
-	char* icon;
-	char* pickup_name;	// for printing on pickup
+	char*		icon;
+	char*		pickup_name;	// for printing on pickup
 	int32_t		count_width;		// number of digits to display by icon
 
 	int32_t		quantity;		// for ammo how much, for weapons how much is used per shot
-	char* ammo;			// for weapons
+	char*		ammo;			// for weapons
 	int32_t		flags;			// IT_* flags
 
 	int32_t		weapmodel;		// weapon model index (for weapons)
 
-	void* info;
+	void*		info;
 	int32_t		tag;
 
-	char* precaches;		// string of all models, sounds, and images this item will use
+	char*		precaches;		// string of all models, sounds, and images this item will use
 
 	int32_t		allowed_teams;	// The teams that are allowed for this item.
 	int32_t		spawn_type;		// Type of entity to spawn (item-specific)
+
+	float		touchable_time; // Time that this item will take to become touchable once it has been dropped.
+	float		disappear_time; // Time that this item will take to disappear once it has been dropped.
 } gitem_t;
 
 #define SPEED_DIRECTOR			0.75			// Speed multiplier for director team. 
@@ -790,18 +793,18 @@ void Ammo_Blaster_monster(edict_t* self, vec3_t start, vec3_t dir, int32_t damag
 void Ammo_Grenade_monster(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, int32_t flashtype);
 void Ammo_Rocket_monster(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_t speed, int32_t flashtype);
 void Ammo_Rail_monster(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t flashtype);
-void M_droptofloor(edict_t* ent);
-void monster_think(edict_t* self);
-void monster_check_dodge(edict_t* self, vec3_t start, vec3_t dir, int32_t speed);
-void walkmonster_start(edict_t* self);
-void swimmonster_start(edict_t* self);
-void flymonster_start(edict_t* self);
-void AttackFinished(edict_t* self, float time);
-void monster_death_use(edict_t* self);
-void M_CategorizePosition(edict_t* ent);
-bool M_CheckAttack(edict_t* self);
-void M_FlyCheck(edict_t* self);
-void M_CheckGround(edict_t* ent);
+void AI_MonsterDropToFloor(edict_t* ent);
+void AI_MonsterThink(edict_t* self);
+void AI_MonsterCheckDodge(edict_t* self, vec3_t start, vec3_t dir, int32_t speed);
+void AI_MonsterWalkStart(edict_t* self);
+void AI_MonsterStartSwim(edict_t* self);
+void AI_MonsterFlyStart(edict_t* self);
+void AI_AttackFinished(edict_t* self, float time);
+void AI_MonsterStartUse(edict_t* self);
+void AI_CategorizePosition(edict_t* ent);
+bool AI_CheckAttack(edict_t* self);
+void AI_CheckFliesEffect(edict_t* self);
+void AI_CheckGround(edict_t* ent);
 
 //
 // g_misc.c
@@ -817,22 +820,22 @@ void BecomeExplosion1(edict_t* self);
 void AI_SetSightClient();
 
 void ai_stand(edict_t* self, float dist);
-void ai_move(edict_t* self, float dist);
-void ai_walk(edict_t* self, float dist);
-void ai_turn(edict_t* self, float dist);
-void ai_run(edict_t* self, float dist);
-void ai_charge(edict_t* self, float dist);
-int32_t range(edict_t* self, edict_t* other);
+void AI_Move(edict_t* self, float dist);
+void AI_Walk(edict_t* self, float dist);
+void AI_Turn(edict_t* self, float dist);
+void AI_Run(edict_t* self, float dist);
+void AI_Charge(edict_t* self, float dist);
+int32_t AI_GetRange(edict_t* self, edict_t* other);
 
-void FoundTarget(edict_t* self);
-bool infront(edict_t* self, edict_t* other);
-bool visible(edict_t* self, edict_t* other);
-bool FacingIdeal(edict_t* self);
+void AI_FoundTarget(edict_t* self);
+bool Edict_IsInFront(edict_t* self, edict_t* other);
+bool Edict_CanSee(edict_t* self, edict_t* other);
+bool AI_FacingIdeal(edict_t* self);
 
 bool M_CheckBottom(edict_t* ent);
-bool M_walkmove(edict_t* ent, float yaw, float dist);
-void M_MoveToGoal(edict_t* ent, float dist);
-void M_ChangeYaw(edict_t* ent);
+bool AI_MoveWalk(edict_t* ent, float yaw, float dist);
+void AI_MoveToGoal(edict_t* ent, float dist);
+void AI_ChangeYaw(edict_t* ent);
 
 
 //
@@ -879,7 +882,7 @@ float Client_CalcRoll(vec3_t angles, vec3_t velocity);
 // functions in files that use mob_player.h
 //
 void player_pain(edict_t* self, edict_t* other, float kick, int32_t damage);
-void player_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t damage, vec3_t point);
+void Player_Die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t damage, vec3_t point);
 
 //
 // game_cmds_server.c

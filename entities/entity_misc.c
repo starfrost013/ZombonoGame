@@ -914,7 +914,7 @@ void barrel_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *s
 
 	ratio = (float)other->mass / (float)self->mass;
 	VectorSubtract (self->s.origin, other->s.origin, v);
-	M_walkmove (self, vectoyaw(v), 20 * ratio * FRAMETIME);
+	AI_MoveWalk (self, vectoyaw(v), 20 * ratio * FRAMETIME);
 }
 
 void barrel_explode (edict_t *self)
@@ -1031,7 +1031,7 @@ void SP_misc_explobox (edict_t *self)
 
 	self->touch = barrel_touch;
 
-	self->think = M_droptofloor;
+	self->think = AI_MonsterDropToFloor;
 	self->nextthink = level.time + 2 * FRAMETIME;
 
 	gi.linkentity (self);

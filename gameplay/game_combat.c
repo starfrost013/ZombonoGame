@@ -135,7 +135,7 @@ void Killed(edict_t* targ, edict_t* inflictor, edict_t* attacker, int32_t damage
 	if ((targ->svflags & SVF_MONSTER) && (targ->deadflag != DEAD_DEAD))
 	{
 		targ->touch = NULL;
-		monster_death_use(targ);
+		AI_MonsterStartUse(targ);
 	}
 
 	targ->die(targ, inflictor, attacker, damage, point);
@@ -320,7 +320,7 @@ void M_ReactToDamage(edict_t* targ, edict_t* attacker)
 		// only switch if can't see the current enemy
 		if (targ->enemy && targ->enemy->client)
 		{
-			if (visible(targ, targ->enemy))
+			if (Edict_CanSee(targ, targ->enemy))
 			{
 				targ->oldenemy = attacker;
 				return;
@@ -329,7 +329,7 @@ void M_ReactToDamage(edict_t* targ, edict_t* attacker)
 		}
 		targ->enemy = attacker;
 		if (!(targ->monsterinfo.aiflags & AI_DUCKED))
-			FoundTarget(targ);
+			AI_FoundTarget(targ);
 		return;
 	}
 
@@ -342,7 +342,7 @@ void M_ReactToDamage(edict_t* targ, edict_t* attacker)
 			targ->oldenemy = targ->enemy;
 		targ->enemy = attacker;
 		if (!(targ->monsterinfo.aiflags & AI_DUCKED))
-			FoundTarget(targ);
+			AI_FoundTarget(targ);
 	}
 	// if they *meant* to shoot us, then shoot back
 	else if (attacker->enemy == targ)
@@ -351,7 +351,7 @@ void M_ReactToDamage(edict_t* targ, edict_t* attacker)
 			targ->oldenemy = targ->enemy;
 		targ->enemy = attacker;
 		if (!(targ->monsterinfo.aiflags & AI_DUCKED))
-			FoundTarget(targ);
+			AI_FoundTarget(targ);
 	}
 	// otherwise get mad at whoever they are mad at (help our buddy) unless it is us!
 	else if (attacker->enemy && attacker->enemy != targ)
@@ -360,7 +360,7 @@ void M_ReactToDamage(edict_t* targ, edict_t* attacker)
 			targ->oldenemy = targ->enemy;
 		targ->enemy = attacker->enemy;
 		if (!(targ->monsterinfo.aiflags & AI_DUCKED))
-			FoundTarget(targ);
+			AI_FoundTarget(targ);
 	}
 }
 
@@ -929,7 +929,7 @@ void LookAtKiller(edict_t* self, edict_t* inflictor, edict_t* attacker)
 player_die
 ==================
 */
-void player_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t damage, vec3_t point)
+void Player_Die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t damage, vec3_t point)
 {
 	int32_t n;
 
@@ -970,8 +970,11 @@ void player_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t da
 	self->client->enviro_framenum = 0;
 	self->flags &= ~FL_POWER_ARMOR;
 
+
 	if (self->health < -40)
-	{	// gib
+	{		
+		// you really got fucked
+		// gib
 		gi.sound(self, CHAN_BODY, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
 		for (n = 0; n < 4; n++)
 			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
@@ -1009,6 +1012,24 @@ void player_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t da
 				break;
 			}
 			gi.sound(self, CHAN_VOICE, gi.soundindex(va("*death%i.wav", (rand() % 4) + 1)), 1, ATTN_NORM, 0);
+		}
+	}
+
+	// drop the players items if the gameflag is set
+	if (!((int32_t)gameflags->value & GF_DONT_DROP_DIRECTOR_ITEMS))
+	{
+		if (self->team == team_director)
+		{
+			// get the item
+			gitem_t* item_bamfuslicator = Item_FindByPickupName("Director - Bamfuslicator");
+			gitem_t* item_tangfuslicator = Item_FindByPickupName("Director - Tangfuslicator");
+
+			item_bamfuslicator->disappear_time = 10.0f;
+			item_tangfuslicator->disappear_time = 10.0f;
+
+			// get the edict for the item
+			Item_Drop(self, item_bamfuslicator);
+			Item_Drop(self, item_tangfuslicator);
 		}
 	}
 

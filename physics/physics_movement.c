@@ -302,7 +302,7 @@ M_ChangeYaw
 
 ===============
 */
-void M_ChangeYaw (edict_t *ent)
+void AI_ChangeYaw (edict_t *ent)
 {
 	float	ideal;
 	float	current;
@@ -357,7 +357,7 @@ bool SV_StepDirection (edict_t *ent, float yaw, float dist)
 	float		delta;
 	
 	ent->ideal_yaw = yaw;
-	M_ChangeYaw (ent);
+	AI_ChangeYaw (ent);
 	
 	yaw = yaw*M_PI*2 / 360;
 	move[0] = cos(yaw)*dist;
@@ -513,7 +513,7 @@ bool SV_CloseEnough (edict_t *ent, edict_t *goal, float dist)
 M_MoveToGoal
 ======================
 */
-void M_MoveToGoal (edict_t *ent, float dist)
+void AI_MoveToGoal (edict_t *ent, float dist)
 {
 	edict_t		*goal;
 	
@@ -540,7 +540,7 @@ void M_MoveToGoal (edict_t *ent, float dist)
 M_walkmove
 ===============
 */
-bool M_walkmove (edict_t *ent, float yaw, float dist)
+bool AI_MoveWalk (edict_t *ent, float yaw, float dist)
 {
 	vec3_t	move;
 	

@@ -182,7 +182,7 @@ Returns the clipflags if the velocity was modified (hit something solid)
 #define	MAX_CLIP_PLANES	5
 int32_t SV_FlyMove(edict_t* ent, float time, int32_t mask)
 {
-	edict_t*	hit;
+	edict_t* hit;
 	int32_t		bumpcount, numbumps;
 	vec3_t		dir;
 	float		d;
@@ -390,7 +390,7 @@ typedef struct
 } pushed_t;
 pushed_t	pushed[MAX_EDICTS], * pushed_p;
 
-edict_t*	obstacle;
+edict_t* obstacle;
 
 /*
 ============
@@ -667,7 +667,7 @@ void SV_Physics_Toss(edict_t* ent)
 	trace_t		trace;
 	vec3_t		move;
 	float		backoff;
-	edict_t*	slave;
+	edict_t* slave;
 	bool		wasinwater;
 	bool		isinwater;
 	vec3_t		old_origin;
@@ -809,7 +809,7 @@ void SV_Physics_Step(edict_t* ent)
 {
 	bool	wasonground;
 	bool	hitsound = false;
-	float*	vel;
+	float* vel;
 	float	speed, newspeed, control;
 	float	friction;
 	edict_t* groundentity;
@@ -817,7 +817,7 @@ void SV_Physics_Step(edict_t* ent)
 
 	// airborn monsters should always check for ground
 	if (!ent->groundentity)
-		M_CheckGround(ent);
+		AI_CheckGround(ent);
 
 	groundentity = ent->groundentity;
 

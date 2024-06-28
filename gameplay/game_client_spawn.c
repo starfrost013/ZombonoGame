@@ -228,7 +228,7 @@ edict_t* Player_SpawnSelectRandom(char* spawn_class_name)
 	edict_t* spot, * spot1, * spot2;
 	int		count = 0;
 	int		selection;
-	float	range, range1, range2;
+	float	AI_GetRange, range1, range2;
 
 	spot = NULL;
 	range1 = range2 = 99999;
@@ -237,15 +237,15 @@ edict_t* Player_SpawnSelectRandom(char* spawn_class_name)
 	while ((spot = Game_FindEdictByValue(spot, FOFS(classname), spawn_class_name)) != NULL)
 	{
 		count++;
-		range = PlayersRangeFromSpot(spot);
-		if (range < range1)
+		AI_GetRange = PlayersRangeFromSpot(spot);
+		if (AI_GetRange < range1)
 		{
-			range1 = range;
+			range1 = AI_GetRange;
 			spot1 = spot;
 		}
-		else if (range < range2)
+		else if (AI_GetRange < range2)
 		{
-			range2 = range;
+			range2 = AI_GetRange;
 			spot2 = spot;
 		}
 	}
@@ -607,7 +607,7 @@ void Client_JoinServer(edict_t* ent)
 	ent->clipmask = MASK_PLAYERSOLID;
 	ent->model = "players/male/tris.md2";
 	ent->pain = player_pain;
-	ent->die = player_die;
+	ent->die = Player_Die;
 	ent->waterlevel = 0;
 	ent->watertype = 0;
 	ent->flags &= ~FL_NO_KNOCKBACK;

@@ -106,12 +106,12 @@ edict_t *PlayerTrail_PickFirst (edict_t *self)
 			break;
 	}
 
-	if (visible(self, trail[marker]))
+	if (Edict_CanSee(self, trail[marker]))
 	{
 		return trail[marker];
 	}
 
-	if (visible(self, trail[PREV(marker)]))
+	if (Edict_CanSee(self, trail[PREV(marker)]))
 	{
 		return trail[PREV(marker)];
 	}

@@ -82,25 +82,25 @@ void zombie_walk1_random(edict_t* self)
 
 mframe_t zombie_frames_walk1[] =
 {
-	ai_walk, 3,  NULL,
-	ai_walk, 6,  NULL,
-	ai_walk, 2,  NULL,
-	ai_walk, 2,  NULL,
-	ai_walk, 2,  NULL,
-	ai_walk, 1,  NULL,
-	ai_walk, 6,  NULL,
-	ai_walk, 5,  NULL,
-	ai_walk, 3,  NULL,
-	ai_walk, -1, zombie_walk1_random,
-	ai_walk, 0,  NULL,
-	ai_walk, 0,  NULL,
-	ai_walk, 0,  NULL,
-	ai_walk, 0,  NULL,
-	ai_walk, 0,  NULL,
-	ai_walk, 0,  NULL,
-	ai_walk, 0,  NULL,
-	ai_walk, 0,  NULL,
-	ai_walk, 0,  NULL
+	AI_Walk, 3,  NULL,
+	AI_Walk, 6,  NULL,
+	AI_Walk, 2,  NULL,
+	AI_Walk, 2,  NULL,
+	AI_Walk, 2,  NULL,
+	AI_Walk, 1,  NULL,
+	AI_Walk, 6,  NULL,
+	AI_Walk, 5,  NULL,
+	AI_Walk, 3,  NULL,
+	AI_Walk, -1, zombie_walk1_random,
+	AI_Walk, 0,  NULL,
+	AI_Walk, 0,  NULL,
+	AI_Walk, 0,  NULL,
+	AI_Walk, 0,  NULL,
+	AI_Walk, 0,  NULL,
+	AI_Walk, 0,  NULL,
+	AI_Walk, 0,  NULL,
+	AI_Walk, 0,  NULL,
+	AI_Walk, 0,  NULL
 };
 mmove_t zombie_move_walk1 = { FRAME_walk1, FRAME_walk19, zombie_frames_walk1, NULL };
 
@@ -118,32 +118,32 @@ void zombie_run(edict_t* self);
 
 mframe_t zombie_frames_start_run[] =
 {
-	ai_run, 7,  NULL,
-	ai_run, 5,  NULL
+	AI_Run, 7,  NULL,
+	AI_Run, 5,  NULL
 };
 mmove_t zombie_move_start_run = { FRAME_run1, FRAME_run2, zombie_frames_start_run, zombie_run };
 
 // this is 18 frames for some reason it crashes despite only being a 15 frame animation because of zombie_move_start_run WTF?
 mframe_t zombie_frames_run[] =
 {
-	ai_run, 10, NULL,
-	ai_run, 11, NULL,
-	ai_run, 11, NULL,
-	ai_run, 16, NULL,
-	ai_run, 10, NULL,
-	ai_run, 15, NULL,
-	ai_run, 10, NULL,
-	ai_run, 11, NULL,
-	ai_run, 11, NULL,
-	ai_run, 16, NULL,
-	ai_run, 10, NULL,
-	ai_run, 15, NULL,
-	ai_run, 10, NULL,
-	ai_run, 11, NULL,
-	ai_run, 11, NULL,
-	ai_run, 16, NULL,
-	ai_run, 10, NULL,
-	ai_run, 15, NULL,
+	AI_Run, 10, NULL,
+	AI_Run, 11, NULL,
+	AI_Run, 11, NULL,
+	AI_Run, 16, NULL,
+	AI_Run, 10, NULL,
+	AI_Run, 15, NULL,
+	AI_Run, 10, NULL,
+	AI_Run, 11, NULL,
+	AI_Run, 11, NULL,
+	AI_Run, 16, NULL,
+	AI_Run, 10, NULL,
+	AI_Run, 15, NULL,
+	AI_Run, 10, NULL,
+	AI_Run, 11, NULL,
+	AI_Run, 11, NULL,
+	AI_Run, 16, NULL,
+	AI_Run, 10, NULL,
+	AI_Run, 15, NULL,
 };
 
 mmove_t zombie_move_run = { FRAME_run3, FRAME_run18, zombie_frames_run, NULL };
@@ -174,93 +174,93 @@ void zombie_run(edict_t* self)
 
 mframe_t zombie_frames_pain1[] =
 {
-	ai_move, -1,  NULL,
-	ai_move, -3,  NULL, // -4
-	ai_move, -4,  NULL, // -8
-	ai_move, -2,  NULL, // -10
-	ai_move, -1,  NULL, // -11
-	ai_move, 0,   NULL, // -11
-	ai_move, 1,   NULL, // -10
-	ai_move, 3,   NULL, // -7
-	ai_move, 4,   NULL, // -3
-	ai_move, 2,   NULL, // -1
-	ai_move, 1,   NULL, // 0
-	ai_move, 0,   NULL  // 0 
+	AI_Move, -1,  NULL,
+	AI_Move, -3,  NULL, // -4
+	AI_Move, -4,  NULL, // -8
+	AI_Move, -2,  NULL, // -10
+	AI_Move, -1,  NULL, // -11
+	AI_Move, 0,   NULL, // -11
+	AI_Move, 1,   NULL, // -10
+	AI_Move, 3,   NULL, // -7
+	AI_Move, 4,   NULL, // -3
+	AI_Move, 2,   NULL, // -1
+	AI_Move, 1,   NULL, // 0
+	AI_Move, 0,   NULL  // 0 
 };
 mmove_t zombie_move_pain1 = { FRAME_paina1, FRAME_paina12, zombie_frames_pain1, zombie_run };
 
 //-14
 mframe_t zombie_frames_pain2[] =
 {
-	ai_move, -1,  NULL, // -1
-	ai_move, -1,  NULL, // -2
-	ai_move, -2,  NULL, // -4
-	ai_move, -3,  NULL, // -7
-	ai_move, -3,  NULL, // -10
-	ai_move, -2,  NULL, // -12
-	ai_move, -1,  NULL, // -13
-	ai_move, -1,  NULL, // -14
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 1,  NULL, // 1
-	ai_move, 1,  NULL, // 2
-	ai_move, 2,  NULL, // 4
-	ai_move, 3,  NULL, // 7
-	ai_move, 3,  NULL, // 10
-	ai_move, 2,  NULL, // 12
-	ai_move, 1,  NULL, // 13
-	ai_move, 1,  NULL  // 14
+	AI_Move, -1,  NULL, // -1
+	AI_Move, -1,  NULL, // -2
+	AI_Move, -2,  NULL, // -4
+	AI_Move, -3,  NULL, // -7
+	AI_Move, -3,  NULL, // -10
+	AI_Move, -2,  NULL, // -12
+	AI_Move, -1,  NULL, // -13
+	AI_Move, -1,  NULL, // -14
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 1,  NULL, // 1
+	AI_Move, 1,  NULL, // 2
+	AI_Move, 2,  NULL, // 4
+	AI_Move, 3,  NULL, // 7
+	AI_Move, 3,  NULL, // 10
+	AI_Move, 2,  NULL, // 12
+	AI_Move, 1,  NULL, // 13
+	AI_Move, 1,  NULL  // 14
 };
 mmove_t zombie_move_pain2 = { FRAME_painb1, FRAME_painb28, zombie_frames_pain2, zombie_run };
 
 mframe_t zombie_frames_pain3[] =
 {
-	ai_move, -8, NULL,
-	ai_move, 10, NULL,
-	ai_move, -4, NULL,
-	ai_move, -1, NULL,
-	ai_move, -3, NULL,
-	ai_move, 0,  NULL,
-	ai_move, 3,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 1,  NULL,
-	ai_move, 0,  NULL,
-	ai_move, 1,  NULL,
-	ai_move, 2,  NULL,
-	ai_move, 4,  NULL,
-	ai_move, 3,  NULL,
-	ai_move, 2,  NULL
+	AI_Move, -8, NULL,
+	AI_Move, 10, NULL,
+	AI_Move, -4, NULL,
+	AI_Move, -1, NULL,
+	AI_Move, -3, NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 3,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 1,  NULL,
+	AI_Move, 0,  NULL,
+	AI_Move, 1,  NULL,
+	AI_Move, 2,  NULL,
+	AI_Move, 4,  NULL,
+	AI_Move, 3,  NULL,
+	AI_Move, 2,  NULL
 };
 mmove_t zombie_move_pain3 = { FRAME_painc1, FRAME_painc18, zombie_frames_pain3, zombie_run };
 
 mframe_t zombie_frames_pain4[] =
 {
-	ai_move, -10, NULL,
-	ai_move, -6,  NULL,
-	ai_move, 8,   NULL,
-	ai_move, 4,   NULL,
-	ai_move, 1,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 2,   NULL,
-	ai_move, 5,   NULL,
-	ai_move, 2,   NULL,
-	ai_move, -1,  NULL,
-	ai_move, -1,  NULL,
-	ai_move, 3,   NULL,
-	ai_move, 2,   NULL
+	AI_Move, -10, NULL,
+	AI_Move, -6,  NULL,
+	AI_Move, 8,   NULL,
+	AI_Move, 4,   NULL,
+	AI_Move, 1,   NULL,
+	AI_Move, 0,   NULL,
+	AI_Move, 2,   NULL,
+	AI_Move, 5,   NULL,
+	AI_Move, 2,   NULL,
+	AI_Move, -1,  NULL,
+	AI_Move, -1,  NULL,
+	AI_Move, 3,   NULL,
+	AI_Move, 2,   NULL
 };
 mmove_t zombie_move_pain4 = { FRAME_paind1, FRAME_paind13, zombie_frames_pain4, zombie_run };
 
@@ -334,7 +334,7 @@ void zombie_attack1_refire1(edict_t* self)
 	if (self->enemy->health <= 0)
 		return;
 
-	if (((skill->value == 3) && (random() < 0.5)) || (range(self, self->enemy) == RANGE_MELEE))
+	if (((skill->value == 3) && (random() < 0.5)) || (AI_GetRange(self, self->enemy) == RANGE_MELEE))
 		self->monsterinfo.nextframe = FRAME_atta2;
 	else
 		self->monsterinfo.nextframe = FRAME_atta10;
@@ -348,24 +348,24 @@ void zombie_attack1_refire2(edict_t* self)
 	if (self->enemy->health <= 0)
 		return;
 
-	if (((skill->value == 3) && (random() < 0.5)) || (range(self, self->enemy) == RANGE_MELEE))
+	if (((skill->value == 3) && (random() < 0.5)) || (AI_GetRange(self, self->enemy) == RANGE_MELEE))
 		self->monsterinfo.nextframe = FRAME_atta2;
 }
 
 mframe_t zombie_frames_attack1[] =
 {
-	ai_charge, 0,  NULL,
-	ai_charge, 0,  NULL,
-	ai_charge, 0,  zombie_fire,
-	ai_charge, 0,  NULL,
-	ai_charge, 0,  NULL,
-	ai_charge, 0,  zombie_attack1_refire1,
-	ai_charge, 0,  NULL,
-	ai_charge, 0,  NULL,
-	ai_charge, 0,  zombie_attack1_refire2,
-	ai_charge, 0,  NULL,
-	ai_charge, 0,  NULL,
-	ai_charge, 0,  NULL
+	AI_Charge, 0,  NULL,
+	AI_Charge, 0,  NULL,
+	AI_Charge, 0,  zombie_fire,
+	AI_Charge, 0,  NULL,
+	AI_Charge, 0,  NULL,
+	AI_Charge, 0,  zombie_attack1_refire1,
+	AI_Charge, 0,  NULL,
+	AI_Charge, 0,  NULL,
+	AI_Charge, 0,  zombie_attack1_refire2,
+	AI_Charge, 0,  NULL,
+	AI_Charge, 0,  NULL,
+	AI_Charge, 0,  NULL
 };
 mmove_t zombie_move_attack1 = { FRAME_atta1, FRAME_atta12, zombie_frames_attack1, zombie_run };
 
@@ -378,7 +378,7 @@ void zombie_attack2_refire1(edict_t* self)
 	if (self->enemy->health <= 0)
 		return;
 
-	if (((skill->value == 3) && (random() < 0.5)) || (range(self, self->enemy) == RANGE_MELEE))
+	if (((skill->value == 3) && (random() < 0.5)) || (AI_GetRange(self, self->enemy) == RANGE_MELEE))
 		self->monsterinfo.nextframe = FRAME_attb4;
 	else
 		self->monsterinfo.nextframe = FRAME_attb14;
@@ -392,26 +392,26 @@ void zombie_attack2_refire2(edict_t* self)
 	if (self->enemy->health <= 0)
 		return;
 
-	if (((skill->value == 3) && (random() < 0.5)) || (range(self, self->enemy) == RANGE_MELEE))
+	if (((skill->value == 3) && (random() < 0.5)) || (AI_GetRange(self, self->enemy) == RANGE_MELEE))
 		self->monsterinfo.nextframe = FRAME_attb4;
 }
 
 mframe_t zombie_frames_attack2[] =
 {
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL,
-	ai_charge, 0, zombie_fire,
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL,
-	ai_charge, 0, zombie_attack2_refire1,
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL,
-	ai_charge, 0,  zombie_attack2_refire2,
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, zombie_fire,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, zombie_attack2_refire1,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0,  zombie_attack2_refire2,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL
 };
 
 mmove_t zombie_move_attack2 = { FRAME_attb1, FRAME_attb14, zombie_frames_attack2, zombie_run };
@@ -445,18 +445,18 @@ void zombie_attack3_refire(edict_t* self)
 
 mframe_t zombie_frames_attack3[] =
 {
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL,
-	ai_charge, 0, zombie_fire,
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL,
-	ai_charge, 0, zombie_attack3_refire,
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL,
-	ai_charge, 0, zombie_duck_up,
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL,
-	ai_charge, 0, NULL,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, zombie_fire,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, zombie_attack3_refire,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, zombie_duck_up,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL,
+	AI_Charge, 0, NULL,
 };
 mmove_t zombie_move_attack3 = { FRAME_attc1, FRAME_attc12, zombie_frames_attack3, zombie_run };
 
@@ -468,7 +468,7 @@ void zombie_attack6_refire(edict_t* self)
 	if (self->enemy->health <= 0)
 		return;
 
-	if (range(self, self->enemy) < RANGE_MID)
+	if (AI_GetRange(self, self->enemy) < RANGE_MID)
 		return;
 
 	if (skill->value == 3)
@@ -477,24 +477,24 @@ void zombie_attack6_refire(edict_t* self)
 
 mframe_t zombie_frames_attack6[] =
 {
-	ai_charge, 10, NULL,
-	ai_charge,  4, NULL,
-	ai_charge, 12, NULL,
-	ai_charge, 11, zombie_fire,
-	ai_charge, 13, NULL,
-	ai_charge, 18, NULL,
-	ai_charge, 15, NULL,
-	ai_charge, 14, NULL,
-	ai_charge, 11, NULL,
-	ai_charge,  8, NULL,
-	ai_charge, 11, NULL,
-	ai_charge, 12, NULL,
-	ai_charge, 12, NULL,
-	ai_charge, 17, zombie_attack6_refire,
-	ai_charge, 9,  NULL,
-	ai_charge, 12, NULL,
-	ai_charge, 12, NULL,
-	ai_charge, 17, NULL,
+	AI_Charge, 10, NULL,
+	AI_Charge,  4, NULL,
+	AI_Charge, 12, NULL,
+	AI_Charge, 11, zombie_fire,
+	AI_Charge, 13, NULL,
+	AI_Charge, 18, NULL,
+	AI_Charge, 15, NULL,
+	AI_Charge, 14, NULL,
+	AI_Charge, 11, NULL,
+	AI_Charge,  8, NULL,
+	AI_Charge, 11, NULL,
+	AI_Charge, 12, NULL,
+	AI_Charge, 12, NULL,
+	AI_Charge, 17, zombie_attack6_refire,
+	AI_Charge, 9,  NULL,
+	AI_Charge, 12, NULL,
+	AI_Charge, 12, NULL,
+	AI_Charge, 17, NULL,
 };
 
 mmove_t zombie_move_attack6 = { FRAME_run1, FRAME_run18, zombie_frames_attack6, zombie_run };
@@ -518,7 +518,7 @@ void zombie_sight(edict_t* self, edict_t* other)
 	else
 		gi.sound(self, CHAN_VOICE, sound_sight2, 1, ATTN_NORM, 0);
 
-	if ((skill->value > 0) && (range(self, self->enemy) >= RANGE_MID))
+	if ((skill->value > 0) && (AI_GetRange(self, self->enemy) >= RANGE_MID))
 	{
 		if (random() > 0.5)
 			self->monsterinfo.currentmove = &zombie_move_attack6;
@@ -539,11 +539,11 @@ void zombie_duck_hold(edict_t* self)
 
 mframe_t zombie_frames_duck[] =
 {
-	ai_move, 5, zombie_duck_down,
-	ai_move, -1, zombie_duck_hold,
-	ai_move, 1,  NULL,
-	ai_move, 0,  zombie_duck_up,
-	ai_move, 5,  NULL
+	AI_Move, 5, zombie_duck_down,
+	AI_Move, -1, zombie_duck_hold,
+	AI_Move, 1,  NULL,
+	AI_Move, 0,  zombie_duck_up,
+	AI_Move, 5,  NULL
 };
 mmove_t zombie_move_duck = { FRAME_paind1, FRAME_paind5, zombie_frames_duck, zombie_run };
 
@@ -605,18 +605,18 @@ void zombie_dead(edict_t* self)
 
 mframe_t zombie_frames_death1[] =
 {
-	ai_move, 0,   NULL,
-	ai_move, -10, NULL,
-	ai_move, -10, NULL,
-	ai_move, -10, NULL,
-	ai_move, -5,  NULL,
-	ai_move, 0,   zombie_fire,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   zombie_fire,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL
+	AI_Move, 0,   NULL,
+	AI_Move, -10, NULL,
+	AI_Move, -10, NULL,
+	AI_Move, -10, NULL,
+	AI_Move, -5,  NULL,
+	AI_Move, 0,   zombie_fire,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   zombie_fire,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   NULL
 };
 
 // TEMP
@@ -624,18 +624,18 @@ mmove_t zombie_move_death1 = { FRAME_paine1, FRAME_paine12, zombie_frames_death1
 
 mframe_t zombie_frames_death2[] =
 {
-	ai_move, -5,  NULL,
-	ai_move, -5,  NULL,
-	ai_move, -5,  NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
-	ai_move, 0,   NULL,
+	AI_Move, -5,  NULL,
+	AI_Move, -5,  NULL,
+	AI_Move, -5,  NULL,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   NULL,
+	AI_Move, 0,   NULL,
 };
 
 // same as zombie_move_death1 but he moves differently and doesn't attack you 
@@ -729,7 +729,7 @@ void SP_monster_zombie_x(edict_t* self)
 
 	self->monsterinfo.stand(self);
 
-	walkmonster_start(self);
+	AI_MonsterWalkStart(self);
 }
 
 /*Ambush Trigger_Spawn Sight

@@ -104,7 +104,7 @@ void Ammo_Rocket(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_
 	rocket->classname = "rocket";
 
 	if (self->client)
-		monster_check_dodge(self, rocket->s.origin, dir, speed);
+		AI_MonsterCheckDodge(self, rocket->s.origin, dir, speed);
 
 	gi.linkentity(rocket);
 }

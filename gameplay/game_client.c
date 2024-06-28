@@ -331,7 +331,7 @@ void Client_BeginServerFrame(edict_t* ent)
 	}
 
 	// add player trail so monsters can follow
-	if (!visible(ent, PlayerTrail_LastSpot()))
+	if (!Edict_CanSee(ent, PlayerTrail_LastSpot()))
 		PlayerTrail_Add(ent->s.old_origin);
 
 	client->latched_buttons = 0;
