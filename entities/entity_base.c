@@ -82,7 +82,6 @@ spawn_t	spawns[] =
 	{"target_crosslevel_trigger", SP_target_crosslevel_trigger},
 	{"target_crosslevel_target", SP_target_crosslevel_target},
 	{"target_laser", SP_target_laser},
-	{"target_help", SP_target_help},
 	{"target_lightramp", SP_target_lightramp},
 	{"target_earthquake", SP_target_earthquake},
 	{"target_character", SP_target_character},
@@ -535,12 +534,6 @@ char *dm_statusbar =
 "	pic	9 "
 "endif "
 
-//  help / weapon icon 
-"if 11 "
-"	xv	148 "
-"	pic	11 "
-"endif "
-
 //  frags
 "xr	-50 "
 "yt 2 "
@@ -624,9 +617,7 @@ void SP_worldspawn (edict_t *ent)
 
 
 	// help icon for statusbar
-	gi.imageindex ("2d/i_help");
 	level.pic_health = gi.imageindex ("2d/i_health");
-	gi.imageindex ("2d/help");
 	gi.imageindex ("2d/field_3"); 
 
 	if (!st.gravity)
@@ -634,7 +625,7 @@ void SP_worldspawn (edict_t *ent)
 	else
 		gi.cvar_set("sv_gravity", st.gravity);
 
-	snd_fry = gi.soundindex ("player/fry.wav");	// standing in lava / slime
+	snd_fry_index = gi.soundindex ("player/fry.wav");	// standing in lava / slime
 
 	Item_Precache (Item_FindByPickupName ("Blaster"));
 
@@ -705,7 +696,7 @@ void SP_worldspawn (edict_t *ent)
 
 	gi.soundindex ("infantry/inflies1.wav");
 
-	sm_meat_index = gi.modelindex ("models/objects/gibs/sm_meat/tris.md2");
+	snd_meat_index = gi.modelindex ("models/objects/gibs/sm_meat/tris.md2");
 	gi.modelindex ("models/objects/gibs/arm/tris.md2");
 	gi.modelindex ("models/objects/gibs/bone/tris.md2");
 	gi.modelindex ("models/objects/gibs/bone2/tris.md2");

@@ -233,10 +233,6 @@ void Game_Init ()
 	// items
 	Items_Init();
 
-	Com_sprintf(game.helpmessage1, sizeof(game.helpmessage1), "");
-
-	Com_sprintf(game.helpmessage2, sizeof(game.helpmessage2), "");
-
 	// initialize all entities for this game
 	game.maxentities = MAX_EDICTS;
 	g_edicts = gi.TagMalloc(game.maxentities * sizeof(g_edicts[0]), TAG_GAME);

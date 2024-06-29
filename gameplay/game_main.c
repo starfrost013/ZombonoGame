@@ -27,9 +27,9 @@ game_import_t	gi;
 game_export_t	globals;
 spawn_temp_t	st;
 
-int	sm_meat_index;
-int	snd_fry;
-int32_t meansOfDeath;
+int32_t	snd_meat_index;
+int32_t	snd_fry_index;
+int32_t means_of_death;
 
 edict_t* g_edicts;
 
@@ -76,21 +76,24 @@ cvar_t* sv_maplist;
 
 cvar_t* aimfix;
 
+void Game_Write(char* filename, bool autosave);
+void Game_Read(char* filename);
 void Game_SpawnEntities(char* mapname, char* entities, char* spawnpoint);
+void Game_Init();
+void Game_RunFrame();
+
+void Gamemode_CheckRules();
+
+void Level_Write(char* filename);
+void Level_Read(char* filename);
+
 void Client_Think(edict_t* ent, usercmd_t* cmd);
 bool Client_Connect(edict_t* ent, char* userinfo);
 void Client_Disconnect(edict_t* ent);
 void Client_OnConnected(edict_t* ent);
 void Client_Command(edict_t* ent);
 void Client_CommandNoConsole(edict_t* ent);
-void Game_Write(char* filename, bool autosave);
-void Game_Read(char* filename);
-void Level_Write(char* filename);
-void Level_Read(char* filename);
-void Game_Init();
-void Game_RunFrame();
 
-void Gamemode_CheckRules();
 
 //===================================================================
 
@@ -117,12 +120,14 @@ game_export_t * GetGameAPI(game_import_t * import)
 	gi = *import;
 
 	globals.apiversion = GAME_API_VERSION;
-	globals.Init = Game_Init;
-	globals.Shutdown = Game_Shutdown;
-	globals.Game_SpawnEntities = Game_SpawnEntities;
 
+	globals.Game_Init = Game_Init;
+	globals.Game_Shutdown = Game_Shutdown;
+	globals.Game_SpawnEntities = Game_SpawnEntities;
 	globals.Game_Write = Game_Write;
 	globals.Game_Read = Game_Read;
+	globals.Game_RunFrame = Game_RunFrame;
+
 	globals.Level_Write = Level_Write;
 	globals.Level_Read = Level_Read;
 
@@ -133,8 +138,6 @@ game_export_t * GetGameAPI(game_import_t * import)
 	globals.Client_OnConnected = Client_OnConnected;
 	globals.Client_Command = Client_Command;
 	globals.Client_CommandNoConsole = Client_CommandNoConsole;
-
-	globals.RunFrame = Game_RunFrame;
 
 	globals.Server_Command = Server_Command;
 
@@ -181,7 +184,7 @@ ClientEndServerFrames
 */
 void ClientEndServerFrames()
 {
-	int		i;
+	int32_t  i;
 	edict_t* ent;
 
 	// calc the player views now that all pushing

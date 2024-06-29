@@ -310,11 +310,6 @@ typedef struct gitem_s
 //
 typedef struct game_locals_s
 {
-	char		helpmessage1[512];
-	char		helpmessage2[512];
-	int32_t		helpchanged;	// flash F1 icon if non 0, play sound
-	// and increment only if 1, 2, or 3
-
 	gclient_t* clients;		// [maxclients]
 
 	// can't store spawnpoint in level, because
@@ -500,8 +495,8 @@ extern game_import_t	gi;
 extern game_export_t	globals;
 extern spawn_temp_t	st;
 
-extern int32_t	sm_meat_index;
-extern int32_t	snd_fry;
+extern int32_t	snd_meat_index;
+extern int32_t	snd_fry_index;
 
 // means of death
 #define MOD_UNKNOWN			0
@@ -539,7 +534,7 @@ extern int32_t	snd_fry;
 #define MOD_ZOMBIFIED		36
 #define MOD_FRIENDLY_FIRE	0x8000000
 
-extern int32_t	meansOfDeath;
+extern int32_t	means_of_death;
 
 
 extern edict_t* g_edicts;
@@ -985,9 +980,6 @@ typedef struct client_persistant_s
 
 	//restore this if we have resumable co-op games or that 6-level single player campaign.
 	//int32_t		coop_score;
-
-	int32_t		game_helpchanged;
-	int32_t		helpchanged;
 
 	bool		spectator;			// client is a spectator
 } client_persistant_t;

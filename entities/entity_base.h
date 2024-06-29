@@ -73,7 +73,6 @@ void SP_target_blaster(edict_t* ent);
 void SP_target_crosslevel_trigger(edict_t* ent);
 void SP_target_crosslevel_target(edict_t* ent);
 void SP_target_laser(edict_t* self);
-void SP_target_help(edict_t* ent);
 void SP_target_lightramp(edict_t* self);
 void SP_target_earthquake(edict_t* ent);
 void SP_target_character(edict_t* ent);

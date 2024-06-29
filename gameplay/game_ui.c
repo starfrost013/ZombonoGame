@@ -422,11 +422,10 @@ void GameUI_SetStats (edict_t *ent)
 	ent->client->ps.stats[STAT_FRAGS] = ent->client->resp.score;
 
 	//
-	// help icon / current weapon if not shown
+	// current weapon if not shown
 	//
-	if (ent->client->pers.helpchanged && (level.framenum&8) )
-		ent->client->ps.stats[STAT_HELPICON] = gi.imageindex ("2d/i_help");
-	else if ( (ent->client->pers.hand == CENTER_HANDED)
+
+	if ( (ent->client->pers.hand == CENTER_HANDED)
 		&& ent->client->pers.weapon)
 		ent->client->ps.stats[STAT_HELPICON] = gi.imageindex (ent->client->pers.weapon->icon);
 	else

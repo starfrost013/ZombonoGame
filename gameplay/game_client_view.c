@@ -42,9 +42,9 @@ SV_CalcRoll
 */
 float Client_CalcRoll(vec3_t angles, vec3_t velocity)
 {
-	float	sign;
-	float	side;
-	float	value;
+	float sign;
+	float side;
+	float value;
 
 	side = DotProduct(velocity, right);
 	sign = side < 0 ? -1 : 1;
@@ -96,7 +96,7 @@ void Player_DamageFeedback(edict_t* player)
 	// start a pain animation if still in the player model
 	if (client->anim_priority < ANIM_PAIN && player->s.modelindex == 255)
 	{
-		static int		i;
+		static int32_t		i;
 
 		client->anim_priority = ANIM_PAIN;
 		if (client->ps.pmove.pm_flags & PMF_DUCKED)
@@ -394,9 +394,9 @@ void Client_CalcGunOffset(edict_t* ent)
 SV_AddBlend
 =============
 */
-void SV_AddBlend(float r, float g, float b, float a, float* v_blend)
+void Client_AddBlend(float r, float g, float b, float a, float* v_blend)
 {
-	float	a2, a3;
+	float a2, a3;
 
 	if (a <= 0)
 		return;
@@ -433,11 +433,11 @@ void Client_CalcBlend(edict_t* ent)
 		ent->client->ps.rdflags &= ~RDF_UNDERWATER;
 
 	if (contents & (CONTENTS_SOLID | CONTENTS_LAVA))
-		SV_AddBlend(1.0, 0.3, 0.0, 0.6, ent->client->ps.blend);
+		Client_AddBlend(1.0, 0.3, 0.0, 0.6, ent->client->ps.blend);
 	else if (contents & CONTENTS_SLIME)
-		SV_AddBlend(0.0, 0.1, 0.05, 0.6, ent->client->ps.blend);
+		Client_AddBlend(0.0, 0.1, 0.05, 0.6, ent->client->ps.blend);
 	else if (contents & CONTENTS_WATER)
-		SV_AddBlend(0.5, 0.3, 0.2, 0.4, ent->client->ps.blend);
+		Client_AddBlend(0.5, 0.3, 0.2, 0.4, ent->client->ps.blend);
 
 	// add for powerups
 	if (ent->client->quad_framenum > level.framenum)
@@ -446,7 +446,7 @@ void Client_CalcBlend(edict_t* ent)
 		if (remaining == 30)	// beginning to fade
 			gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage2.wav"), 1, ATTN_NORM, 0);
 		if (remaining > 30 || (remaining & 4))
-			SV_AddBlend(0, 0, 1, 0.08, ent->client->ps.blend);
+			Client_AddBlend(0, 0, 1, 0.08, ent->client->ps.blend);
 	}
 	else if (ent->client->invincible_framenum > level.framenum)
 	{
@@ -454,7 +454,7 @@ void Client_CalcBlend(edict_t* ent)
 		if (remaining == 30)	// beginning to fade
 			gi.sound(ent, CHAN_ITEM, gi.soundindex("items/protect2.wav"), 1, ATTN_NORM, 0);
 		if (remaining > 30 || (remaining & 4))
-			SV_AddBlend(1, 1, 0, 0.08, ent->client->ps.blend);
+			Client_AddBlend(1, 1, 0, 0.08, ent->client->ps.blend);
 	}
 	else if (ent->client->enviro_framenum > level.framenum)
 	{
@@ -462,7 +462,7 @@ void Client_CalcBlend(edict_t* ent)
 		if (remaining == 30)	// beginning to fade
 			gi.sound(ent, CHAN_ITEM, gi.soundindex("items/airout.wav"), 1, ATTN_NORM, 0);
 		if (remaining > 30 || (remaining & 4))
-			SV_AddBlend(0, 1, 0, 0.08, ent->client->ps.blend);
+			Client_AddBlend(0, 1, 0, 0.08, ent->client->ps.blend);
 	}
 	else if (ent->client->breather_framenum > level.framenum)
 	{
@@ -470,16 +470,16 @@ void Client_CalcBlend(edict_t* ent)
 		if (remaining == 30)	// beginning to fade
 			gi.sound(ent, CHAN_ITEM, gi.soundindex("items/airout.wav"), 1, ATTN_NORM, 0);
 		if (remaining > 30 || (remaining & 4))
-			SV_AddBlend(0.4, 1, 0.4, 0.04, ent->client->ps.blend);
+			Client_AddBlend(0.4, 1, 0.4, 0.04, ent->client->ps.blend);
 	}
 
 	// add for damage
 	if (ent->client->damage_alpha > 0)
-		SV_AddBlend(ent->client->damage_blend[0], ent->client->damage_blend[1]
+		Client_AddBlend(ent->client->damage_blend[0], ent->client->damage_blend[1]
 			, ent->client->damage_blend[2], ent->client->damage_alpha, ent->client->ps.blend);
 
 	if (ent->client->bonus_alpha > 0)
-		SV_AddBlend(0.85, 0.7, 0.3, ent->client->bonus_alpha, ent->client->ps.blend);
+		Client_AddBlend(0.85, 0.7, 0.3, ent->client->bonus_alpha, ent->client->ps.blend);
 
 	// drop the damage value
 	ent->client->damage_alpha -= 0.06;
@@ -733,27 +733,13 @@ void Client_SetSound(edict_t* ent)
 {
 	char* weap;
 
-	if (ent->client->pers.game_helpchanged != game.helpchanged)
-	{
-		ent->client->pers.game_helpchanged = game.helpchanged;
-		ent->client->pers.helpchanged = 1;
-	}
-
-	// help beep (no more than three times)
-	if (ent->client->pers.helpchanged && ent->client->pers.helpchanged <= 3 && !(level.framenum & 63))
-	{
-		ent->client->pers.helpchanged++;
-		gi.sound(ent, CHAN_VOICE, gi.soundindex("misc/pc_up.wav"), 1, ATTN_STATIC, 0);
-	}
-
-
 	if (ent->client->pers.weapon)
 		weap = ent->client->pers.weapon->classname;
 	else
 		weap = "";
 
 	if (ent->waterlevel && (ent->watertype & (CONTENTS_LAVA | CONTENTS_SLIME)))
-		ent->s.sound = snd_fry;
+		ent->s.sound = snd_fry_index;
 	// stupid hack
 	else if (strcmp(weap, "weapon_railgun") == 0)
 		ent->s.sound = gi.soundindex("weapons/rg_hum.wav");

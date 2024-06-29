@@ -1120,8 +1120,8 @@ bool Info_Validate(char* s)
 void Info_SetValueForKey(char* s, char* key, char* value)
 {
 	char	newi[MAX_INFO_STRING], * v;
-	int32_t 	c;
-	int32_t 	maxsize = MAX_INFO_STRING;
+	int32_t c;
+	int32_t maxsize = MAX_INFO_STRING;
 
 	if (strstr(key, "\\") || strstr(value, "\\"))
 	{

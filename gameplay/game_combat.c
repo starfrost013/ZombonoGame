@@ -418,7 +418,7 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 		}
 	}
 
-	meansOfDeath = mod;
+	means_of_death = mod;
 
 	// easy mode takes half damage
 	// easy mode sucks
@@ -660,10 +660,10 @@ void ClientObituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 	bool	ff;
 
 	if ((!(int32_t)(gameflags->value) & GF_NO_FRIENDLY_FIRE) && attacker->client)
-		meansOfDeath |= MOD_FRIENDLY_FIRE;
+		means_of_death |= MOD_FRIENDLY_FIRE;
 
-	ff = meansOfDeath & MOD_FRIENDLY_FIRE;
-	mod = meansOfDeath & ~MOD_FRIENDLY_FIRE;
+	ff = means_of_death & MOD_FRIENDLY_FIRE;
+	mod = means_of_death & ~MOD_FRIENDLY_FIRE;
 	message = NULL;
 	message2 = "";
 

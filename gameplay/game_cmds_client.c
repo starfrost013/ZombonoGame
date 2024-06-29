@@ -752,7 +752,7 @@ void Client_CommandKill(edict_t* ent)
 
 	ent->flags &= ~FL_GODMODE;
 	ent->health = 0;
-	meansOfDeath = MOD_SUICIDE;
+	means_of_death = MOD_SUICIDE;
 	Player_Die(ent, ent, ent, 100000, vec3_origin);
 }
 
