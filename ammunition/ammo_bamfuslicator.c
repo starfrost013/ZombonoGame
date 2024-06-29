@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <entities/entity_base.h>
 
 // ammo_bamfuslicator.c: Code for the Director team's bamfuslicator weapon ammo (split from g_weapon.c)
-// WHERE IS THE FUCKING AMMUNITION?
 
 #define BAMFUSLICATOR_MIN_DISTANCE		64		// so you don't get stuck
 #define BAMFUSLICATOR_MAX_DISTANCE		768
@@ -111,6 +110,9 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 
 	// spawn the monster
 	monster = Edict_Spawn();
+
+	// ephemeral
+	monster->flags |= FL_NO_SAVE;
 
 	// move the zombie to where the player spawned it
 	// the zombie is on director team (this is used so they don't harm directors unless the requisite gameflag is set)

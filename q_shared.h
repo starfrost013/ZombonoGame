@@ -721,16 +721,16 @@ typedef enum
 #define	CS_SKYROTATE				4
 #define	CS_STATUSBAR				5		// display program string (obsolete - replaced with gameui messages)
 
-#define CS_PHYS_STOPSPEED			19		// stopping speed
-#define CS_PHYS_MAXSPEED_PLAYER		20		// max speed - player team, non-TDM modes as well
-#define CS_PHYS_MAXSPEED_DIRECTOR	21		// max speed - director team
-#define CS_PHYS_DUCKSPEED			22		// duck speed
-#define CS_PHYS_ACCELERATE_PLAYER	23		// ground acceleration for players
-#define CS_PHYS_ACCELERATE_DIRECTOR	24		// ground acceleration for directors
-#define CS_PHYS_ACCELERATE_AIR		25		// air acceleration for both teams (split?)
-#define CS_PHYS_ACCELERATE_WATER	26		// water acceleration for both teams (split?)
-#define CS_PHYS_FRICTION			27		// ground friction
-#define CS_PHYS_FRICTION_WATER		28		// water friction
+#define CS_PHYS_STOPSPEED			20		// stopping speed
+#define CS_PHYS_MAXSPEED_PLAYER		21		// max speed - player team, non-TDM modes as well
+#define CS_PHYS_MAXSPEED_DIRECTOR	22		// max speed - director team
+#define CS_PHYS_DUCKSPEED			23		// duck speed
+#define CS_PHYS_ACCELERATE_PLAYER	24		// ground acceleration for players
+#define CS_PHYS_ACCELERATE_DIRECTOR	25		// ground acceleration for directors
+#define CS_PHYS_ACCELERATE_AIR		26		// air acceleration for both teams (split?)
+#define CS_PHYS_ACCELERATE_WATER	27		// water acceleration for both teams (split?)
+#define CS_PHYS_FRICTION			28		// ground friction
+#define CS_PHYS_FRICTION_WATER		29		// water friction
 
 #define	CS_MAXCLIENTS				30
 #define	CS_MAPCHECKSUM				31		// for catching cheater maps

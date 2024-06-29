@@ -552,12 +552,12 @@ void Game_Read (char *filename)
 
 /*
 ==============
-WriteEdict
+Edict_Write
 
 All pointer variables (except function pointers) must be handled specially.
 ==============
 */
-void WriteEdict (FILE *f, edict_t *ent)
+void Edict_Write (FILE* f, edict_t* ent)
 {
 	field_t		*field;
 	edict_t		temp;
@@ -589,7 +589,7 @@ WriteLevelLocals
 All pointer variables (except function pointers) must be handled specially.
 ==============
 */
-void WriteLevelLocals (FILE *f)
+void Level_WriteLocals (FILE *f)
 {
 	field_t		*field;
 	level_locals_t		temp;
@@ -621,7 +621,7 @@ ReadEdict
 All pointer variables (except function pointers) must be handled specially.
 ==============
 */
-void ReadEdict (FILE *f, edict_t *ent)
+void Edict_Read (FILE *f, edict_t *ent)
 {
 	field_t		*field;
 
@@ -640,7 +640,7 @@ ReadLevelLocals
 All pointer variables (except function pointers) must be handled specially.
 ==============
 */
-void ReadLevelLocals (FILE *f)
+void Level_ReadLocals (FILE *f)
 {
 	field_t		*field;
 
@@ -660,7 +660,7 @@ WriteLevel
 */
 void Level_Write (char *filename)
 {
-	int		i;
+	int32_t	i;
 	edict_t	*ent;
 	FILE	*f;
 	void	*base;
@@ -678,16 +678,23 @@ void Level_Write (char *filename)
 	fwrite (&base, sizeof(base), 1, f);
 
 	// write out level_locals_t
-	WriteLevelLocals (f);
+	Level_WriteLocals (f);
 
 	// write out all the entities
 	for (i=0 ; i<globals.num_edicts ; i++)
 	{
 		ent = &g_edicts[i];
+
+		// ignore nonexistent edicts
 		if (!ent->inuse)
 			continue;
+
+		// ignore ephemeral stuff
+		if (ent->flags & FL_NO_SAVE)
+			continue;
+
 		fwrite (&i, sizeof(i), 1, f);
-		WriteEdict (f, ent);
+		Edict_Write (f, ent);
 	}
 	i = -1;
 	fwrite (&i, sizeof(i), 1, f);
@@ -744,7 +751,7 @@ void Level_Read (char *filename)
 	fread (&base, sizeof(base), 1, f);
 
 	// load the level locals
-	ReadLevelLocals (f);
+	Level_ReadLocals (f);
 
 	// load all the entities
 	while (1)
@@ -760,7 +767,7 @@ void Level_Read (char *filename)
 			globals.num_edicts = entnum+1;
 
 		ent = &g_edicts[entnum];
-		ReadEdict (f, ent);
+		Edict_Read (f, ent);
 
 		// let the server rebuild world links for this ent
 		memset (&ent->area, 0, sizeof(ent->area));

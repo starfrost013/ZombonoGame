@@ -70,7 +70,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SPAWNFLAG_NOT_WAVES			0x00002000
 #define SPAWNFLAG_NOT_COOP			0x00004000
 #define SPAWNFLAG_NOT_CONTROL_POINT	0x00008000
-
+#define SPAWNFLAG_NOT_TOURNAMENT	0x00010000 //tentative
 // edict->flags
 #define	FL_FLY					0x00000001
 #define	FL_SWIM					0x00000002	// implied immunity to drowining
@@ -85,6 +85,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define	FL_TEAMSLAVE			0x00000400	// not the first on the team
 #define FL_NO_KNOCKBACK			0x00000800
 #define FL_POWER_ARMOR			0x00001000	// power armor (if any) is active
+#define FL_NO_SAVE				0x40000000	// do not save item
 #define FL_RESPAWN				0x80000000	// used for item respawning
 
 // memory tags to allow dynamic memory to be cleaned up

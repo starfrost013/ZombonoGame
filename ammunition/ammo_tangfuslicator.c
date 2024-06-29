@@ -52,6 +52,9 @@ void Ammo_Tangfuslicator_Touch(edict_t* self, edict_t* other, cplane_t* plane, c
 		// spawn the zombie
 		zombie = Edict_Spawn();
 
+		// ephemeral
+		zombie->flags |= FL_NO_SAVE;
+
 		// move the zombie to where the player spawned it
 		// the zombie is on director team (this is used so they don't harm directors unless the requisite gameflag is set)
 		zombie->team = team_director;
