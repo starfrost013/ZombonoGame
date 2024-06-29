@@ -302,9 +302,6 @@ typedef struct gitem_s
 	float		disappear_time; // Time that this item will take to disappear once it has been dropped.
 } gitem_t;
 
-#define SPEED_DIRECTOR			0.75			// Speed multiplier for director team. 
-#define SPEED_PLAYER			1.0				// Speed multiplier for player team.
-
 //
 // this structure is left intact through an entire game
 // it should be initialized at dll load time, and read/written to

@@ -123,6 +123,7 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 
 		pm.cmd = *ucmd;
 
+		/*
 		// set team speed
 		if (ent->team == team_director)
 		{
@@ -134,12 +135,13 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 			pm.cmd.forwardmove *= SPEED_PLAYER;
 			pm.cmd.sidemove *= SPEED_PLAYER;
 		}
+		*/
 
 		pm.trace = PM_trace;	// adds default parms
 		pm.pointcontents = gi.pointcontents;
 
 		// perform a pmove
-		gi.Pmove(&pm);
+		gi.Player_Move(&pm);
 
 		// save results of pmove
 		client->ps.pmove = pm.s;

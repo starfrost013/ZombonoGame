@@ -90,7 +90,7 @@ void Level_Read(char* filename);
 void Game_Init();
 void Game_RunFrame();
 
-void CheckGamemodeRules();
+void Gamemode_CheckRules();
 
 //===================================================================
 
@@ -311,7 +311,7 @@ void Game_CheckIfPasswordRequired()
 CheckGamemodeRules
 =================
 */
-void CheckGamemodeRules()
+void Gamemode_CheckRules()
 {
 	if (level.intermissiontime)
 		return;
@@ -329,7 +329,7 @@ ExitLevel
 This runs after the end of a game
 =============
 */
-void ExitLevel()
+void Level_Exit()
 {
 	int32_t i;
 	edict_t* ent;
@@ -378,7 +378,7 @@ void Game_RunFrame()
 
 	if (level.exitintermission)
 	{
-		ExitLevel();
+		Level_Exit();
 		return;
 	}
 
@@ -417,7 +417,7 @@ void Game_RunFrame()
 	}
 
 	// see if it is time to end a deathmatch
-	CheckGamemodeRules();
+	Gamemode_CheckRules();
 
 	// see if needpass needs updated
 	Game_CheckIfPasswordRequired();

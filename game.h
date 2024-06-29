@@ -138,7 +138,7 @@ typedef struct game_import_s
 	void	(*linkentity) (edict_t *ent);
 	void	(*unlinkentity) (edict_t *ent);		// call before removing an interactive edict
 	int32_t (*BoxEdicts) (vec3_t mins, vec3_t maxs, edict_t **list,	int32_t maxcount, int32_t areatype);
-	void	(*Pmove) (pmove_t *pmove);		// player movement code common with client prediction
+	void	(*Player_Move) (pmove_t *pmove);		// player movement code common with client prediction
 
 	// network messaging
 	void	(*multicast) (vec3_t origin, multicast_t to);
