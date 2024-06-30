@@ -606,7 +606,7 @@ void Client_JoinServer(edict_t* ent)
 	ent->air_finished = level.time + 12;
 	ent->clipmask = MASK_PLAYERSOLID;
 	ent->model = "players/male/tris.md2";
-	ent->pain = player_pain;
+	ent->pain = Player_Pain;
 	ent->die = Player_Die;
 	ent->waterlevel = 0;
 	ent->watertype = 0;

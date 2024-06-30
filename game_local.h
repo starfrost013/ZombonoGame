@@ -33,7 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define	GAMENAME	"Zombono"
 
 // the "gameversion" client command will print this plus compile date
-#define GAMEVERSION GAMENAME " v0.1.0-pre1 " __DATE__
+#define GAMEVERSION GAMENAME " v0.1.0-pre2 " __DATE__
 
 // protocol bytes that can be directly added to messages
 #define	svc_muzzleflash			1
@@ -874,7 +874,7 @@ float Client_CalcRoll(vec3_t angles, vec3_t velocity);
 //
 // functions in files that use mob_player.h
 //
-void player_pain(edict_t* self, edict_t* other, float kick, int32_t damage);
+void Player_Pain(edict_t* self, edict_t* other, float kick, int32_t damage);
 void Player_Die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t damage, vec3_t point);
 
 //

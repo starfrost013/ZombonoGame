@@ -605,7 +605,7 @@ void Player_RadiusDamage(edict_t* inflictor, edict_t* attacker, float damage, ed
 /* Player specific */
 
 
-void player_pain(edict_t* self, edict_t* other, float kick, int32_t damage)
+void Player_Pain(edict_t* self, edict_t* other, float kick, int32_t damage)
 {
 	// player pain is handled at the end of the frame in P_DamageFeedback
 }

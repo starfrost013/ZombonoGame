@@ -926,10 +926,10 @@ Cmd_Say_f
 void Client_CommandSay(edict_t* ent, bool team, bool arg0)
 {
 	int32_t		i, j;
-	edict_t* other;
-	char* p;
+	edict_t*	other;
+	char*		p;
 	char		text[2048];
-	gclient_t* cl;
+	gclient_t*	cl;
 
 	if (gi.argc() < 2 && !arg0)
 		return;
