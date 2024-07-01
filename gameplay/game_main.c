@@ -94,7 +94,6 @@ void Client_OnConnected(edict_t* ent);
 void Client_Command(edict_t* ent);
 void Client_CommandNoConsole(edict_t* ent);
 
-
 //===================================================================
 
 
