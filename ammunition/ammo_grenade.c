@@ -59,9 +59,9 @@ static void Ammo_Grenade_explode(edict_t* ent)
 	if (ent->spawnflags & 2)
 		mod = MOD_HELD_GRENADE;
 	else if (ent->spawnflags & 1)
-		mod = MOD_HG_SPLASH;
+		mod = MOD_SPLASH_HANDGRENADE;
 	else
-		mod = MOD_G_SPLASH;
+		mod = MOD_SPLASH_GRENADE;
 
 	Player_RadiusDamage(ent, ent->owner, ent->dmg, ent->enemy, ent->dmg_radius, mod);
 

@@ -933,7 +933,7 @@ void Use_Item (edict_t *ent, edict_t *other, edict_t *activator)
 droptofloor
 ================
 */
-void droptofloor (edict_t *ent)
+void Item_DropToFloor (edict_t *ent)
 {
 	trace_t		tr;
 	vec3_t		dest;
@@ -1124,7 +1124,7 @@ void Item_Spawn (edict_t *ent, gitem_t *item)
 
 	ent->item = item;
 	ent->nextthink = level.time + 2 * FRAMETIME;    // items start after other solids
-	ent->think = droptofloor;
+	ent->think = Item_DropToFloor;
 	ent->s.effects = item->world_model_flags;
 	ent->s.renderfx = RF_GLOW;
 	if (ent->model)

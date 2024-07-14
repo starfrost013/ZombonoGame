@@ -164,20 +164,20 @@ void ED_CallSpawn (edict_t *ent)
 ED_NewString
 =============
 */
-char *ED_NewString (char *string)
+char* ED_NewString(char* string)
 {
-	char	*newb, *new_p;
-	int		i,l;
-	
+	char* newb, * new_p;
+	int		i, l;
+
 	l = (int32_t)strlen(string) + 1;
 
-	newb = gi.TagMalloc (l, TAG_LEVEL);
+	newb = gi.TagMalloc(l, TAG_LEVEL);
 
 	new_p = newb;
 
-	for (i=0 ; i< l ; i++)
+	for (i = 0; i < l; i++)
 	{
-		if (string[i] == '\\' && i < l-1)
+		if (string[i] == '\\' && i < l - 1)
 		{
 			i++;
 			if (string[i] == 'n')
@@ -188,7 +188,7 @@ char *ED_NewString (char *string)
 		else
 			*new_p++ = string[i];
 	}
-	
+
 	return newb;
 }
 
@@ -345,31 +345,39 @@ All but the last will have the teamchain field set to the next one
 void G_FindTeams ()
 {
 	edict_t	*e, *e2, *chain;
-	int		i, j;
-	int		c, c2;
+	int32_t	i, j;
+	int32_t	c, c2;
 
 	c = 0;
 	c2 = 0;
+
 	for (i=1, e=g_edicts+i ; i < globals.num_edicts ; i++,e++)
 	{
 		if (!e->inuse)
 			continue;
+
 		if (!e->team)
 			continue;
+
 		if (e->flags & FL_TEAMSLAVE)
 			continue;
+
 		chain = e;
 		e->teammaster = e;
 		c++;
 		c2++;
+
 		for (j=i+1, e2=e+1 ; j < globals.num_edicts ; j++,e2++)
 		{
 			if (!e2->inuse)
 				continue;
+
 			if (!e2->team)
 				continue;
+
 			if (e2->flags & FL_TEAMSLAVE)
 				continue;
+
 			if (e->team == e2->team)
 			{
 				c2++;
@@ -395,9 +403,9 @@ parsing textual entity definitions out of an ent file.
 void Game_SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 {
 	edict_t		*ent;
-	int			inhibit;
+	int32_t		inhibit;
 	char		*com_token;
-	int			i;
+	int32_t		i;
 	float		skill_level;
 
 	skill_level = floor (skill->value);

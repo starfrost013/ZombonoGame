@@ -610,7 +610,7 @@ void Player_Pain(edict_t* self, edict_t* other, float kick, int32_t damage)
 	// player pain is handled at the end of the frame in P_DamageFeedback
 }
 
-bool IsFemale(edict_t* ent)
+bool Player_IsFemale(edict_t* ent)
 {
 	char* info;
 
@@ -624,7 +624,7 @@ bool IsFemale(edict_t* ent)
 }
 
 // WOKE!
-bool IsOther(edict_t* ent)
+bool Player_IsOther(edict_t* ent)
 {
 	char* info;
 
@@ -638,7 +638,7 @@ bool IsOther(edict_t* ent)
 }
 
 
-bool IsNeutral(edict_t* ent)
+bool Player_IsNeutral(edict_t* ent)
 {
 	char* info;
 
@@ -652,7 +652,7 @@ bool IsNeutral(edict_t* ent)
 	return false;
 }
 
-void ClientObituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
+void Player_Obituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 {
 	int32_t	mod;
 	char*	message;
@@ -719,33 +719,33 @@ void ClientObituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 		case MOD_HELD_GRENADE:
 			message = "tried to put the pin back in";
 			break;
-		case MOD_HG_SPLASH:
-		case MOD_G_SPLASH:
-			if (IsNeutral(self))
+		case MOD_SPLASH_HANDGRENADE:
+		case MOD_SPLASH_GRENADE:
+			if (Player_IsNeutral(self))
 				message = "tripped on its own grenade";
-			else if (IsFemale(self))
+			else if (Player_IsFemale(self))
 				message = "tripped on her own grenade";
-			else if (IsOther(self))
+			else if (Player_IsOther(self))
 				message = "tripped on their own grenade";
 			else
 				message = "tripped on his own grenade";
 			break;
-		case MOD_R_SPLASH:
-			if (IsNeutral(self))
+		case MOD_SPLASH_ROCKET:
+			if (Player_IsNeutral(self))
 				message = "blew itself up";
-			else if (IsFemale(self))
+			else if (Player_IsFemale(self))
 				message = "blew herself up";
-			else if (IsOther(self))
+			else if (Player_IsOther(self))
 				message = "blew themselves up";
 			else
 				message = "blew himself up";
 			break;
 		default:
-			if (IsNeutral(self))
+			if (Player_IsNeutral(self))
 				message = "killed itself";
-			else if (IsFemale(self))
+			else if (Player_IsFemale(self))
 				message = "killed herself";
-			else if (IsOther(self))
+			else if (Player_IsOther(self))
 				message = "killed themselves";
 
 			else
@@ -755,7 +755,7 @@ void ClientObituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 	}
 	if (message)
 	{
-		gi.bprintf(PRINT_MEDIUM, "%s %s.\n", self->client->pers.netname, message);
+		gi.bprintf(PRINT_MEDIUM, "%s %s!\n", self->client->pers.netname, message);
 		self->client->resp.score--;
 		self->enemy = NULL;
 		return;
@@ -772,7 +772,7 @@ void ClientObituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 		case MOD_SHOTGUN:
 			message = "was gunned down by";
 			break;
-		case MOD_SSHOTGUN:
+		case MOD_SHOTGUN_SUPER:
 			message = "was blown away by";
 			message2 = "'s super shotgun";
 			break;
@@ -787,7 +787,7 @@ void ClientObituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 			message = "was popped by";
 			message2 = "'s grenade";
 			break;
-		case MOD_G_SPLASH:
+		case MOD_SPLASH_GRENADE:
 			message = "was shredded by";
 			message2 = "'s shrapnel";
 			break;
@@ -795,7 +795,7 @@ void ClientObituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 			message = "ate";
 			message2 = "'s rocket";
 			break;
-		case MOD_R_SPLASH:
+		case MOD_SPLASH_ROCKET:
 			message = "almost dodged";
 			message2 = "'s rocket";
 			break;
@@ -810,7 +810,7 @@ void ClientObituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 			message = "caught";
 			message2 = "'s handgrenade";
 			break;
-		case MOD_HG_SPLASH:
+		case MOD_SPLASH_HANDGRENADE:
 			message = "didn't see";
 			message2 = "'s handgrenade";
 			break;
@@ -826,7 +826,7 @@ void ClientObituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 		if (message)
 		{
 			// TODO: send a message if you friendly fired, and then kick
-			gi.bprintf(PRINT_MEDIUM, "%s %s %s%s\n", self->client->pers.netname, message, attacker->client->pers.netname, message2);
+			gi.bprintf(PRINT_MEDIUM, "%s %s %s%s!\n", self->client->pers.netname, message, attacker->client->pers.netname, message2);
 
 			if (ff)
 				attacker->client->resp.score--;
@@ -842,12 +842,12 @@ void ClientObituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 	self->client->resp.score--;
 }
 
-void TossClientWeapon(edict_t* self)
+void Player_TossWeapon(edict_t* self)
 {
 	gitem_t* item;
 	edict_t* drop;
-	bool		quad;
-	float		spread;
+	bool	quad;
+	float	spread;
 
 	item = self->client->pers.weapon;
 	if (!self->client->loadout_current_ammo)
@@ -956,8 +956,8 @@ void Player_Die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t da
 		self->client->respawn_time = level.time + 1.0;
 		LookAtKiller(self, inflictor, attacker);
 		self->client->ps.pmove.pm_type = PM_DEAD;
-		ClientObituary(self, inflictor, attacker);
-		TossClientWeapon(self);
+		Player_Obituary(self, inflictor, attacker);
+		Player_TossWeapon(self);
 
 		// show scores
 		GameUI_SendLeaderboard(self);
@@ -1108,7 +1108,6 @@ void Player_FallDamage(edict_t* ent)
 		{
 			Player_Damage(ent, world, world, dir, ent->s.origin, vec3_origin, damage, 0, 0, MOD_FALLING);
 		}
-
 	}
 	else
 	{

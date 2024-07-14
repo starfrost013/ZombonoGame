@@ -495,47 +495,46 @@ extern game_import_t	gi;
 extern game_export_t	globals;
 extern spawn_temp_t	st;
 
-extern int32_t	snd_meat_index;
-extern int32_t	snd_fry_index;
+extern int32_t snd_meat_index;
+extern int32_t snd_fry_index;
 
 // means of death
-#define MOD_UNKNOWN			0
-#define MOD_BLASTER			1
-#define MOD_SHOTGUN			2
-#define MOD_SSHOTGUN		3
-#define MOD_MACHINEGUN		4
-#define MOD_CHAINGUN		5
-#define MOD_GRENADE			6
-#define MOD_G_SPLASH		7
-#define MOD_ROCKET			8
-#define MOD_R_SPLASH		9
-#define MOD_HYPERBLASTER	10
-#define MOD_RAILGUN			11
-#define MOD_HANDGRENADE		15
-#define MOD_HG_SPLASH		16
-#define MOD_WATER			17
-#define MOD_SLIME			18
-#define MOD_LAVA			19
-#define MOD_CRUSH			20
-#define MOD_TELEFRAG		21
-#define MOD_FALLING			22
-#define MOD_SUICIDE			23
-#define MOD_HELD_GRENADE	24
-#define MOD_EXPLOSIVE		25
-#define MOD_BARREL			26
-#define MOD_EXIT			28
-#define MOD_SPLASH			29
-#define MOD_TARGET_LASER	30
-#define MOD_TRIGGER_HURT	31
-#define MOD_HIT				32
-#define MOD_TARGET_BLASTER	33
-#define MOD_ZOMBIE			34
-#define MOD_CRUSHED			35
-#define MOD_ZOMBIFIED		36
-#define MOD_FRIENDLY_FIRE	0x8000000
+#define MOD_UNKNOWN				0
+#define MOD_BLASTER				1
+#define MOD_SHOTGUN				2
+#define MOD_SHOTGUN_SUPER			3
+#define MOD_MACHINEGUN			4
+#define MOD_CHAINGUN			5
+#define MOD_GRENADE				6
+#define MOD_SPLASH_GRENADE		7
+#define MOD_ROCKET				8
+#define MOD_SPLASH_ROCKET		9
+#define MOD_HYPERBLASTER		10
+#define MOD_RAILGUN				11
+#define MOD_HANDGRENADE			12
+#define MOD_SPLASH_HANDGRENADE	13
+#define MOD_WATER				14
+#define MOD_SLIME				15
+#define MOD_LAVA				16
+#define MOD_CRUSH				17
+#define MOD_TELEFRAG			18
+#define MOD_FALLING				19
+#define MOD_SUICIDE				20
+#define MOD_HELD_GRENADE		21
+#define MOD_EXPLOSIVE			22
+#define MOD_BARREL				23
+#define MOD_EXIT				24
+#define MOD_SPLASH				25
+#define MOD_TARGET_LASER		26
+#define MOD_TRIGGER_HURT		27
+#define MOD_HIT					28
+#define MOD_TARGET_BLASTER		29
+#define MOD_ZOMBIE				30
+#define MOD_CRUSHED				31
+#define MOD_ZOMBIFIED			32
+#define MOD_FRIENDLY_FIRE		0x8000000
 
-extern int32_t	means_of_death;
-
+extern int32_t means_of_death;
 
 extern edict_t* g_edicts;
 

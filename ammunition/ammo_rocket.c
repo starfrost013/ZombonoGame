@@ -64,7 +64,7 @@ void Ammo_Rocket_touch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t
 		}
 	}
 
-	Player_RadiusDamage(ent, ent->owner, ent->radius_dmg, other, ent->dmg_radius, MOD_R_SPLASH);
+	Player_RadiusDamage(ent, ent->owner, ent->radius_dmg, other, ent->dmg_radius, MOD_SPLASH_ROCKET);
 
 	gi.WriteByte(svc_temp_entity);
 	if (ent->waterlevel)
