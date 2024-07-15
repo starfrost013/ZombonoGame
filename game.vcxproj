@@ -98,7 +98,7 @@
     <TargetName>$(ProjectName)x64</TargetName>
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)\obj\$(Configuration)\obj_game</IntDir>
-    <OutDir>$(SolutionDir)build\out\zombonogame</OutDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)\zombonogame</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -170,7 +170,7 @@
       <StackReserveSize>4194304</StackReserveSize>
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)\tools\assetbuild\bin\Debug\net8.0\assetbuild.exe</Command>
+      <Command>$(SolutionDir)\tools\assetbuild\bin\Debug\net8.0\assetbuild.exe zombonogame $(Configuration)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -340,10 +340,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="game.def" />
-	  <Content Include="gameinfo.json">
-		  <Link>..\gameinfo.json</Link>
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
+    <Content Include="gameinfo.json">
+      <Link>..\gameinfo.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />

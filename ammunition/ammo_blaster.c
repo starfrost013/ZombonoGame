@@ -53,7 +53,7 @@ void Ammo_Blaster_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface
 			mod = MOD_HYPERBLASTER;
 		else
 			mod = MOD_BLASTER;
-		Player_Damage(other, self, self->owner, self->velocity, self->s.origin, plane->normal, self->dmg, 1, DAMAGE_ENERGY, mod);
+		Player_Damage(other, self, self->owner, self->velocity, self->s.origin, plane->normal, self->dmg, 1, DAMAGE_ENERGY, mod); 
 	}
 	else
 	{
