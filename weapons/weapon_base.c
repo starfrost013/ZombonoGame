@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 bool	is_quad;
 uint8_t	is_silenced;
 
-void P_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result)
+void Player_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result)
 {
 	gclient_t* client = ent->client;
 	float* point = ent->s.origin;
@@ -67,7 +67,7 @@ Monsters that don't directly see the player can move
 to a noise in hopes of seeing the player from there.
 ===============
 */
-void PlayerNoise(edict_t* who, vec3_t where, int32_t type)
+void Player_Noise(edict_t* who, vec3_t where, int32_t type)
 {
 	edict_t* noise;
 
@@ -280,7 +280,7 @@ void Player_WeaponChange(edict_t* ent)
 NoAmmoWeaponChange
 =================
 */
-void NoAmmoWeaponChange(edict_t* ent)
+void Player_WeaponChangeNoAmmo(edict_t* ent)
 {
 	if (Loadout_GetItem(ent, "slugs")
 		&& Loadout_GetItem(ent, "railgun"))
@@ -600,7 +600,7 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 				ent->pain_debounce_time = level.time + 1;
 			}
 
-			NoAmmoWeaponChange(ent);
+			Player_WeaponChangeNoAmmo(ent);
 		}
 
 	}

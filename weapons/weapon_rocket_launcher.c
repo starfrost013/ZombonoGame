@@ -49,7 +49,7 @@ void Weapon_RocketLauncher_Fire(edict_t* ent)
 	ent->client->kick_angles[0] = -1;
 
 	VectorSet(offset, 8, 8, ent->viewheight - 8);
-	P_ProjectSource(ent, offset, forward, right, start);
+	Player_ProjectSource(ent, offset, forward, right, start);
 	Ammo_Rocket(ent, start, forward, damage, ROCKETLAUNCHER_SPEED, damage_radius, radius_damage);
 
 	// send muzzle flash
@@ -60,7 +60,7 @@ void Weapon_RocketLauncher_Fire(edict_t* ent)
 
 	ent->client->ps.gunframe++;
 
-	PlayerNoise(ent, start, PNOISE_WEAPON);
+	Player_Noise(ent, start, PNOISE_WEAPON);
 
 	if (!((int32_t)gameflags->value & GF_INFINITE_AMMO))
 		ent->client->loadout_current_ammo->amount--;

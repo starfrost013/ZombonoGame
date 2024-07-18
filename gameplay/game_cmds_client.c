@@ -31,7 +31,7 @@ void Player_SelectNextItem(edict_t* ent, int32_t itflags)
 
 	if (cl->chase_target)
 	{
-		ChaseNext(ent);
+		ChaseCam_Next(ent);
 		return;
 	}
 
@@ -81,7 +81,7 @@ void Player_SelectPrevItem(edict_t* ent, int32_t itflags)
 
 	if (cl->chase_target)
 	{
-		ChaseNext(ent);
+		ChaseCam_Next(ent);
 		return;
 	}
 

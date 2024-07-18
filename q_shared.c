@@ -648,7 +648,7 @@ void COM_DefaultExtension(char* path, char* extension)
 bool	big_endian;
 
 // can't just use function pointers, or dll linkage can
-// mess up when qcommon is included in multiple places
+// mess up when common is included in multiple places
 int16_t (*_BigShort) (int16_t l);
 int16_t (*_LittleShort) (int16_t l);
 uint16_t(*_BigShortUnsigned) (int16_t l);

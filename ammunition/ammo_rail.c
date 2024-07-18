@@ -83,7 +83,7 @@ void Ammo_Rail(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32
 	}
 
 	if (self->client)
-		PlayerNoise(self, tr.endpos, PNOISE_IMPACT);
+		Player_Noise(self, tr.endpos, PNOISE_IMPACT);
 }
 
 void Ammo_Rail_monster(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t flashtype)

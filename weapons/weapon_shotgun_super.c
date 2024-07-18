@@ -39,7 +39,7 @@ void Weapon_supershotgun_fire(edict_t* ent)
 	ent->client->kick_angles[0] = -2;
 
 	VectorSet(offset, 0, 8, ent->viewheight - 8);
-	P_ProjectSource(ent, offset, forward, right, start);
+	Player_ProjectSource(ent, offset, forward, right, start);
 
 	if (is_quad)
 	{
@@ -63,7 +63,7 @@ void Weapon_supershotgun_fire(edict_t* ent)
 	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
 	ent->client->ps.gunframe++;
-	PlayerNoise(ent, start, PNOISE_WEAPON);
+	Player_Noise(ent, start, PNOISE_WEAPON);
 
 	if (!((int32_t)gameflags->value & GF_INFINITE_AMMO))
 	{

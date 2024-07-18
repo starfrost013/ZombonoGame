@@ -1980,12 +1980,10 @@ void SP_item_health_mega (edict_t *self)
 	self->style = HEALTH_IGNORE_MAX|HEALTH_TIMED;
 }
 
-
-void Items_Init ()
+void ItemList_Init ()
 {
 	game.num_items = sizeof(itemlist)/sizeof(itemlist[0]) - 1;
 }
-
 
 
 /*
@@ -1995,9 +1993,9 @@ SetItemNames
 Called by worldspawn
 ===============
 */
-void Item_SetName ()
+void Item_SetName()
 {
-	int		i;
+	int32_t	i;
 	gitem_t	*it;
 
 	for (i=0 ; i<game.num_items ; i++)

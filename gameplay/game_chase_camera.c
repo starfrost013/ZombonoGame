@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <game_local.h>
 
-void UpdateChaseCam(edict_t *ent)
+void ChaseCam_Update(edict_t *ent)
 {
 	vec3_t o, ownerv, goal;
 	edict_t *targ;
@@ -36,7 +36,7 @@ void UpdateChaseCam(edict_t *ent)
 		|| ent->client->chase_target->client->resp.spectator) 
 	{
 		edict_t *old = ent->client->chase_target;
-		ChaseNext(ent);
+		ChaseCam_Next(ent);
 
 		if (ent->client->chase_target == old) 
 		{
@@ -116,7 +116,7 @@ void UpdateChaseCam(edict_t *ent)
 	gi.linkentity(ent);
 }
 
-void ChaseNext(edict_t *ent)
+void ChaseCam_Next(edict_t *ent)
 {
 	int32_t i;
 	edict_t *e;
@@ -140,7 +140,7 @@ void ChaseNext(edict_t *ent)
 	ent->client->update_chase = true;
 }
 
-void ChasePrev(edict_t *ent)
+void ChaseCam_Prev(edict_t *ent)
 {
 	int32_t i;
 	edict_t *e;
@@ -164,7 +164,7 @@ void ChasePrev(edict_t *ent)
 	ent->client->update_chase = true;
 }
 
-void GetChaseTarget(edict_t *ent)
+void ChaseCam_GetTarget(edict_t *ent)
 {
 	int32_t i;
 	edict_t *other;
@@ -174,7 +174,7 @@ void GetChaseTarget(edict_t *ent)
 		if (other->inuse && !other->client->resp.spectator) {
 			ent->client->chase_target = other;
 			ent->client->update_chase = true;
-			UpdateChaseCam(ent);
+			ChaseCam_Update(ent);
 			return;
 		}
 	}

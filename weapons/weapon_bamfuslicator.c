@@ -56,7 +56,7 @@ void Weapon_Bamfuslicator_Fire(edict_t* ent)
 	// set offset
 	VectorSet(offset, 0, 8, ent->viewheight - 8);
 
-	P_ProjectSource(ent, offset, forward, right, start);
+	Player_ProjectSource(ent, offset, forward, right, start);
 
 	Ammo_Bamfuslicator(ent, start, forward, ent->client->pers.weapon->spawn_type); // will always store current spawn type
 

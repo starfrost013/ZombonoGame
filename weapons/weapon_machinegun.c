@@ -66,7 +66,7 @@ void Weapon_Machinegun_Fire(edict_t* ent)
 				gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/noammo.wav"), 1, ATTN_NORM, 0);
 				ent->pain_debounce_time = level.time + 1;
 			}
-			NoAmmoWeaponChange(ent);
+			Player_WeaponChangeNoAmmo(ent);
 			return;
 		}
 	}
@@ -90,7 +90,7 @@ void Weapon_Machinegun_Fire(edict_t* ent)
 	VectorAdd(ent->client->v_angle, ent->client->kick_angles, angles);
 	AngleVectors(angles, forward, right, NULL);
 	VectorSet(offset, 0, 8, ent->viewheight - 8);
-	P_ProjectSource(ent, offset, forward, right, start);
+	Player_ProjectSource(ent, offset, forward, right, start);
 	Ammo_Bullet(ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_MACHINEGUN);
 
 	gi.WriteByte(svc_muzzleflash);
@@ -98,7 +98,7 @@ void Weapon_Machinegun_Fire(edict_t* ent)
 	gi.WriteByte(MZ_MACHINEGUN | is_silenced);
 	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
-	PlayerNoise(ent, start, PNOISE_WEAPON);
+	Player_Noise(ent, start, PNOISE_WEAPON);
 
 	ent->client->anim_priority = ANIM_ATTACK;
 

@@ -46,21 +46,21 @@ void ogre_stand(edict_t* self);
 
 mframe_t ogre_frames_stand1[] =
 {
-	ai_stand, 0, ogre_idle,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL
+	AI_Stand, 0, ogre_idle,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL
 };
 mmove_t ogre_move_stand1 = { FRAME_stand1, FRAME_stand15, ogre_frames_stand1, ogre_stand };
 

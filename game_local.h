@@ -33,7 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define	GAMENAME	"Zombono"
 
 // the "gameversion" client command will print this plus compile date
-#define GAMEVERSION GAMENAME " v0.1.0-pre2 " __DATE__
+#define GAMEVERSION GAMENAME " v0.1.0 " __DATE__
 
 // protocol bytes that can be directly added to messages
 #define	svc_muzzleflash			1
@@ -101,13 +101,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 extern edict_t* current_player;
 extern gclient_t* current_client;
 
-extern vec3_t	forward, right, up;
+extern vec3_t forward, right, up;
 
-extern float	xyspeed;
+extern float xyspeed;
 
-extern float	bobmove;
-extern int		bobcycle;		// odd cycles are right foot going forward
-extern float	bobfracsin;		// sin(bobfrac*M_PI)
+extern float bobmove;
+extern int32_t bobcycle;		// odd cycles are right foot going forward
+extern float bobfracsin;		// sin(bobfrac*M_PI)
 
 typedef enum
 {
@@ -129,7 +129,7 @@ extern bool		is_quad;
 extern uint8_t	is_silenced;
 
 // STUPID hack
-void P_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
+void Player_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
 void Weapon_Grenade_fire(edict_t* ent, bool held);
 void Weapon_Bamfuslicator_SetType(edict_t* ent);
 
@@ -682,7 +682,7 @@ void Client_CommandLeaderboard(edict_t* ent);
 //
 #define	ITEM_INDEX(x) ((x)-itemlist)
 
-void Items_Init();
+void ItemList_Init();
 
 void Item_Precache(gitem_t* it);
 void Item_SetName();
@@ -789,7 +789,7 @@ void AI_MonsterDropToFloor(edict_t* ent);
 void AI_MonsterThink(edict_t* self);
 void AI_MonsterCheckDodge(edict_t* self, vec3_t start, vec3_t dir, int32_t speed);
 void AI_MonsterWalkStart(edict_t* self);
-void AI_MonsterStartSwim(edict_t* self);
+void AI_MonsterSwimStart(edict_t* self);
 void AI_MonsterFlyStart(edict_t* self);
 void AI_AttackFinished(edict_t* self, float time);
 void AI_MonsterStartUse(edict_t* self);
@@ -811,7 +811,7 @@ void BecomeExplosion1(edict_t* self);
 //
 void AI_SetSightClient();
 
-void ai_stand(edict_t* self, float dist);
+void AI_Stand(edict_t* self, float dist);
 void AI_Move(edict_t* self, float dist);
 void AI_Walk(edict_t* self, float dist);
 void AI_Turn(edict_t* self, float dist);
@@ -870,6 +870,9 @@ void Client_BeginServerFrame(edict_t* ent);
 void Client_UserinfoChanged(edict_t* ent, char* userinfo);
 float Client_CalcRoll(vec3_t angles, vec3_t velocity);
 
+
+void Client_SetupGamemode(edict_t* ent, vec3_t origin, vec3_t angles);
+
 //
 // functions in files that use mob_player.h
 //
@@ -901,7 +904,7 @@ void Player_WorldEffects();
 edict_t* Player_SpawnSelectFarthest(char* spawn_class_name);
 edict_t* Player_SpawnSelectRandom(char* spawn_class_name);
 edict_t* Player_SpawnSelectUnassigned();
-edict_t* Player_SpawnSelectTeam(edict_t* player);
+
 
 //
 // game_ui.c
@@ -914,7 +917,7 @@ void GameUI_CheckChaseStats(edict_t* ent);
 //
 // weapon_base.c
 //
-void PlayerNoise(edict_t* who, vec3_t where, int32_t type);
+void Player_Noise(edict_t* who, vec3_t where, int32_t type);
 
 //
 // physics_base.c
@@ -930,10 +933,10 @@ void FetchClientEntData(edict_t* ent);
 //
 // game_chase_camera.c
 //
-void UpdateChaseCam(edict_t* ent);
-void ChaseNext(edict_t* ent);
-void ChasePrev(edict_t* ent);
-void GetChaseTarget(edict_t* ent);
+void ChaseCam_Update(edict_t* ent);
+void ChaseCam_Next(edict_t* ent);
+void ChaseCam_Prev(edict_t* ent);
+void ChaseCam_GetTarget(edict_t* ent);
 
 // end of match
 void Game_EndMatch();
@@ -1248,22 +1251,23 @@ struct edict_s
 
 // Gamemode-specific stuff
 void Gamemode_TDMCheckRules();
-
+edict_t* Gamemode_TDMSpawnPlayer(edict_t* player);
 
 void Gamemode_WavesCheckRules();
 void Gamemode_WavesUpdate();
+edict_t* Gamemode_WavesSpawnPlayer(edict_t* player);
 
 // /weapons/weapon_base.c
 
-void P_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
-void PlayerNoise(edict_t* who, vec3_t where, int32_t type);
+void Player_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
+void Player_Noise(edict_t* who, vec3_t where, int32_t type);
 bool Weapon_Pickup(edict_t* ent, edict_t* other);
 void Player_WeaponChange(edict_t* ent);
-void NoAmmoWeaponChange(edict_t* ent);
+void Player_WeaponChangeNoAmmo(edict_t* ent);
 void Weapon_Think(edict_t* ent);
 void Weapon_Use(edict_t* ent, gitem_t* item);
 void Weapon_Drop(edict_t* ent, gitem_t* item);
-void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIRE_LAST, int32_t FRAME_IDLE_LAST, int32_t FRAME_DEACTIVATE_LAST,
+void Weapon_Generic(edict_t* ent, int32_t frame_activate_last, int32_t frame_fire_last, int32_t frame_idle_last, int32_t frame_deactivate_last,
 	int32_t* pause_frames, int32_t* fire_frames_primary, int32_t* fire_frames_secondary, void (*fire_primary)(edict_t* ent), void(*fire_secondary)(edict_t* ent));
 
 // game_loadout.c

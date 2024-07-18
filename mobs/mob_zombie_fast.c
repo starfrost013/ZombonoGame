@@ -59,21 +59,21 @@ void zombie_fast_stand(edict_t* self);
 
 mframe_t zombie_fast_frames_stand1[] =
 {
-	ai_stand, 0, zombie_fast_idle,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL,
-	ai_stand, 0, NULL
+	AI_Stand, 0, zombie_fast_idle,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL,
+	AI_Stand, 0, NULL
 };
 mmove_t zombie_fast_move_stand1 = { FRAME_stand1, FRAME_stand15, zombie_fast_frames_stand1, zombie_fast_stand };
 

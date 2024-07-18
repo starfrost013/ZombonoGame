@@ -165,44 +165,35 @@ player_team Gamemode_TDMGetWinner()
 }
 
 // figure out if the other modes use this
-edict_t* Player_SpawnSelectTeam(edict_t* player)
+edict_t* Gamemode_TDMSpawnPlayer(edict_t* player)
 {
-	if ((int32_t)gamemode->value != 0)
+	if (player->team == 0)
 	{
-		gi.bprintf(PRINT_ALL, "Can't currently spawn for non-TDM gamemodes");
-
+		gi.bprintf(PRINT_ALL, "Error - Player Teamflag not set! Defaulting to info_player_start");
 		return Player_SpawnSelectUnassigned();
+	}
+	// Teamflags are used to allow items to be used with multiple teams, but not all
+	// 
+	// Teamflag 1 - Director
+	char* spawn_class_name = "info_player_start_director";
+
+	// Teamflag 2 - Player
+	if (player->team == team_player)
+	{
+		spawn_class_name = "info_player_start_player";
+	}
+	// Teamflag 4 - Unassigned
+	else if (player->team == team_unassigned)
+	{
+		return Player_SpawnSelectUnassigned();
+	}
+
+	if ((int32_t)(gameflags->value) & GF_SPAWN_FARTHEST)
+	{
+		return Player_SpawnSelectFarthest(spawn_class_name);
 	}
 	else
 	{
-		if (player->team == 0)
-		{
-			gi.bprintf(PRINT_ALL, "Error - Player Teamflag not set! Defaulting to info_player_start");
-			return Player_SpawnSelectUnassigned();
-		}
-		// Teamflags are used to allow items to be used with multiple teams, but not all
-		// 
-		// Teamflag 1 - Director
-		char* spawn_class_name = "info_player_start_director";
-
-		// Teamflag 2 - Player
-		if (player->team == team_player)
-		{
-			spawn_class_name = "info_player_start_player";
-		}
-		// Teamflag 4 - Unassigned
-		else if (player->team == team_unassigned)
-		{
-			return Player_SpawnSelectUnassigned();
-		}
-
-		if ((int32_t)(gameflags->value) & GF_SPAWN_FARTHEST)
-		{
-			return Player_SpawnSelectFarthest(spawn_class_name);
-		}
-		else
-		{
-			return Player_SpawnSelectRandom(spawn_class_name);
-		}
+		return Player_SpawnSelectRandom(spawn_class_name);
 	}
 }

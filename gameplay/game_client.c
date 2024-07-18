@@ -157,7 +157,7 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 		if (ent->groundentity && !pm.groundentity && (pm.cmd.upmove >= 10) && (pm.waterlevel == 0))
 		{
 			gi.sound(ent, CHAN_VOICE, gi.soundindex("*jump1.wav"), 1, ATTN_NORM, 0);
-			PlayerNoise(ent, ent->s.origin, PNOISE_SELF);
+			Player_Noise(ent, ent->s.origin, PNOISE_SELF);
 
 			// add the relative velocity of the object we're on
 			// limit it to 2x velocity
@@ -250,7 +250,7 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 				client->ps.pmove.pm_flags &= ~PMF_NO_PREDICTION;
 			}
 			else
-				GetChaseTarget(ent);
+				ChaseCam_GetTarget(ent);
 
 		}
 		else if (!client->weapon_thunk) {
@@ -264,9 +264,9 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 			if (!(client->ps.pmove.pm_flags & PMF_JUMP_HELD)) {
 				client->ps.pmove.pm_flags |= PMF_JUMP_HELD;
 				if (client->chase_target)
-					ChaseNext(ent);
+					ChaseCam_Next(ent);
 				else
-					GetChaseTarget(ent);
+					ChaseCam_GetTarget(ent);
 			}
 		}
 		else
@@ -277,7 +277,7 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 	for (i = 1; i <= maxclients->value; i++) {
 		other = g_edicts + i;
 		if (other->inuse && other->client->chase_target == ent)
-			UpdateChaseCam(other);
+			ChaseCam_Update(other);
 	}
 }
 

@@ -2069,7 +2069,7 @@ void func_trampoline_use(edict_t* self, edict_t* other, edict_t* activator)
 	// TODO: Temporary SFX
 	gi.sound(other, CHAN_VOICE, gi.soundindex("*jump1.wav"), 1, ATTN_NORM, 0);
 
-	PlayerNoise(other, other->s.origin, PNOISE_SELF);
+	Player_Noise(other, other->s.origin, PNOISE_SELF);
 
 	if (self->dmg > 0)
 	{

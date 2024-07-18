@@ -134,7 +134,7 @@ static void Ammo_Bullet_generic(edict_t* self, vec3_t start, vec3_t aimdir, int3
 					gi.multicast(tr.endpos, MULTICAST_PVS);
 
 					if (self->client)
-						PlayerNoise(self, tr.endpos, PNOISE_IMPACT);
+						Player_Noise(self, tr.endpos, PNOISE_IMPACT);
 				}
 			}
 		}

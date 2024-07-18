@@ -326,6 +326,61 @@ edict_t* Player_SpawnSelectFarthest(char* spawn_class_name)
 	return spot;
 }
 
+void Player_SetupGamemodeTDM(edict_t* ent, vec3_t origin, vec3_t angles)
+{
+	gi.WriteByte(svc_loadout_clear);
+	gi.unicast(ent, true);
+
+	if (timelimit->value)
+		GameUI_Send(ent, "TimeUI", true, false, true);
+
+	GameUI_Send(ent, "ScoreUI", true, false, true);
+
+	// HACK: THIS MUST BE THE LAST ONE OTHERWISE IT WILL NOT BE SET AS THE CURRENT UI AND YOU CAN'T SPAWN
+	GameUI_Send(ent, "TeamUI", true, true, true);
+
+	// every player starts out as unassigned
+	ent->team = team_unassigned;
+
+	// tell the player to spawn;
+	// start by finding a spawn point
+	// do it before setting health back up, so farthest
+	// ranging doesn't count this client
+	Player_SelectSpawnPoint(ent, origin, angles);
+}
+
+void Player_SetupGamemodeWaves(edict_t* ent, vec3_t origin, vec3_t angles)
+{
+	gi.WriteByte(svc_loadout_clear);
+	gi.unicast(ent, true);
+
+	if (timelimit->value)
+		GameUI_Send(ent, "TimeUI", true, false, true);
+
+	GameUI_Send(ent, "ScoreUI", true, false, true);
+
+	// HACK: THIS MUST BE THE LAST ONE OTHERWISE IT WILL NOT BE SET AS THE CURRENT UI AND YOU CAN'T SPAWN
+	GameUI_Send(ent, "TeamWavesUI", true, true, true);
+
+	// every player starts out as unassigned
+	ent->team = team_unassigned;
+
+	// tell the player to spawn;
+	// start by finding a spawn point
+	// do it before setting health back up, so farthest
+	// ranging doesn't count this client
+	Player_SelectSpawnPoint(ent, origin, angles);
+}
+
+void Client_SetupGamemode(edict_t* ent, vec3_t origin, vec3_t angles)
+{
+	switch ((int32_t)gamemode->value)
+	{
+		case GAMEMODE_TDM:
+			Player_SetupGamemodeTDM(ent, origin, angles);
+	}
+}
+
 /*
 ===========
 SelectSpawnPoint
@@ -340,7 +395,11 @@ void Player_SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles)
 	// TODO: Change this for zombono.
 	if (gamemode->value == GAMEMODE_TDM)
 	{
-		spot = Player_SpawnSelectTeam(ent);
+		spot = Gamemode_TDMSpawnPlayer(ent);
+	}
+	else if (gamemode->value == GAMEMODE_WAVES)
+	{
+		spot = Gamemode_WavesSpawnPlayer(ent);
 	}
 	else
 	{
@@ -348,7 +407,7 @@ void Player_SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles)
 		spot = Player_SpawnSelectUnassigned();
 	}
 
-	// find a single player start spot
+	// failsafe
 	if (!spot)
 	{
 		spot = Player_SpawnSelectUnassigned();
@@ -550,18 +609,6 @@ void Client_JoinServer(edict_t* ent)
 
 	// TEMPORARY HACK FOR PLAYTEST - TODO: THIS *WILL* BREAK FOR EXISTING CLIENTS IF THE TIMELIMIT OR FRAGLIMIT IS CHANGED AFTER SERVER CREATION UNTIL YOU RESPAWN
 
-	if (timelimit->value)
-		GameUI_Send(ent, "TimeUI", true, false, true);
-
-	GameUI_Send(ent, "ScoreUI", true, false, true);
-
-	if (gamemode->value == GAMEMODE_TDM)
-	{
-		// HACK: THIS MUST BE THE LAST ONE OTHERWISE IT WILL NOT BE SET AS THE CURRENT UI AND YOU CAN'T SPAWN
-		GameUI_Send(ent, "TeamUI", true, true, true);
-	}
-
-
 	// tell the client to wipe its loadout information
 	gi.WriteByte(svc_loadout_clear);
 	gi.unicast(ent, true);
@@ -569,11 +616,7 @@ void Client_JoinServer(edict_t* ent)
 	// every player starts out as unassigned
 	ent->team = team_unassigned;
 
-	// tell the player to spawn;
-	// start by finding a spawn point
-	// do it before setting health back up, so farthest
-	// ranging doesn't count this client
-	Player_SelectSpawnPoint(ent, spawn_origin, spawn_angles);
+	Client_SetupGamemode(ent, spawn_origin, spawn_angles);
 
 	index = ent - g_edicts - 1;
 	client = ent->client;

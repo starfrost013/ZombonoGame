@@ -48,7 +48,7 @@ void Weapon_HyperBlaster_Fire(edict_t* ent)
 				gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/noammo.wav"), 1, ATTN_NORM, 0);
 				ent->pain_debounce_time = level.time + 1;
 			}
-			NoAmmoWeaponChange(ent);
+			Player_WeaponChangeNoAmmo(ent);
 		}
 		else
 		{

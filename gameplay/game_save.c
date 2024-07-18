@@ -231,7 +231,7 @@ void Game_Init ()
 	aimfix = gi.cvar("aimfix", "0", CVAR_ARCHIVE);
 
 	// items
-	Items_Init();
+	ItemList_Init();
 
 	// initialize all entities for this game
 	game.maxentities = MAX_EDICTS;

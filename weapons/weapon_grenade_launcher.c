@@ -39,7 +39,7 @@ void Weapon_grenadelauncher_fire(edict_t* ent)
 
 	VectorSet(offset, 8, 8, ent->viewheight - 8);
 	AngleVectors(ent->client->v_angle, forward, right, NULL);
-	P_ProjectSource(ent, offset, forward, right, start);
+	Player_ProjectSource(ent, offset, forward, right, start);
 
 	VectorScale(forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
@@ -53,7 +53,7 @@ void Weapon_grenadelauncher_fire(edict_t* ent)
 
 	ent->client->ps.gunframe++;
 
-	PlayerNoise(ent, start, PNOISE_WEAPON);
+	Player_Noise(ent, start, PNOISE_WEAPON);
 
 	if (!((int32_t)gameflags->value & GF_INFINITE_AMMO))
 		ent->client->loadout_current_ammo->amount--;

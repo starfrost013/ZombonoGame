@@ -522,7 +522,7 @@ void Player_WorldEffects()
 	//
 	if (!old_waterlevel && waterlevel)
 	{
-		PlayerNoise(current_player, current_player->s.origin, PNOISE_SELF);
+		Player_Noise(current_player, current_player->s.origin, PNOISE_SELF);
 		if (current_player->watertype & CONTENTS_LAVA)
 			gi.sound(current_player, CHAN_BODY, gi.soundindex("player/lava_in.wav"), 1, ATTN_NORM, 0);
 		else if (current_player->watertype & CONTENTS_SLIME)
@@ -540,7 +540,7 @@ void Player_WorldEffects()
 	//
 	if (old_waterlevel && !waterlevel)
 	{
-		PlayerNoise(current_player, current_player->s.origin, PNOISE_SELF);
+		Player_Noise(current_player, current_player->s.origin, PNOISE_SELF);
 		gi.sound(current_player, CHAN_BODY, gi.soundindex("player/watr_out.wav"), 1, ATTN_NORM, 0);
 		current_player->flags &= ~FL_INWATER;
 	}
@@ -561,7 +561,7 @@ void Player_WorldEffects()
 		if (current_player->air_finished < level.time)
 		{	// gasp for air
 			gi.sound(current_player, CHAN_VOICE, gi.soundindex("player/gasp1.wav"), 1, ATTN_NORM, 0);
-			PlayerNoise(current_player, current_player->s.origin, PNOISE_SELF);
+			Player_Noise(current_player, current_player->s.origin, PNOISE_SELF);
 		}
 		else  if (current_player->air_finished < level.time + 11)
 		{	// just break surface
@@ -586,7 +586,7 @@ void Player_WorldEffects()
 				else
 					gi.sound(current_player, CHAN_AUTO, gi.soundindex("player/u_breath2.wav"), 1, ATTN_NORM, 0);
 				current_client->breather_sound ^= 1;
-				PlayerNoise(current_player, current_player->s.origin, PNOISE_SELF);
+				Player_Noise(current_player, current_player->s.origin, PNOISE_SELF);
 				//FIXME: release a bubble?
 			}
 		}

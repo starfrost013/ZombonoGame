@@ -103,7 +103,7 @@ Used for standing around and looking for players
 Distance is for slight position adjustments needed by the animations
 ==============
 */
-void ai_stand (edict_t *self, float dist)
+void AI_Stand (edict_t *self, float dist)
 {
 	vec3_t	v;
 

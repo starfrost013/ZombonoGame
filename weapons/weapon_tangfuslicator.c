@@ -34,7 +34,7 @@ void Weapon_Tangfuslicator_Fire(edict_t* ent)
 	// set offset
 	VectorSet(offset, 0, 8, ent->viewheight - 8);
 
-	P_ProjectSource(ent, offset, forward, right, start);
+	Player_ProjectSource(ent, offset, forward, right, start);
 
 	Ammo_Tangfuslicator(ent, start, forward); // will always store current spawn type
 

@@ -45,7 +45,7 @@ void Ammo_Rocket_touch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t
 	}
 
 	if (ent->owner->client)
-		PlayerNoise(ent->owner, ent->s.origin, PNOISE_IMPACT);
+		Player_Noise(ent->owner, ent->s.origin, PNOISE_IMPACT);
 
 	// calculate position for the explosion entity
 	VectorMA(ent->s.origin, -0.02, ent->velocity, origin);

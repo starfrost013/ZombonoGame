@@ -45,7 +45,7 @@ void Ammo_Blaster_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface
 	}
 
 	if (self->owner->client)
-		PlayerNoise(self->owner, self->s.origin, PNOISE_IMPACT);
+		Player_Noise(self->owner, self->s.origin, PNOISE_IMPACT);
 
 	if (other->takedamage)
 	{

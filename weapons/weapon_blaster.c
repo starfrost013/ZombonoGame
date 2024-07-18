@@ -34,7 +34,7 @@ void Blaster_Fire(edict_t* ent, vec3_t g_offset, int32_t damage, bool hyper, int
 	AngleVectors(ent->client->v_angle, forward, right, NULL);
 	VectorSet(offset, 24, 8, ent->viewheight - 8);
 	VectorAdd(offset, g_offset, offset);
-	P_ProjectSource(ent, offset, forward, right, start);
+	Player_ProjectSource(ent, offset, forward, right, start);
 
 	VectorScale(forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
@@ -50,7 +50,7 @@ void Blaster_Fire(edict_t* ent, vec3_t g_offset, int32_t damage, bool hyper, int
 		gi.WriteByte(MZ_BLASTER | is_silenced);
 	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
-	PlayerNoise(ent, start, PNOISE_WEAPON);
+	Player_Noise(ent, start, PNOISE_WEAPON);
 }
 
 void Weapon_Blaster_Fire(edict_t* ent)

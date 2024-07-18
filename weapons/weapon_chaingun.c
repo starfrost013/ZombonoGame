@@ -100,7 +100,7 @@ void Chaingun_Fire(edict_t* ent)
 			gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/noammo.wav"), 1, ATTN_NORM, 0);
 			ent->pain_debounce_time = level.time + 1;
 		}
-		NoAmmoWeaponChange(ent);
+		Player_WeaponChangeNoAmmo(ent);
 		return;
 	}
 
@@ -123,7 +123,7 @@ void Chaingun_Fire(edict_t* ent)
 		r = 7 + crandom() * 4;
 		u = crandom() * 4;
 		VectorSet(offset, 0, r, u + ent->viewheight - 8);
-		P_ProjectSource(ent, offset, forward, right, start);
+		Player_ProjectSource(ent, offset, forward, right, start);
 
 		Ammo_Bullet(ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_CHAINGUN);
 	}
@@ -134,7 +134,7 @@ void Chaingun_Fire(edict_t* ent)
 	gi.WriteByte((MZ_CHAINGUN1 + shots - 1) | is_silenced);
 	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
-	PlayerNoise(ent, start, PNOISE_WEAPON);
+	Player_Noise(ent, start, PNOISE_WEAPON);
 
 	if (!((int32_t)gameflags->value & GF_INFINITE_AMMO))
 	{

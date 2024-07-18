@@ -202,7 +202,7 @@ int32_t Q_strncasecmp(char* s1, char* s2, int32_t n);
 
 //=============================================
 
-// If this isn't included from qcommon.h *AND* q_shared.h the game dies BECAUSE THESE FUNCTIONS ALSO GET CALLED FROM THE GAME DLL
+// If this isn't included from common.h *AND* q_shared.h the game dies BECAUSE THESE FUNCTIONS ALSO GET CALLED FROM THE GAME DLL
 extern bool big_endian;
 
 int16_t	BigShort(int16_t l);
@@ -369,7 +369,7 @@ COLLISION DETECTION
 #define	AREA_SOLID		1
 #define	AREA_TRIGGERS	2
 
-// TODO: Move this to qcommon/bsp.h
+// TODO: Move this to common/bsp.h
 
 // plane_t structure
 // !!! if this is changed, it must be changed in asm code too !!!
@@ -409,7 +409,7 @@ typedef struct csurface_s
 typedef struct mapsurface_s  // used internally due to name len probs //ZOID
 {
 	csurface_t	c;
-	char		rname[80]; // must be set to TEXTURE_NAME_LENGTH in higher-level qcommon/bsp.h
+	char		rname[80]; // must be set to TEXTURE_NAME_LENGTH in higher-level common/bsp.h
 } mapsurface_t;
 
 // a trace is returned when a box is swept through the world
