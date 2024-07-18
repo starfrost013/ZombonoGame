@@ -189,6 +189,9 @@
     <ClCompile Include="gamemodes\gamemode_tdm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gamemodes\gamemode_waves.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.def">

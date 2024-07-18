@@ -1012,7 +1012,7 @@ void Item_Precache (gitem_t *it)
 {
 	char	*s, *start;
 	char	data[MAX_QPATH];
-	int		len;
+	int32_t	len;
 	gitem_t	*ammo;
 
 	if (!it)

@@ -82,7 +82,7 @@ void Game_SpawnEntities(char* mapname, char* entities, char* spawnpoint);
 void Game_Init();
 void Game_RunFrame();
 
-void Gamemode_CheckRules();
+void Gamemode_Update();
 
 void Level_Write(char* filename);
 void Level_Read(char* filename);
@@ -313,7 +313,7 @@ void Game_CheckIfPasswordRequired()
 CheckGamemodeRules
 =================
 */
-void Gamemode_CheckRules()
+void Gamemode_Update()
 {
 	if (level.intermissiontime)
 		return;
@@ -322,6 +322,11 @@ void Gamemode_CheckRules()
 	if (gamemode->value == GAMEMODE_TDM)
 	{
 		Gamemode_TDMCheckRules();
+	}
+	else if (gamemode->value == GAMEMODE_WAVES)
+	{
+		Gamemode_WavesUpdate();
+		Gamemode_WavesCheckRules();
 	}
 }
 
@@ -418,8 +423,9 @@ void Game_RunFrame()
 		Physics_RunEntity(ent);
 	}
 
+	// update the gamemode 
 	// see if it is time to end a deathmatch
-	Gamemode_CheckRules();
+	Gamemode_Update();
 
 	// see if needpass needs updated
 	Game_CheckIfPasswordRequired();

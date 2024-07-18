@@ -1238,6 +1238,9 @@ struct edict_s
 
 	gitem_t*	item;			// for bonus items
 
+	// waves mode 
+	uint32_t	money;			// the amount of money that you have
+
 	// common data blocks
 	moveinfo_t		moveinfo;
 	monsterinfo_t	monsterinfo;
@@ -1245,6 +1248,10 @@ struct edict_s
 
 // Gamemode-specific stuff
 void Gamemode_TDMCheckRules();
+
+
+void Gamemode_WavesCheckRules();
+void Gamemode_WavesUpdate();
 
 // /weapons/weapon_base.c
 

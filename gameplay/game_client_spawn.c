@@ -555,8 +555,12 @@ void Client_JoinServer(edict_t* ent)
 
 	GameUI_Send(ent, "ScoreUI", true, false, true);
 
-	// HACK: THIS MUST BE THE LAST ONE OTHERWISE IT WILL NOT BE SET AS THE CURRENT UI AND YOU CAN'T SPAWN
-	GameUI_Send(ent, "TeamUI", true, true, true);
+	if (gamemode->value == GAMEMODE_TDM)
+	{
+		// HACK: THIS MUST BE THE LAST ONE OTHERWISE IT WILL NOT BE SET AS THE CURRENT UI AND YOU CAN'T SPAWN
+		GameUI_Send(ent, "TeamUI", true, true, true);
+	}
+
 
 	// tell the client to wipe its loadout information
 	gi.WriteByte(svc_loadout_clear);
@@ -574,7 +578,7 @@ void Client_JoinServer(edict_t* ent)
 	index = ent - g_edicts - 1;
 	client = ent->client;
 
-	char		userinfo[MAX_INFO_STRING];
+	char userinfo[MAX_INFO_STRING];
 
 	resp = client->resp;
 	memcpy(userinfo, client->pers.userinfo, sizeof(userinfo));
