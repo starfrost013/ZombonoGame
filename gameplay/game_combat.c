@@ -1035,7 +1035,7 @@ void Player_Die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t da
 
 	self->deadflag = DEAD_DEAD;
 
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 }
 
 /*

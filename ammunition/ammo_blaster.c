@@ -104,7 +104,7 @@ void Ammo_Blaster(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32
 	bolt->classname = "bolt";
 	if (hyper)
 		bolt->spawnflags = 1;
-	gi.linkentity(bolt);
+	gi.Edict_Link(bolt);
 
 	if (self->client)
 		AI_MonsterCheckDodge(self, bolt->s.origin, dir, speed);

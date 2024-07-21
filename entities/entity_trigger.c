@@ -112,7 +112,7 @@ void trigger_enable(edict_t* self, edict_t* other, edict_t* activator)
 {
 	self->solid = SOLID_TRIGGER;
 	self->use = Use_Multi;
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 }
 
 void SP_trigger_multiple(edict_t* ent)
@@ -146,7 +146,7 @@ void SP_trigger_multiple(edict_t* ent)
 		Edict_SetMovedir(ent->s.angles, ent->movedir);
 
 	gi.setmodel(ent, ent->model);
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 }
 
 
@@ -318,7 +318,7 @@ void SP_trigger_push(edict_t* self)
 	self->touch = trigger_push_touch;
 	if (!self->speed)
 		self->speed = 1000;
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 }
 
 
@@ -348,7 +348,7 @@ void hurt_use(edict_t* self, edict_t* other, edict_t* activator)
 		self->solid = SOLID_TRIGGER;
 	else
 		self->solid = SOLID_NOT;
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 
 	if (!(self->spawnflags & 2))
 		self->use = NULL;
@@ -401,7 +401,7 @@ void SP_trigger_hurt(edict_t* self)
 	if (self->spawnflags & 2)
 		self->use = hurt_use;
 
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 }
 
 

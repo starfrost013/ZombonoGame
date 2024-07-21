@@ -449,7 +449,7 @@ Marks the edict as free
 */
 void Edict_Free(edict_t* ed)
 {
-	gi.unlinkentity(ed);		// unlink from world
+	gi.Edict_Unlink(ed);		// unlink from world
 
 	if ((ed - g_edicts) <= (maxclients->value + BODY_QUEUE_SIZE))
 	{

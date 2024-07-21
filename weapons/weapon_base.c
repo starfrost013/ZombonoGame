@@ -120,7 +120,7 @@ void Player_Noise(edict_t* who, vec3_t where, int32_t type)
 	VectorSubtract(where, noise->maxs, noise->absmin);
 	VectorAdd(where, noise->maxs, noise->absmax);
 	noise->teleport_time = level.time;
-	gi.linkentity(noise);
+	gi.Edict_Link(noise);
 }
 
 

@@ -149,17 +149,17 @@ void Client_CommandGive(edict_t* ent)
 	}
 #endif
 
-	name = gi.args();
+	name = gi.Cmd_Args();
 
 	if (Q_stricmp(name, "all") == 0)
 		give_all = true;
 	else
 		give_all = false;
 
-	if (give_all || Q_stricmp(gi.argv(1), "health") == 0)
+	if (give_all || Q_stricmp(gi.Cmd_Argv(1), "health") == 0)
 	{
-		if (gi.argc() == 3)
-			ent->health = atoi(gi.argv(2));
+		if (gi.Cmd_Argc() == 3)
+			ent->health = atoi(gi.Cmd_Argv(2));
 		else
 			ent->health = ent->max_health;
 
@@ -258,7 +258,7 @@ void Client_CommandGive(edict_t* ent)
 	it = Item_FindByPickupName(name);
 	if (!it)
 	{
-		name = gi.argv(1);
+		name = gi.Cmd_Argv(1);
 		it = Item_FindByPickupName(name);
 		if (!it)
 		{
@@ -277,8 +277,8 @@ void Client_CommandGive(edict_t* ent)
 
 	if (it->flags & IT_AMMO)
 	{
-		if (gi.argc() == 3)
-			loadout_entry_ptr->amount = atoi(gi.argv(2));
+		if (gi.Cmd_Argc() == 3)
+			loadout_entry_ptr->amount = atoi(gi.Cmd_Argv(2));
 		else
 			loadout_entry_ptr->amount += it->quantity;
 	}
@@ -399,7 +399,7 @@ Use an inventory item
 */
 void Client_CommandUse(edict_t* ent)
 {
-	char* s = gi.args();
+	char* s = gi.Cmd_Args();
 	gitem_t* it = Item_FindByPickupName(s);
 
 	if (!it)
@@ -432,7 +432,7 @@ void Client_CommandLoadout(edict_t* ent)
 	if (ent->client->loadout.num_items == 0)
 		return;
 
-	char* index_str = gi.argv(1);
+	char* index_str = gi.Cmd_Argv(1);
 	char ui_name[MAX_UI_STRLEN_GAME] = { 0 };
 
 	// set the current loadout
@@ -549,7 +549,7 @@ void Client_CommandDrop(edict_t* ent)
 
 	loadout_entry_t* loadout_entry_ptr = Loadout_GetItem(ent, it->pickup_name);
 
-	s = gi.args();
+	s = gi.Cmd_Args();
 	it = Item_FindByPickupName(s);
 	if (!it)
 	{
@@ -830,7 +830,7 @@ void Client_CommandWave(edict_t* ent)
 {
 	int32_t i;
 
-	i = atoi(gi.argv(1));
+	i = atoi(gi.Cmd_Argv(1));
 
 	// can't wave when ducked
 	if (ent->client->ps.pmove.pm_flags & PMF_DUCKED)
@@ -931,7 +931,7 @@ void Client_CommandSay(edict_t* ent, bool team, bool arg0)
 	char		text[2048];
 	gclient_t*	cl;
 
-	if (gi.argc() < 2 && !arg0)
+	if (gi.Cmd_Argc() < 2 && !arg0)
 		return;
 
 	if (team)
@@ -941,13 +941,13 @@ void Client_CommandSay(edict_t* ent, bool team, bool arg0)
 
 	if (arg0)
 	{
-		strcat(text, gi.argv(0));
+		strcat(text, gi.Cmd_Argv(0));
 		strcat(text, " ");
-		strcat(text, gi.args());
+		strcat(text, gi.Cmd_Args());
 	}
 	else
 	{
-		p = gi.args();
+		p = gi.Cmd_Args();
 
 		if (*p == '"')
 		{
@@ -1061,7 +1061,7 @@ void Client_Command(edict_t* ent)
 	if (!ent->client)
 		return;		// not fully in game yet
 
-	cmd = gi.argv(0);
+	cmd = gi.Cmd_Argv(0);
 
 	bool valid_command = false;
 
@@ -1208,10 +1208,10 @@ void Client_CommandNoConsole(edict_t* ent)
 	if (!ent->client)
 		return;		// not fully in game yet
 
-	cmd = gi.argv(0);
+	cmd = gi.Cmd_Argv(0);
 
 	if (!Q_stricmp(cmd, "setteam"))
 	{
-		Client_CommandSetTeam(ent, atoi(gi.argv(1)));
+		Client_CommandSetTeam(ent, atoi(gi.Cmd_Argv(1)));
 	}
 }

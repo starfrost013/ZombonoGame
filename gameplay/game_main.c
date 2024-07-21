@@ -304,7 +304,7 @@ void Game_CheckIfPasswordRequired()
 		if (*spectator_password->string && Q_stricmp(spectator_password->string, "none"))
 			need |= 2;
 
-		gi.cvar_set("needpass", va("%d", need));
+		gi.Cvar_Set("needpass", va("%d", need));
 	}
 }
 

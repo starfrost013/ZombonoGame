@@ -133,5 +133,5 @@ void Ammo_Tangfuslicator(edict_t* self, vec3_t trace_start, vec3_t aimdir)
 	do_not_zombify = self;
 
 	// go
-	gi.linkentity(lightning_bolt);
+	gi.Edict_Link(lightning_bolt);
 }

@@ -818,7 +818,7 @@ char* va(char* format, ...)
 }
 
 
-char	com_token[MAX_TOKEN_CHARS];
+char com_token[MAX_TOKEN_CHARS];
 
 /*
 ==============
@@ -977,11 +977,11 @@ int32_t Q_strcasecmp(char* s1, char* s2)
 
 void Com_sprintf(char* dest, int32_t size, char* fmt, ...)
 {
-	int32_t 	len;
-	va_list		argptr;
-
-	// TODO 0.0.11: WTF? Is malloc too slow? Investigate
+	// TODO before 0.1.0 launch: WTF? Is malloc too slow? Investigate
 	char	bigbuffer[0x10000];
+
+	int32_t  len;
+	va_list	 argptr;
 
 	va_start(argptr, fmt);
 	len = vsnprintf(bigbuffer, 0x10000, fmt, argptr);

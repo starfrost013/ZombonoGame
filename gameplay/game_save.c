@@ -174,61 +174,61 @@ void Game_Init ()
 {
 	gi.dprintf("==== InitGame ====\n");
 
-	gun_x = gi.cvar("gun_x", "0", 0);
-	gun_y = gi.cvar("gun_y", "0", 0);
-	gun_z = gi.cvar("gun_z", "0", 0);
+	gun_x = gi.Cvar_Get("gun_x", "0", 0);
+	gun_y = gi.Cvar_Get("gun_y", "0", 0);
+	gun_z = gi.Cvar_Get("gun_z", "0", 0);
 
 	//use phys prefix for these?
-	sv_rollspeed = gi.cvar("sv_rollspeed", "200", 0);
-	sv_rollangle = gi.cvar("sv_rollangle", "2", 0);
-	sv_maxvelocity = gi.cvar("sv_maxvelocity", "2000", 0);
-	sv_gravity = gi.cvar("sv_gravity", "800", 0);
-	sv_stopspeed = gi.cvar("sv_stopspeed", "100", 0);
-	sv_friction = gi.cvar("sv_friction", "6", 0);
-	sv_waterfriction = gi.cvar("sv_waterfriction", "1", 0);
+	sv_rollspeed = gi.Cvar_Get("sv_rollspeed", "200", 0);
+	sv_rollangle = gi.Cvar_Get("sv_rollangle", "2", 0);
+	sv_maxvelocity = gi.Cvar_Get("sv_maxvelocity", "2000", 0);
+	sv_gravity = gi.Cvar_Get("sv_gravity", "800", 0);
+	sv_stopspeed = gi.Cvar_Get("sv_stopspeed", "100", 0);
+	sv_friction = gi.Cvar_Get("sv_friction", "6", 0);
+	sv_waterfriction = gi.Cvar_Get("sv_waterfriction", "1", 0);
 
 	// noset vars
-	dedicated = gi.cvar("dedicated", "0", CVAR_NOSET);
+	dedicated = gi.Cvar_Get("dedicated", "0", CVAR_NOSET);
 
 	// latched vars
-	sv_cheats = gi.cvar("sv_cheats", "0", CVAR_SERVERINFO | CVAR_LATCH);
+	sv_cheats = gi.Cvar_Get("sv_cheats", "0", CVAR_SERVERINFO | CVAR_LATCH);
 
-	gi.cvar("gamename", GAMENAME, CVAR_SERVERINFO | CVAR_LATCH);
-	gi.cvar("gamedate", __DATE__, CVAR_SERVERINFO | CVAR_LATCH);
-	gi.cvar("gameversion", GAMEVERSION, CVAR_SERVERINFO | CVAR_LATCH);
+	gi.Cvar_Get("gamename", GAME_NAME, CVAR_SERVERINFO | CVAR_LATCH);
+	gi.Cvar_Get("gamedate", __DATE__, CVAR_SERVERINFO | CVAR_LATCH);
+	gi.Cvar_Get("gameversion", GAME_VERSION, CVAR_SERVERINFO | CVAR_LATCH);
 
-	maxclients = gi.cvar("maxclients", "4", CVAR_SERVERINFO | CVAR_LATCH);
-	maxspectators = gi.cvar("maxspectators", "4", CVAR_SERVERINFO);
-	gamemode = gi.cvar("gamemode", "0", CVAR_SERVERINFO | CVAR_LATCH);
-	skill = gi.cvar("skill", "1", CVAR_LATCH);
+	maxclients = gi.Cvar_Get("maxclients", "4", CVAR_SERVERINFO | CVAR_LATCH);
+	maxspectators = gi.Cvar_Get("maxspectators", "4", CVAR_SERVERINFO);
+	gamemode = gi.Cvar_Get("gamemode", "0", CVAR_SERVERINFO | CVAR_LATCH);
+	skill = gi.Cvar_Get("skill", "1", CVAR_LATCH);
 
 	// change anytime vars
-	gameflags = gi.cvar("gameflags", "0", CVAR_SERVERINFO);
-	fraglimit = gi.cvar("fraglimit", "0", CVAR_SERVERINFO);
-	timelimit = gi.cvar("timelimit", "0", CVAR_SERVERINFO);
-	password = gi.cvar("password", "", CVAR_USERINFO);
-	spectator_password = gi.cvar("spectator_password", "", CVAR_USERINFO);
-	needpass = gi.cvar("needpass", "0", CVAR_SERVERINFO);
-	filterban = gi.cvar("filterban", "1", 0);
+	gameflags = gi.Cvar_Get("gameflags", "0", CVAR_SERVERINFO);
+	fraglimit = gi.Cvar_Get("fraglimit", "0", CVAR_SERVERINFO);
+	timelimit = gi.Cvar_Get("timelimit", "0", CVAR_SERVERINFO);
+	password = gi.Cvar_Get("password", "", CVAR_USERINFO);
+	spectator_password = gi.Cvar_Get("spectator_password", "", CVAR_USERINFO);
+	needpass = gi.Cvar_Get("needpass", "0", CVAR_SERVERINFO);
+	filterban = gi.Cvar_Get("filterban", "1", 0);
 
-	g_select_empty = gi.cvar("g_select_empty", "0", CVAR_ARCHIVE);
+	g_select_empty = gi.Cvar_Get("g_select_empty", "0", CVAR_ARCHIVE);
 
-	run_pitch = gi.cvar("run_pitch", "0.002", 0);
-	run_roll = gi.cvar("run_roll", "0.005", 0);
-	bob_up = gi.cvar("bob_up", "0.005", 0);
-	bob_pitch = gi.cvar("bob_pitch", "0.002", 0);
-	bob_roll = gi.cvar("bob_roll", "0.002", 0);
+	run_pitch = gi.Cvar_Get("run_pitch", "0.002", 0);
+	run_roll = gi.Cvar_Get("run_roll", "0.005", 0);
+	bob_up = gi.Cvar_Get("bob_up", "0.005", 0);
+	bob_pitch = gi.Cvar_Get("bob_pitch", "0.002", 0);
+	bob_roll = gi.Cvar_Get("bob_roll", "0.002", 0);
 
 	// flood control
-	flood_msgs = gi.cvar("flood_msgs", "4", 0);
-	flood_persecond = gi.cvar("flood_persecond", "4", 0);
-	flood_waitdelay = gi.cvar("flood_waitdelay", "10", 0);
+	flood_msgs = gi.Cvar_Get("flood_msgs", "4", 0);
+	flood_persecond = gi.Cvar_Get("flood_persecond", "4", 0);
+	flood_waitdelay = gi.Cvar_Get("flood_waitdelay", "10", 0);
 
 	// multiplayer server map list
-	sv_maplist = gi.cvar("sv_maplist", "", 0);
+	sv_maplist = gi.Cvar_Get("sv_maplist", "", 0);
 
 	/* others */
-	aimfix = gi.cvar("aimfix", "0", CVAR_ARCHIVE);
+	aimfix = gi.Cvar_Get("aimfix", "0", CVAR_ARCHIVE);
 
 	// items
 	ItemList_Init();
@@ -767,7 +767,7 @@ void Level_Read (char *filename)
 
 		// let the server rebuild world links for this ent
 		memset (&ent->area, 0, sizeof(ent->area));
-		gi.linkentity (ent);
+		gi.Edict_Link (ent);
 	}
 
 	fclose (f);

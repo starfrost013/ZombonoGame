@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type zombie_type)
 {
 	// Sorry for anyone reading this code
-
+	
 	edict_t*	monster = { 0 };
 	edict_t*	within_player_bounds[MAX_EDICTS] = { 0 };
 	edict_t*	within_monster_bounds[MAX_EDICTS] = { 0 };

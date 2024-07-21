@@ -154,7 +154,7 @@ void Server_CommandAddIP()
 {
 	int32_t	i;
 
-	if (gi.argc() < 3)
+	if (gi.Cmd_Argc() < 3)
 	{
 		gi.cprintf(NULL, PRINT_HIGH, "Usage:  addip <ip-mask>\n");
 		return;
@@ -174,7 +174,7 @@ void Server_CommandAddIP()
 		numipfilters++;
 	}
 
-	if (!StringToFilter(gi.argv(2), &ipfilters[i]))
+	if (!StringToFilter(gi.Cmd_Argv(2), &ipfilters[i]))
 		ipfilters[i].compare = 0xffffffff;
 }
 
@@ -188,13 +188,13 @@ void Server_CommandRemoveIP()
 	ipfilter_t	f;
 	int32_t		i, j;
 
-	if (gi.argc() < 3)
+	if (gi.Cmd_Argc() < 3)
 	{
 		gi.cprintf(NULL, PRINT_HIGH, "Usage:  sv removeip <ip-mask>\n");
 		return;
 	}
 
-	if (!StringToFilter(gi.argv(2), &f))
+	if (!StringToFilter(gi.Cmd_Argv(2), &f))
 		return;
 
 	for (i = 0; i < numipfilters; i++)
@@ -207,7 +207,7 @@ void Server_CommandRemoveIP()
 			gi.cprintf(NULL, PRINT_HIGH, "Removed.\n");
 			return;
 		}
-	gi.cprintf(NULL, PRINT_HIGH, "Didn't find %s.\n", gi.argv(2));
+	gi.cprintf(NULL, PRINT_HIGH, "Didn't find %s.\n", gi.Cmd_Argv(2));
 }
 
 /*
@@ -242,10 +242,10 @@ void SVCmd_WriteIP_f()
 	int32_t	i;
 	cvar_t* game;
 
-	game = gi.cvar("game_asset_path", "", 0);
+	game = gi.Cvar_Get("game_asset_path", "", 0);
 
 	if (!*game->string)
-		sprintf(name, "%s/listip.cfg", GAMENAME);
+		sprintf(name, "%s/listip.cfg", GAME_NAME);
 	else
 		sprintf(name, "%s/listip.cfg", game->value);
 
@@ -282,7 +282,7 @@ void	Server_Command()
 {
 	char* cmd;
 
-	cmd = gi.argv(1);
+	cmd = gi.Cmd_Argv(1);
 	if (Q_stricmp(cmd, "addip") == 0)
 		Server_CommandAddIP();
 	else if (Q_stricmp(cmd, "removeip") == 0)

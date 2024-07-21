@@ -358,7 +358,7 @@ retry:
 	trace = gi.trace(start, ent->mins, ent->maxs, end, ent, mask);
 
 	VectorCopy(trace.endpos, ent->s.origin);
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 
 	if (trace.fraction != 1.0)
 	{
@@ -369,7 +369,7 @@ retry:
 		{
 			// move the pusher back and try again
 			VectorCopy(start, ent->s.origin);
-			gi.linkentity(ent);
+			gi.Edict_Link(ent);
 			goto retry;
 		}
 	}
@@ -443,7 +443,7 @@ bool SV_Push(edict_t* pusher, vec3_t move, vec3_t amove)
 	// move the pusher to it's final position
 	VectorAdd(pusher->s.origin, move, pusher->s.origin);
 	VectorAdd(pusher->s.angles, amove, pusher->s.angles);
-	gi.linkentity(pusher);
+	gi.Edict_Link(pusher);
 
 	// see if any solid entities are inside the final position
 	check = g_edicts + 1;
@@ -507,7 +507,7 @@ bool SV_Push(edict_t* pusher, vec3_t move, vec3_t amove)
 			block = SV_TestEntityPosition(check);
 			if (!block)
 			{	// pushed ok
-				gi.linkentity(check);
+				gi.Edict_Link(check);
 				// impact?
 				continue;
 			}
@@ -538,7 +538,7 @@ bool SV_Push(edict_t* pusher, vec3_t move, vec3_t amove)
 			{
 				p->ent->client->ps.pmove.delta_angles[YAW] = p->deltayaw;
 			}
-			gi.linkentity(p->ent);
+			gi.Edict_Link(p->ent);
 		}
 		return false;
 	}
@@ -644,7 +644,7 @@ void SV_Physics_Noclip(edict_t* ent)
 	VectorMA(ent->s.angles, FRAMETIME, ent->avelocity, ent->s.angles);
 	VectorMA(ent->s.origin, FRAMETIME, ent->velocity, ent->s.origin);
 
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 }
 
 /*
@@ -753,7 +753,7 @@ void SV_Physics_Toss(edict_t* ent)
 	for (slave = ent->teamchain; slave; slave = slave->teamchain)
 	{
 		VectorCopy(ent->s.origin, slave->s.origin);
-		gi.linkentity(slave);
+		gi.Edict_Link(slave);
 	}
 }
 
@@ -909,7 +909,7 @@ void SV_Physics_Step(edict_t* ent)
 
 		SV_FlyMove(ent, FRAMETIME, mask);
 
-		gi.linkentity(ent);
+		gi.Edict_Link(ent);
 
 		Edict_TouchTriggers(ent);
 

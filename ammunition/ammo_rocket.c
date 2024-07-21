@@ -106,7 +106,7 @@ void Ammo_Rocket(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_
 	if (self->client)
 		AI_MonsterCheckDodge(self, rocket->s.origin, dir, speed);
 
-	gi.linkentity(rocket);
+	gi.Edict_Link(rocket);
 }
 
 void Ammo_Rocket_monster(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_t speed, int32_t flashtype)

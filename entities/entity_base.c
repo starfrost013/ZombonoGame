@@ -414,7 +414,7 @@ void Game_SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 	if (skill_level > 3)
 		skill_level = 3;
 	if (skill->value != skill_level)
-		gi.cvar_forceset("skill", va("%f", skill_level));
+		gi.Cvar_ForceSet("skill", va("%f", skill_level));
 
 	SaveClientData ();
 
@@ -629,9 +629,9 @@ void SP_worldspawn (edict_t *ent)
 	gi.imageindex ("2d/field_3"); 
 
 	if (!st.gravity)
-		gi.cvar_set("sv_gravity", "800");
+		gi.Cvar_Set("sv_gravity", "800");
 	else
-		gi.cvar_set("sv_gravity", st.gravity);
+		gi.Cvar_Set("sv_gravity", st.gravity);
 
 	snd_fry_index = gi.soundindex ("player/fry.wav");	// standing in lava / slime
 

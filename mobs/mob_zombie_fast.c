@@ -438,7 +438,7 @@ void zombie_fast_duck_down(edict_t* self)
 	self->maxs[2] -= 32;
 	self->takedamage = DAMAGE_YES;
 	self->monsterinfo.pausetime = level.time + 1;
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 }
 
 void zombie_fast_duck_up(edict_t* self)
@@ -446,7 +446,7 @@ void zombie_fast_duck_up(edict_t* self)
 	self->monsterinfo.aiflags &= ~AI_DUCKED;
 	self->maxs[2] += 32;
 	self->takedamage = DAMAGE_AIM;
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 }
 
 void zombie_fast_attack3_refire(edict_t* self)
@@ -613,7 +613,7 @@ void zombie_fast_dead(edict_t* self)
 	self->movetype = MOVETYPE_TOSS;
 	self->svflags |= SVF_DEADMONSTER;
 	self->nextthink = 0;
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 }
 
 mframe_t zombie_fast_frames_death1[] =
@@ -739,7 +739,7 @@ void SP_monster_zombie_fast_x(edict_t* self)
 	self->monsterinfo.melee = NULL;
 	self->monsterinfo.sight = zombie_fast_sight;
 
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 
 	self->monsterinfo.stand(self);
 

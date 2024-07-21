@@ -97,8 +97,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)x64</TargetName>
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(SolutionDir)\obj\$(Configuration)\obj_game</IntDir>
-    <OutDir>$(SolutionDir)build\$(Configuration)\zombonogame</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(Configuration)\obj_game\</IntDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)\zombonogame\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -113,14 +113,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>$(ProjectName)x64</TargetName>
     <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(SolutionDir)\obj\$(Configuration)\obj_game</IntDir>
-    <OutDir>$(SolutionDir)build\out\zombonogame</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(Configuration)\obj_game\</IntDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)\zombonogame\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Playtest|x64'">
     <TargetName>$(ProjectName)x64</TargetName>
     <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(SolutionDir)\obj\$(Configuration)\obj_game</IntDir>
-    <OutDir>$(SolutionDir)build\out\zombonogame</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(Configuration)\obj_game\</IntDir>
+    <OutDir>$(SolutionDir)build\$(Configuration)\zombonogame\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -156,7 +156,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/we4013 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/we4013 /w34505 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -170,7 +170,7 @@
       <StackReserveSize>4194304</StackReserveSize>
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)\tools\assetbuild\bin\Debug\net8.0\assetbuild.exe zombonogame $(Configuration)</Command>
+      <Command>$(SolutionDir)\tools\assetbuild\bin\$(Configuration)\net8.0\assetbuild.exe zombonogame $(Configuration)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -239,7 +239,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/we4013 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/we4013 /w34505 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -252,7 +252,7 @@
       <StackReserveSize>4194304</StackReserveSize>
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)\tools\assetbuild\bin\Debug\net8.0\assetbuild.exe</Command>
+      <Command>$(SolutionDir)\tools\assetbuild\bin\$(Configuration)\net8.0\assetbuild.exe zombonogame $(Configuration)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Playtest|x64'">
@@ -269,7 +269,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
-      <AdditionalOptions>/we4013 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/we4013 /w34505 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -282,7 +282,7 @@
       <StackReserveSize>4194304</StackReserveSize>
     </Link>
     <PreBuildEvent>
-      <Command>$(SolutionDir)\tools\assetbuild\bin\Debug\net8.0\assetbuild.exe</Command>
+      <Command>$(SolutionDir)\tools\assetbuild\bin\$(Configuration)\net8.0\assetbuild.exe zombonogame $(Configuration)</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

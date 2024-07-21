@@ -228,7 +228,7 @@ void Client_Disconnect(edict_t* ent)
 	gi.WriteByte(MZ_LOGOUT);
 	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
-	gi.unlinkentity(ent);
+	gi.Edict_Unlink(ent);
 	ent->s.modelindex = 0;
 	ent->solid = SOLID_NOT;
 	ent->inuse = false;

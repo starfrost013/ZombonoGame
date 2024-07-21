@@ -1,5 +1,5 @@
 /*
-Copyright (C) 1997-2001 Id Software, Inc. 
+Copyright (C) 1997-2001 Id Software, Inc.
 Copyright (C) 2023-2024 starfrost
 
 This program is free software; you can redistribute it and/or
@@ -9,7 +9,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -21,10 +21,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <game_local.h>
 
-void ChaseCam_Update(edict_t *ent)
+void ChaseCam_Update(edict_t* ent)
 {
 	vec3_t o, ownerv, goal;
-	edict_t *targ;
+	edict_t* targ;
 	vec3_t forward, right;
 	trace_t trace;
 	int32_t i;
@@ -33,12 +33,12 @@ void ChaseCam_Update(edict_t *ent)
 
 	// is our chase target gone?
 	if (!ent->client->chase_target->inuse
-		|| ent->client->chase_target->client->resp.spectator) 
+		|| ent->client->chase_target->client->resp.spectator)
 	{
-		edict_t *old = ent->client->chase_target;
+		edict_t* old = ent->client->chase_target;
 		ChaseCam_Next(ent);
 
-		if (ent->client->chase_target == old) 
+		if (ent->client->chase_target == old)
 		{
 			ent->client->chase_target = NULL;
 			ent->client->ps.pmove.pm_flags &= ~PMF_NO_PREDICTION;
@@ -56,7 +56,7 @@ void ChaseCam_Update(edict_t *ent)
 	VectorCopy(targ->client->v_angle, angles);
 	if (angles[PITCH] > 56)
 		angles[PITCH] = 56;
-	AngleVectors (angles, forward, right, NULL);
+	AngleVectors(angles, forward, right, NULL);
 	VectorNormalize(forward);
 	VectorMA(ownerv, -30, forward, o);
 
@@ -97,7 +97,7 @@ void ChaseCam_Update(edict_t *ent)
 
 	VectorCopy(goal, ent->s.origin);
 
-	for (i=0 ; i<3 ; i++)
+	for (i = 0; i < 3; i++)
 		ent->client->ps.pmove.delta_angles[i] = ANGLE2SHORT(targ->client->v_angle[i] - ent->client->resp.cmd_angles[i]);
 
 	if (targ->deadflag) {
@@ -105,7 +105,7 @@ void ChaseCam_Update(edict_t *ent)
 		ent->client->ps.viewangles[PITCH] = -15;
 		ent->client->ps.viewangles[YAW] = targ->client->killer_yaw;
 	}
-	else 
+	else
 	{
 		VectorCopy(targ->client->v_angle, ent->client->ps.viewangles);
 		VectorCopy(targ->client->v_angle, ent->client->v_angle);
@@ -113,20 +113,22 @@ void ChaseCam_Update(edict_t *ent)
 
 	ent->viewheight = 0;
 	ent->client->ps.pmove.pm_flags |= PMF_NO_PREDICTION;
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 }
 
-void ChaseCam_Next(edict_t *ent)
+void ChaseCam_Next(edict_t* ent)
 {
 	int32_t i;
-	edict_t *e;
+	edict_t* e;
 
 	if (!ent->client->chase_target)
 		return;
 
 	i = ent->client->chase_target - g_edicts;
-	do {
+	do
+	{
 		i++;
+
 		if (i > maxclients->value)
 			i = 1;
 		e = g_edicts + i;
@@ -134,16 +136,17 @@ void ChaseCam_Next(edict_t *ent)
 			continue;
 		if (!e->client->resp.spectator)
 			break;
-	} while (e != ent->client->chase_target);
+	} 
+	while (e != ent->client->chase_target);
 
 	ent->client->chase_target = e;
 	ent->client->update_chase = true;
 }
 
-void ChaseCam_Prev(edict_t *ent)
+void ChaseCam_Prev(edict_t* ent)
 {
 	int32_t i;
-	edict_t *e;
+	edict_t* e;
 
 	if (!ent->client->chase_target)
 		return;
@@ -151,27 +154,34 @@ void ChaseCam_Prev(edict_t *ent)
 	i = ent->client->chase_target - g_edicts;
 	do {
 		i--;
+
 		if (i < 1)
 			i = maxclients->value;
+
 		e = g_edicts + i;
+
 		if (!e->inuse)
 			continue;
+
 		if (!e->client->resp.spectator)
 			break;
-	} while (e != ent->client->chase_target);
+	} 
+	while (e != ent->client->chase_target);
 
 	ent->client->chase_target = e;
 	ent->client->update_chase = true;
 }
 
-void ChaseCam_GetTarget(edict_t *ent)
+void ChaseCam_GetTarget(edict_t* ent)
 {
 	int32_t i;
-	edict_t *other;
+	edict_t* other;
 
-	for (i = 1; i <= maxclients->value; i++) {
+	for (i = 1; i <= maxclients->value; i++)
+	{
 		other = g_edicts + i;
-		if (other->inuse && !other->client->resp.spectator) {
+		if (other->inuse && !other->client->resp.spectator) 
+		{
 			ent->client->chase_target = other;
 			ent->client->update_chase = true;
 			ChaseCam_Update(ent);

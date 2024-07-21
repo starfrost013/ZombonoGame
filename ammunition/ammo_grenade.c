@@ -148,7 +148,7 @@ void Ammo_Grenade(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, in
 	grenade->dmg_radius = damage_radius;
 	grenade->classname = "grenade";
 
-	gi.linkentity(grenade);
+	gi.Edict_Link(grenade);
 }
 
 void Ammo_Grenade2(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, float timer, float damage_radius, bool held)
@@ -191,7 +191,7 @@ void Ammo_Grenade2(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, i
 	else
 	{
 		gi.sound(self, CHAN_WEAPON, gi.soundindex("weapons/hgrent1a.wav"), 1, ATTN_NORM, 0);
-		gi.linkentity(grenade);
+		gi.Edict_Link(grenade);
 	}
 }
 

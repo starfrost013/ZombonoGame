@@ -34,22 +34,39 @@ trace_t	PM_trace(vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end)
 		return gi.trace(start, mins, maxs, end, pm_passent, MASK_DEADSOLID);
 }
 
-uint32_t CheckBlock(void* b, int32_t c)
-{
-	int	v, i;
-	v = 0;
-	for (i = 0; i < c; i++)
-		v += ((uint8_t*)b)[i];
-	return v;
-}
 
-void PrintPmove(pmove_t* pm)
+void Client_UpdateCamera(edict_t* ent, usercmd_t* ucmd)
 {
-	uint32_t	c1, c2;
+	edict_t* other;
 
-	c1 = CheckBlock(&pm->s, sizeof(pm->s));
-	c2 = CheckBlock(&pm->cmd, sizeof(pm->cmd));
-	Com_Printf("sv %3i:%i %i\n", pm->cmd.impulse, c1, c2);
+	switch (ent->client->ps.camera_type)
+	{
+		// this is the normal camera type that is not handed by anything
+	case camera_type_normal:
+		VectorCopy(ent->s.origin, ent->client->ps.vieworigin);
+		return; 
+		// this is separate to spectator mode
+	case camera_type_chase:
+
+		// update chase cam if being followed
+		for (int32_t i = 1; i <= maxclients->value; i++)
+		{
+			other = g_edicts + i;
+			if (other->inuse && other->client->chase_target == ent)
+				ChaseCam_Update(other);
+		}
+		return;
+	case camera_type_topdown:
+		//todo: cvar?
+		vec3_t addition = { 0, 0, 150 };
+		vec3_t viewangle = { 0, 0, -180 };
+		VectorAdd(ent->client->ps.pmove.origin, addition, ent->client->ps.vieworigin);
+		VectorCopy(viewangle, ent->client->ps.viewangles);
+		return;
+	case camera_type_free:
+		Com_Printf("CAMERA_TYPE_FREE NOT IMPLEMENTED!!!!!!!!");
+		return; 
+	}
 }
 
 /*
@@ -124,7 +141,7 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 		pm.cmd = *ucmd;
 
 		/*
-		// set team speed
+		// set team acceleration
 		if (ent->team == team_director)
 		{
 			pm.cmd.forwardmove *= SPEED_DIRECTOR;
@@ -210,7 +227,7 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 			VectorCopy(pm.viewangles, client->ps.viewangles);
 		}
 
-		gi.linkentity(ent);
+		gi.Edict_Link(ent);
 
 		if (ent->movetype != MOVETYPE_NOCLIP)
 			Edict_TouchTriggers(ent);
@@ -241,8 +258,8 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 	// fire weapon from final position if needed
 	if (client->latched_buttons & BUTTON_ATTACK1)
 	{
-		if (client->resp.spectator) {
-
+		if (client->resp.spectator)
+		{
 			client->latched_buttons = 0;
 
 			if (client->chase_target) {
@@ -259,9 +276,12 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 		}
 	}
 
-	if (client->resp.spectator) {
-		if (ucmd->upmove >= 10) {
-			if (!(client->ps.pmove.pm_flags & PMF_JUMP_HELD)) {
+	if (client->resp.spectator)
+	{
+		if (ucmd->upmove >= 10)
+		{
+			if (!(client->ps.pmove.pm_flags & PMF_JUMP_HELD)) 
+			{
 				client->ps.pmove.pm_flags |= PMF_JUMP_HELD;
 				if (client->chase_target)
 					ChaseCam_Next(ent);
@@ -273,12 +293,8 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 			client->ps.pmove.pm_flags &= ~PMF_JUMP_HELD;
 	}
 
-	// update chase cam if being followed
-	for (i = 1; i <= maxclients->value; i++) {
-		other = g_edicts + i;
-		if (other->inuse && other->client->chase_target == ent)
-			ChaseCam_Update(other);
-	}
+	Client_UpdateCamera(ent, ucmd);
+
 }
 
 
@@ -338,6 +354,8 @@ void Client_BeginServerFrame(edict_t* ent)
 
 	client->latched_buttons = 0;
 }
+
+
 
 /*
 =================
@@ -471,7 +489,7 @@ void Client_EndServerFrame(edict_t* ent)
 	VectorClear(ent->client->kick_angles);
 
 	// update the leaderboard every 10 ticks (1 second)
-	// BEFORE IT WAS UPDATING IT EVERY FRAME WHILE ACTIVE???
+	// BEFORE IT WAS UPDATING IT EVERY TICK WHILE ACTIVE???
 	if ((level.framenum % (int32_t)(1 / FRAMETIME)) == 0)
 		GameUI_SendLeaderboard(ent);
 }

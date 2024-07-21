@@ -30,10 +30,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <inttypes.h>
 
-#define	GAMENAME	"Zombono"
+#define	GAME_NAME	"Zombono"
 
 // the "gameversion" client command will print this plus compile date
-#define GAMEVERSION GAMENAME " v0.1.0 " __DATE__
+#define GAME_VERSION GAME_NAME " v0.1.0 " __DATE__
 
 // protocol bytes that can be directly added to messages
 #define	svc_muzzleflash			1
@@ -909,6 +909,9 @@ edict_t* Player_SpawnSelectUnassigned();
 //
 // game_ui.c
 //
+
+
+
 void Player_MoveToIntermission(edict_t* ent, player_team winning_team);
 void GameUI_SetStats(edict_t* ent);
 void GameUI_SetStatsSpectator(edict_t* ent);
@@ -937,6 +940,7 @@ void ChaseCam_Update(edict_t* ent);
 void ChaseCam_Next(edict_t* ent);
 void ChaseCam_Prev(edict_t* ent);
 void ChaseCam_GetTarget(edict_t* ent);
+
 
 // end of match
 void Game_EndMatch();
@@ -977,8 +981,8 @@ typedef struct client_persistant_s
 	int32_t		max_cells;
 	int32_t		max_slugs;
 
-	gitem_t* weapon;
-	gitem_t* lastweapon;
+	gitem_t*	weapon;
+	gitem_t*	lastweapon;
 
 	//restore this if we have resumable co-op games or that 6-level single player campaign.
 	//int32_t		coop_score;
@@ -1077,8 +1081,12 @@ typedef struct gclient_s
 
 	float		respawn_time;		// can respawn when time > this
 
-	edict_t* chase_target;		// player we are chasing
+	camera_type camera_type;
+
+	// camera_type_chase only
+	edict_t*	chase_target;		// player we are chasing
 	bool		update_chase;		// need to update chase info? 
+
 } gclient_t;
 
 struct edict_s
@@ -1275,3 +1283,4 @@ loadout_entry_t* Loadout_AddItem(edict_t* ent, const char* item_name, const char
 void			Loadout_DeleteItem(edict_t* ent, const char* item_name);				// Deletes the loadout item with the name name.
 loadout_entry_t* Loadout_GetItem(edict_t* ent, const char* item_name);		// Returns the loadout item with the name item_name.
 bool			Loadout_EntryIsItem(loadout_entry_t* entry, const char* item_name);	// Determines if the loadout entry entry is the item with the name item_name.
+

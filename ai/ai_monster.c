@@ -238,7 +238,7 @@ void AI_MonsterDropToFloor(edict_t* ent)
 
 	VectorCopy(trace.endpos, ent->s.origin);
 
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 	AI_CheckGround(ent);
 	AI_CategorizePosition(ent);
 }
@@ -374,7 +374,7 @@ void AI_MonsterTriggeredSpawn(edict_t* self)
 	self->movetype = MOVETYPE_STEP;
 	self->svflags &= ~SVF_NOCLIENT;
 	self->air_finished = level.time + 12;
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 
 	AI_MonsterStartGo(self);
 

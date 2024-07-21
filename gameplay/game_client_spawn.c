@@ -460,9 +460,9 @@ void Player_CopyToBodyQue(edict_t* ent)
 
 	// FIXME: send an effect on the removed body
 
-	gi.unlinkentity(ent);
+	gi.Edict_Unlink(ent);
 
-	gi.unlinkentity(body);
+	gi.Edict_Unlink(body);
 	body->s = ent->s;
 	body->s.number = body - g_edicts;
 
@@ -480,7 +480,7 @@ void Player_CopyToBodyQue(edict_t* ent)
 	body->die = body_die;
 	body->takedamage = DAMAGE_YES;
 
-	gi.linkentity(body);
+	gi.Edict_Link(body);
 }
 
 
@@ -715,7 +715,7 @@ void Client_JoinServer(edict_t* ent)
 		ent->solid = SOLID_NOT;
 		ent->svflags |= SVF_NOCLIENT;
 		ent->client->ps.gunindex = 0;
-		gi.linkentity(ent);
+		gi.Edict_Link(ent);
 		return;
 	}
 	else
@@ -725,7 +725,7 @@ void Client_JoinServer(edict_t* ent)
 	{	// could't spawn in?
 	}
 
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 
 	// force the current weapon up
 	client->newweapon = client->pers.weapon;

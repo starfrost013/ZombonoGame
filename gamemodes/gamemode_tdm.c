@@ -49,16 +49,30 @@ void Gamemode_TDMCheckRules()
 
 			int32_t total_seconds = timelimit->value - (int32_t)level.time;
 			// convert remaining time to integer mm:ss
-			int32_t seconds = (int32_t)(total_seconds % 60);
 			int32_t minutes = (int32_t)(total_seconds / 60);
+			int32_t seconds = (int32_t)(total_seconds % 60);
 
-			if (seconds < 10)
+			if (minutes < 10)
 			{
-				snprintf(&text, TIME_BUF_LENGTH, "Time: %d:0%d", minutes, seconds);
+				if (seconds < 10)
+				{
+					snprintf(text, TIME_BUF_LENGTH, "0%d:0%d", minutes, seconds);
+				}
+				else
+				{
+					snprintf(text, TIME_BUF_LENGTH, "0%d:%d", minutes, seconds);
+				}
 			}
 			else
 			{
-				snprintf(&text, TIME_BUF_LENGTH, "Time: %d:%d", minutes, seconds);
+				if (seconds < 10)
+				{
+					snprintf(text, TIME_BUF_LENGTH, "%d:0%d", minutes, seconds);
+				}
+				else
+				{
+					snprintf(text, TIME_BUF_LENGTH, "%d:%d", minutes, seconds);
+				}
 			}
 
 			// multicast time remaining to each client

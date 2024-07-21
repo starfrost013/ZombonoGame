@@ -490,7 +490,7 @@ void plat_spawn_inside_trigger(edict_t* ent)
 	VectorCopy(tmin, trigger->mins);
 	VectorCopy(tmax, trigger->maxs);
 
-	gi.linkentity(trigger);
+	gi.Edict_Link(trigger);
 }
 
 
@@ -561,7 +561,7 @@ void SP_func_plat(edict_t* ent)
 	else
 	{
 		VectorCopy(ent->pos2, ent->s.origin);
-		gi.linkentity(ent);
+		gi.Edict_Link(ent);
 		ent->moveinfo.state = STATE_BOTTOM;
 	}
 
@@ -662,7 +662,7 @@ void SP_func_rotating(edict_t* ent)
 		ent->s.effects |= EF_ANIM_ALLFAST;
 
 	gi.setmodel(ent, ent->model);
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 }
 
 /*
@@ -816,7 +816,7 @@ void SP_func_button(edict_t* ent)
 	VectorCopy(ent->pos2, ent->moveinfo.end_origin);
 	VectorCopy(ent->s.angles, ent->moveinfo.end_angles);
 
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 }
 
 /*
@@ -1066,7 +1066,7 @@ void Think_SpawnDoorTrigger(edict_t* ent)
 	other->solid = SOLID_TRIGGER;
 	other->movetype = MOVETYPE_NONE;
 	other->touch = Touch_DoorTrigger;
-	gi.linkentity(other);
+	gi.Edict_Link(other);
 
 	if (ent->spawnflags & DOOR_START_OPEN)
 		door_use_areaportals(ent, true);
@@ -1230,7 +1230,7 @@ void SP_func_door(edict_t* ent)
 	if (!ent->team)
 		ent->teammaster = ent;
 
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 
 	ent->nextthink = level.time + FRAMETIME;
 	if (ent->health || ent->targetname)
@@ -1361,7 +1361,7 @@ void SP_func_door_rotating(edict_t* ent)
 	if (!ent->team)
 		ent->teammaster = ent;
 
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 
 	ent->nextthink = level.time + FRAMETIME;
 	if (ent->health || ent->targetname)
@@ -1449,7 +1449,7 @@ void SP_func_water(edict_t* self)
 
 	self->classname = "func_door";
 
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 }
 
 
@@ -1578,7 +1578,7 @@ again:
 		VectorSubtract(ent->s.origin, self->mins, self->s.origin);
 		VectorCopy(self->s.origin, self->s.old_origin);
 		self->s.event = EV_OTHER_TELEPORT;
-		gi.linkentity(self);
+		gi.Edict_Link(self);
 		goto again;
 	}
 
@@ -1633,7 +1633,7 @@ void func_train_find(edict_t* self)
 	self->target = ent->target;
 
 	VectorSubtract(ent->s.origin, self->mins, self->s.origin);
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 
 	// if not triggered, start immediately
 	if (!self->targetname)
@@ -1695,7 +1695,7 @@ void SP_func_train(edict_t* self)
 
 	self->use = train_use;
 
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 
 	if (self->target)
 	{
@@ -1870,7 +1870,7 @@ void SP_func_conveyor(edict_t* self)
 
 	gi.setmodel(self, self->model);
 	self->solid = SOLID_BSP;
-	gi.linkentity(self);
+	gi.Edict_Link(self);
 }
 
 
@@ -2045,7 +2045,7 @@ void SP_func_door_secret(edict_t* ent)
 
 	ent->classname = "func_door";
 
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 }
 
 
@@ -2100,7 +2100,7 @@ void SP_func_trampoline(edict_t* ent)
 	// set model to worldmodel
 	gi.setmodel(ent, ent->model);
 
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 }
 
 #define PARTICLE_EFFECT_START_OFF	1
@@ -2253,5 +2253,5 @@ void SP_func_particle_effect(edict_t* ent)
 	ent->think = func_particle_effect_think;
 	ent->nextthink = level.time + FRAMETIME;
 	ent->timestamp = level.time;
-	gi.linkentity(ent);
+	gi.Edict_Link(ent);
 }

@@ -47,6 +47,13 @@ void Weapon_Bamfuslicator_SetType(edict_t* ent)
 
 void Weapon_Bamfuslicator_Fire(edict_t* ent)
 {
+	// TEST code
+
+	if (ent->client->ps.camera_type != camera_type_topdown)
+		ent->client->ps.camera_type = camera_type_topdown;
+	else
+		ent->client->ps.camera_type = camera_type_normal;
+
 	//todo: audio
 	vec3_t offset, start, forward, right;
 

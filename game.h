@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // game.h -- game dll information visible to server
 
-#define	GAME_API_VERSION	8
+#define	GAME_API_VERSION	9
 
 // edict->svflags
 
@@ -73,18 +73,18 @@ struct edict_s
 	// FIXME: move these fields to a server private sv_entity_t
 	link_t		area;				// linked to a division node or leaf
 	
-	int32_t 		num_clusters;		// if -1, use headnode instead
-	int32_t 		clusternums[MAX_ENT_CLUSTERS];
-	int32_t 		headnode;			// unused if num_clusters != -1
-	int32_t 		areanum, areanum2;
+	int32_t 	num_clusters;		// if -1, use headnode instead
+	int32_t 	clusternums[MAX_ENT_CLUSTERS];
+	int32_t 	headnode;			// unused if num_clusters != -1
+	int32_t 	areanum, areanum2;
 
 	//================================
 
-	int32_t 		svflags;			// SVF_NOCLIENT, SVF_DEADMONSTER, SVF_MONSTER, etc
+	int32_t 	svflags;			// SVF_NOCLIENT, SVF_DEADMONSTER, SVF_MONSTER, etc
 	vec3_t		mins, maxs;
 	vec3_t		absmin, absmax, size;
 	solid_t		solid;
-	int32_t 		clipmask;
+	int32_t 	clipmask;
 	edict_t		*owner;
 
 	// the game dll can add anything it wants after
@@ -118,25 +118,25 @@ typedef struct game_import_s
 	void	(*error) (char *fmt, ...);
 
 	// the *index functions create configstrings and some internal server state
-	int32_t 	(*modelindex) (char *name);
-	int32_t 	(*soundindex) (char *name);
-	int32_t 	(*imageindex) (char *name);
+	int32_t (*modelindex) (char *name);
+	int32_t (*soundindex) (char *name);
+	int32_t (*imageindex) (char *name);
 
 	void	(*setmodel) (edict_t *ent, char *name);
 
 	// collision detection
 	trace_t	(*trace) (vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, edict_t *passent, int32_t contentmask);
-	int32_t 	(*pointcontents) (vec3_t point);
+	int32_t (*pointcontents) (vec3_t point);
 	bool	(*inPVS) (vec3_t p1, vec3_t p2);
 	bool	(*inPHS) (vec3_t p1, vec3_t p2);
-	void		(*SetAreaPortalState) (int32_t portalnum, bool open);
+	void	(*SetAreaPortalState) (int32_t portalnum, bool open);
 	bool	(*AreasConnected) (int32_t area1, int32_t area2);
 
 	// an entity will never be sent to a client or used for collision
 	// if it is not passed to linkentity.  If the size, position, or
 	// solidity changes, it must be relinked.
-	void	(*linkentity) (edict_t *ent);
-	void	(*unlinkentity) (edict_t *ent);		// call before removing an interactive edict
+	void	(*Edict_Link) (edict_t *ent);
+	void	(*Edict_Unlink) (edict_t *ent);		// call before removing an interactive edict
 	int32_t (*BoxEdicts) (vec3_t mins, vec3_t maxs, edict_t **list,	int32_t maxcount, int32_t areatype);
 	void	(*Player_Move) (pmove_t *pmove);		// player movement code common with client prediction
 
@@ -160,14 +160,17 @@ typedef struct game_import_s
 	void	(*FreeTags) (int32_t tag);
 
 	// console variable interaction
-	cvar_t* (*cvar) (char *var_name, char *value, int32_t flags);
-	cvar_t* (*cvar_set) (char *var_name, char *value);
-	cvar_t* (*cvar_forceset) (char *var_name, char *value);
+	cvar_t* (*Cvar_Get) (char *var_name, char *value, int32_t flags);
+	cvar_t* (*Cvar_Set) (char *var_name, char *value);
+	cvar_t* (*Cvar_ForceSet) (char *var_name, char *value);
 
 	// ClientCommand and ServerCommand parameter access
-	int32_t 	(*argc) ();
-	char	*(*argv) (int32_t n);
-	char	*(*args) ();	// concatenation of all argv >= 1
+	int32_t (*Cmd_Argc) ();
+	char	*(*Cmd_Argv) (int32_t n);
+	char	*(*Cmd_Args) ();	// concatenation of all argv >= 1
+
+	void	(*Cmd_AddCommand)(char* name, void(*cmd)());
+	void	(*Cmd_RemoveCommand)(char* name);
 
 	// add commands to the server console as if they were typed in
 	// for map changing, etc

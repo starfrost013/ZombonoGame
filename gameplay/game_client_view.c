@@ -756,7 +756,7 @@ G_SetClientFrame
 */
 void Client_SetFrame(edict_t* ent)
 {
-	gclient_t* client;
+	gclient_t*	client;
 	bool		duck, run;
 
 	if (ent->s.modelindex != 255)
@@ -797,6 +797,7 @@ void Client_SetFrame(edict_t* ent)
 
 	if (client->anim_priority == ANIM_DEATH)
 		return;		// stay there
+
 	if (client->anim_priority == ANIM_JUMP)
 	{
 		if (!ent->groundentity)

@@ -698,6 +698,25 @@ typedef enum
 #define GAMEMODE_COOP			3		// Coop???
 #define GAMEMODE_CONTROL_POINT	4		// Control Point??? Need more innovative game modes...maybe a build-off
 
+// Camera System
+typedef enum camera_type_e
+{
+	// ps.pmove.origin used for view construction
+	camera_type_normal = 0,
+
+	// chase camera used for spectator
+	camera_type_chase = 1,
+
+	// top-down camera used for director team's view
+	camera_type_topdown = 2,
+
+	// debug freecam
+	camera_type_free = 3,
+
+	// sentinel value for the end of the camera list
+	camera_type_max = camera_type_free, 
+} camera_type;
+
 /*
 ==========================================================
 
@@ -803,10 +822,13 @@ typedef struct
 
 	// these fields do not need to be communicated bit-precise
 
+	vec3_t			vieworigin;		// origin of the view
 	vec3_t			viewangles;		// for fixed views
 	vec3_t			viewoffset;		// add to pmovestate->origin
 	vec3_t			kick_angles;	// add to view direction to get render angles
 								// set by weapon kicks, pain effects, etc
+
+	camera_type		camera_type;	// the type of camrea
 
 	vec3_t			gunangles;
 	vec3_t			gunoffset;

@@ -123,7 +123,7 @@ void DoRespawn (edict_t *ent)
 
 	ent->svflags &= ~SVF_NOCLIENT;
 	ent->solid = SOLID_TRIGGER;
-	gi.linkentity (ent);
+	gi.Edict_Link (ent);
 
 	// send an effect
 	ent->s.event = EV_ITEM_RESPAWN;
@@ -136,7 +136,7 @@ void Item_SetRespawn (edict_t *ent, float delay)
 	ent->solid = SOLID_NOT;
 	ent->nextthink = level.time + delay;
 	ent->think = DoRespawn;
-	gi.linkentity (ent);
+	gi.Edict_Link (ent);
 }
 
 
@@ -902,7 +902,7 @@ edict_t* Item_Drop (edict_t *ent, gitem_t *item)
 	else
 		dropped->nextthink = level.time + 1;
 
-	gi.linkentity (dropped);
+	gi.Edict_Link (dropped);
 
 	return dropped;
 }
@@ -923,7 +923,7 @@ void Use_Item (edict_t *ent, edict_t *other, edict_t *activator)
 		ent->touch = Item_OnTouch;
 	}
 
-	gi.linkentity (ent);
+	gi.Edict_Link (ent);
 }
 
 //======================================================================
@@ -995,7 +995,7 @@ void Item_DropToFloor (edict_t *ent)
 		ent->use = Use_Item;
 	}
 
-	gi.linkentity (ent);
+	gi.Edict_Link (ent);
 }
 
 

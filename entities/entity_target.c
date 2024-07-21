@@ -110,7 +110,7 @@ void SP_target_speaker (edict_t *ent)
 
 	// must link the entity so we get areas and clusters so
 	// the server can determine who to send updates to
-	gi.linkentity (ent);
+	gi.Edict_Link (ent);
 }
 
 //==========================================================
@@ -334,9 +334,9 @@ void use_target_spawner (edict_t *self, edict_t *other, edict_t *activator)
 	VectorCopy (self->s.origin, ent->s.origin);
 	VectorCopy (self->s.angles, ent->s.angles);
 	ED_CallSpawn (ent);
-	gi.unlinkentity (ent);
+	gi.Edict_Unlink (ent);
 	Game_KillBox (ent);
-	gi.linkentity (ent);
+	gi.Edict_Link (ent);
 	if (self->speed)
 		VectorCopy (self->movedir, ent->velocity);
 }
@@ -586,7 +586,7 @@ void target_laser_start (edict_t *self)
 
 	VectorSet (self->mins, -8, -8, -8);
 	VectorSet (self->maxs, 8, 8, 8);
-	gi.linkentity (self);
+	gi.Edict_Link (self);
 
 	if (self->spawnflags & 1)
 		target_laser_on (self);
