@@ -139,23 +139,10 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 		}
 
 		pm.cmd = *ucmd;
-
-		/*
-		// set team acceleration
-		if (ent->team == team_director)
-		{
-			pm.cmd.forwardmove *= SPEED_DIRECTOR;
-			pm.cmd.sidemove *= SPEED_DIRECTOR;
-		}
-		else if (ent->team == team_player)
-		{
-			pm.cmd.forwardmove *= SPEED_PLAYER;
-			pm.cmd.sidemove *= SPEED_PLAYER;
-		}
-		*/
-
 		pm.trace = PM_trace;	// adds default parms
 		pm.pointcontents = gi.pointcontents;
+
+		VectorCopy(client->ps.vieworigin, pm.vieworigin);
 
 		// perform a pmove
 		gi.Player_Move(&pm);

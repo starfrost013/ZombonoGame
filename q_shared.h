@@ -498,7 +498,8 @@ typedef struct
 	// results (out)
 	int32_t 		numtouch;
 	struct edict_s* touchents[MAXTOUCH];
-
+	
+	vec3_t			vieworigin;			// camera position
 	vec3_t			viewangles;			// clamped
 	float			viewheight;
 
@@ -822,13 +823,12 @@ typedef struct
 
 	// these fields do not need to be communicated bit-precise
 
-	vec3_t			vieworigin;		// origin of the view
+	vec3_t			vieworigin;		// camera origin
+	camera_type		camera_type;	// camera type
 	vec3_t			viewangles;		// for fixed views
 	vec3_t			viewoffset;		// add to pmovestate->origin
 	vec3_t			kick_angles;	// add to view direction to get render angles
 								// set by weapon kicks, pain effects, etc
-
-	camera_type		camera_type;	// the type of camrea
 
 	vec3_t			gunangles;
 	vec3_t			gunoffset;
