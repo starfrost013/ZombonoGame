@@ -590,7 +590,7 @@ void Client_RespawnSpectator(edict_t* ent)
 
 /*
 ===========
-PutClientInServer
+Client_JoinServer
 
 Called when a player connects to a server or respawns in
 a deathmatch.
@@ -670,6 +670,9 @@ void Client_JoinServer(edict_t* ent)
 	client->ps.pmove.origin[0] = spawn_origin[0];
 	client->ps.pmove.origin[1] = spawn_origin[1];
 	client->ps.pmove.origin[2] = spawn_origin[2];
+
+	// move the client's camera around
+	VectorCopy(client->ps.pmove.origin, client->ps.vieworigin);
 
 	client->ps.fov = atoi(Info_ValueForKey(client->pers.userinfo, "fov"));
 	if (client->ps.fov < 1)
