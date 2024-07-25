@@ -136,7 +136,6 @@ void Client_CommandGive(edict_t* ent)
 {
 	char* name;
 	gitem_t* it;
-	int32_t		index;
 	int32_t		i;
 	bool		give_all;
 	edict_t* it_ent;
@@ -525,7 +524,7 @@ void Client_CommandLoadout(edict_t* ent)
 		if (&ent->client->loadout.items[index] != ent->client->loadout_current_weapon)
 		{
 			ent->client->loadout_current_weapon = &ent->client->loadout.items[index];
-			ent->client->newweapon = Item_FindByPickupName(&ent->client->loadout.items[index].item_name);
+			ent->client->newweapon = Item_FindByPickupName(ent->client->loadout.items[index].item_name);
 			Player_WeaponChange(ent);
 		}
 	}
@@ -698,7 +697,6 @@ Cmd_WeapLast_f
 void Client_CommandWeapLast(edict_t* ent)
 {
 	gclient_t* cl;
-	int32_t		index;
 	gitem_t* it;
 
 	cl = ent->client;

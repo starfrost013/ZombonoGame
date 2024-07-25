@@ -78,7 +78,7 @@ void Ammo_Tangfuslicator_Touch(edict_t* self, edict_t* other, cplane_t* plane, c
 			return;
 
 		// hurt other enemies by TANGFUSLICATOR_NON_HUMAN_DAMAGE_PERCENT of their health if we accidentlaly hit them
-		Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, other->max_health * TANGFUSLICATOR_NON_HUMAN_DAMAGE_PERCENT, 0, 0, MOD_ZOMBIE);
+		Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, (float)other->max_health * TANGFUSLICATOR_NON_HUMAN_DAMAGE_PERCENT, 0, 0, MOD_ZOMBIE);
 	}
 }
 

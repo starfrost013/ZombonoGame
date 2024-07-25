@@ -176,7 +176,7 @@ typedef struct game_import_s
 	// for map changing, etc
 	void	(*AddCommandString) (char *text);
 
-	void	(*DebugGraph) (float value, int32_t color);
+	void	(*DebugGraph) (float value, int32_t r, int32_t g, int32_t b, int32_t a);
 } game_import_t;
 
 //

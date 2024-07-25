@@ -92,7 +92,7 @@ edict_t* Game_FindEdictsWithinRadius(edict_t* from, vec3_t org, float rad)
 		if (from->solid == SOLID_NOT)
 			continue;
 		for (j = 0; j < 3; j++)
-			eorg[j] = org[j] - (from->s.origin[j] + (from->mins[j] + from->maxs[j]) * 0.5);
+			eorg[j] = org[j] - (from->s.origin[j] + (from->mins[j] + from->maxs[j]) * 0.5f);
 		if (VectorLength(eorg) > rad)
 			continue;
 		return from;
@@ -367,7 +367,7 @@ void vectoangles(vec3_t value1, vec3_t angles)
 	else
 	{
 		if (value1[0])
-			yaw = (int32_t)(atan2(value1[1], value1[0]) * 180 / M_PI);
+			yaw = (int32_t)(atan2f(value1[1], value1[0]) * 180 / M_PI);
 		else if (value1[1] > 0)
 			yaw = 90;
 		else
@@ -375,8 +375,8 @@ void vectoangles(vec3_t value1, vec3_t angles)
 		if (yaw < 0)
 			yaw += 360;
 
-		forward = sqrt(value1[0] * value1[0] + value1[1] * value1[1]);
-		pitch = (int32_t)(atan2(value1[2], forward) * 180 / M_PI);
+		forward = sqrtf(value1[0] * value1[0] + value1[1] * value1[1]);
+		pitch = (int32_t)(atan2f(value1[2], forward) * 180 / M_PI);
 		if (pitch < 0)
 			pitch += 360;
 	}

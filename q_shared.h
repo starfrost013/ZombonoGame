@@ -56,7 +56,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define	MAX_QPATH			256		// max length of a quake game pathname (todo: implement in pak files)
 #define	MAX_OSPATH			260		// max length of a filesystem pathname
 
-#define	FRAMETIME			0.1					//1/(frametime) = tickrate
+#define	FRAMETIME			0.1f	//1/(frametime) = tickrate
 #define TICK_RATE			1/FRAMETIME
 
 //
@@ -116,7 +116,7 @@ typedef vec3_t color3_t;
 typedef vec4_t color4_t;
 
 #ifndef M_PI
-#define M_PI		3.14159265358979323846	// matches value in gcc v2 math.h
+#define M_PI		3.14159265358979323846f	// matches value in gcc v2 math.h
 #endif
 
 struct cplane_s;
@@ -727,7 +727,7 @@ typedef enum camera_type_e
 */
 
 #define	ANGLE2SHORT(x)	((int32_t)((x)*65536/360) & 65535)
-#define	SHORT2ANGLE(x)	((x)*(360.0/65536))
+#define	SHORT2ANGLE(x)	((x)*(360.0f/65536))
 
 //
 // config strings are a general means of communication from

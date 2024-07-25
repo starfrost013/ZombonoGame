@@ -56,8 +56,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //==================================================================
 
 // view pitching times
-#define DAMAGE_TIME		0.5
-#define	FALL_TIME		0.3
+#define DAMAGE_TIME		0.5f
+#define	FALL_TIME		0.3f
 
 // edict->spawnflags
 // these are set with checkboxes on each entity in the map editor
@@ -71,6 +71,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SPAWNFLAG_NOT_COOP			0x00004000
 #define SPAWNFLAG_NOT_CONTROL_POINT	0x00008000
 #define SPAWNFLAG_NOT_TOURNAMENT	0x00010000 //tentative
+
 // edict->flags
 #define	FL_FLY					0x00000001
 #define	FL_SWIM					0x00000002	// implied immunity to drowining
@@ -544,7 +545,7 @@ extern edict_t* g_edicts;
 #define	CLOFS(x) (intptr_t)&(((gclient_t *)0)->x)
 
 #define random()	((rand () & 0x7fff) / ((float)0x7fff))
-#define crandom()	(2.0 * (random() - 0.5))
+#define crandom()	(2.0f * (random() - 0.5f))
 
 extern cvar_t* gamemode;
 extern cvar_t* gameflags;
@@ -969,7 +970,7 @@ typedef struct client_persistant_s
 // values saved and restored from edicts when changing levels
 	int32_t		health;
 	int32_t		max_health;
-	int32_t		savedFlags;
+	int32_t		saved_flags;
 
 	int32_t		selected_item;
 

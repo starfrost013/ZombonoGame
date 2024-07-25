@@ -46,7 +46,7 @@ static void Ammo_Grenade_explode(edict_t* ent)
 		VectorAdd(ent->enemy->mins, ent->enemy->maxs, v);
 		VectorMA(ent->enemy->s.origin, 0.5, v, v);
 		VectorSubtract(ent->s.origin, v, v);
-		points = ent->dmg - 0.5 * VectorLength(v);
+		points = ent->dmg - 0.5f * VectorLength(v);
 		VectorSubtract(ent->enemy->s.origin, ent->s.origin, dir);
 		if (ent->spawnflags & 1)
 			mod = MOD_HANDGRENADE;
@@ -130,8 +130,8 @@ void Ammo_Grenade(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, in
 	grenade = Edict_Spawn();
 	VectorCopy(start, grenade->s.origin);
 	VectorScale(aimdir, speed, grenade->velocity);
-	VectorMA(grenade->velocity, 200 + crandom() * 10.0, up, grenade->velocity);
-	VectorMA(grenade->velocity, crandom() * 10.0, right, grenade->velocity);
+	VectorMA(grenade->velocity, 200 + crandom() * 10.0f, up, grenade->velocity);
+	VectorMA(grenade->velocity, crandom() * 10.0f, right, grenade->velocity);
 	VectorSet(grenade->avelocity, 300, 300, 300);
 	grenade->movetype = MOVETYPE_BOUNCE;
 	grenade->clipmask = MASK_SHOT;
@@ -163,8 +163,8 @@ void Ammo_Grenade2(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, i
 	grenade = Edict_Spawn();
 	VectorCopy(start, grenade->s.origin);
 	VectorScale(aimdir, speed, grenade->velocity);
-	VectorMA(grenade->velocity, 200 + crandom() * 10.0, up, grenade->velocity);
-	VectorMA(grenade->velocity, crandom() * 10.0, right, grenade->velocity);
+	VectorMA(grenade->velocity, 200 + crandom() * 10.0f, up, grenade->velocity);
+	VectorMA(grenade->velocity, crandom() * 10.0f, right, grenade->velocity);
 	VectorSet(grenade->avelocity, 300, 300, 300);
 	grenade->movetype = MOVETYPE_BOUNCE;
 	grenade->clipmask = MASK_SHOT;
@@ -197,7 +197,7 @@ void Ammo_Grenade2(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, i
 
 void Ammo_Grenade_monster(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, int32_t flashtype)
 {
-	Ammo_Grenade(self, start, aimdir, damage, speed, 2.5, damage + 40);
+	Ammo_Grenade(self, start, aimdir, damage, speed, 2.5, (float)(damage + 40.0f));
 
 	gi.WriteByte(svc_muzzleflash2);
 	gi.WriteShort(self - g_edicts);

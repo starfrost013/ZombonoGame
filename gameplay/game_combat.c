@@ -186,7 +186,7 @@ dflags		these flags are used to control how T_Damage works
 */
 static int32_t CheckPowerArmor(edict_t* ent, vec3_t point, vec3_t normal, int32_t damage, int32_t dflags)
 {
-	gclient_t*	client;
+	gclient_t* client;
 	int32_t		save = 0;
 	int32_t		power_armor_type = 0;
 	loadout_entry_t* loadout_ptr_cells = NULL;
@@ -242,7 +242,7 @@ static int32_t CheckPowerArmor(edict_t* ent, vec3_t point, vec3_t normal, int32_
 		save = damage;
 
 	SpawnDamage(temp_entity_type, point, normal, save);
-	ent->powerarmor_time = level.time + 0.2;
+	ent->powerarmor_time = level.time + 0.2f;
 
 	power_used = save / damage_per_cell;
 
@@ -255,10 +255,10 @@ static int32_t CheckPowerArmor(edict_t* ent, vec3_t point, vec3_t normal, int32_
 
 static int32_t CheckArmor(edict_t* ent, vec3_t point, vec3_t normal, int32_t damage, int32_t te_sparks, int32_t dflags)
 {
-	gclient_t*		client;
+	gclient_t* client;
 	int32_t			save;
 	loadout_entry_t* current_armor = Armor_GetCurrent(ent);
-	gitem_t*		armor;
+	gitem_t* armor;
 
 	if (!damage)
 		return 0;
@@ -277,9 +277,9 @@ static int32_t CheckArmor(edict_t* ent, vec3_t point, vec3_t normal, int32_t dam
 	armor = Item_FindByPickupName(current_armor->item_name);
 
 	if (dflags & DAMAGE_ENERGY)
-		save = ceil(((gitem_armor_t*)armor->info)->energy_protection * damage);
+		save = ceilf(((gitem_armor_t*)armor->info)->energy_protection * (float)damage);
 	else
-		save = ceil(((gitem_armor_t*)armor->info)->normal_protection * damage);
+		save = ceilf(((gitem_armor_t*)armor->info)->normal_protection * (float)damage);
 
 	if (save >= current_armor->amount)
 		save = current_armor->amount;
@@ -405,7 +405,7 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 				&& targ->team == team_unassigned
 				|| attacker->team == team_unassigned)
 			{
-				return false;
+				return;
 			}
 
 			if (targ->team == attacker->team)
@@ -586,11 +586,11 @@ void Player_RadiusDamage(edict_t* inflictor, edict_t* attacker, float damage, ed
 			continue;
 
 		VectorAdd(ent->mins, ent->maxs, v);
-		VectorMA(ent->s.origin, 0.5, v, v);
+		VectorMA(ent->s.origin, 0.5f, v, v);
 		VectorSubtract(inflictor->s.origin, v, v);
-		points = damage - 0.5 * VectorLength(v);
+		points = damage - 0.5f * VectorLength(v);
 		if (ent == attacker)
-			points = points * 0.5;
+			points = points * 0.5f;
 		if (points > 0)
 		{
 			if (Player_CanDamage(ent, inflictor))
@@ -655,8 +655,8 @@ bool Player_IsNeutral(edict_t* ent)
 void Player_Obituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 {
 	int32_t	mod;
-	char*	message;
-	char*	message2;
+	char* message;
+	char* message2;
 	bool	ff;
 
 	if ((!(int32_t)(gameflags->value) & GF_NO_FRIENDLY_FIRE) && attacker->client)
@@ -891,9 +891,9 @@ void Player_TossWeapon(edict_t* self)
 LookAtKiller
 ==================
 */
-void LookAtKiller(edict_t* self, edict_t* inflictor, edict_t* attacker)
+void Player_LookAtKiller(edict_t* self, edict_t* inflictor, edict_t* attacker)
 {
-	vec3_t		dir;
+	vec3_t dir;
 
 	if (attacker && attacker != world && attacker != self)
 	{
@@ -910,7 +910,7 @@ void LookAtKiller(edict_t* self, edict_t* inflictor, edict_t* attacker)
 	}
 
 	if (dir[0])
-		self->client->killer_yaw = 180 / M_PI * atan2(dir[1], dir[0]);
+		self->client->killer_yaw = 180.0f / M_PI * atan2f(dir[1], dir[0]);
 	else {
 		self->client->killer_yaw = 0;
 		if (dir[1] > 0)
@@ -953,8 +953,8 @@ void Player_Die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t da
 
 	if (!self->deadflag)
 	{
-		self->client->respawn_time = level.time + 1.0;
-		LookAtKiller(self, inflictor, attacker);
+		self->client->respawn_time = level.time + 1.0f;
+		Player_LookAtKiller(self, inflictor, attacker);
 		self->client->ps.pmove.pm_type = PM_DEAD;
 		Player_Obituary(self, inflictor, attacker);
 		Player_TossWeapon(self);
@@ -972,7 +972,7 @@ void Player_Die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t da
 
 
 	if (self->health < -40)
-	{		
+	{
 		// you really got fucked
 		// gib
 		gi.sound(self, CHAN_BODY, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
@@ -1065,7 +1065,7 @@ void Player_FallDamage(edict_t* ent)
 			return;
 		delta = ent->velocity[2] - ent->client->oldvelocity[2];
 	}
-	delta = delta * delta * 0.0001;
+	delta = delta * delta * 0.0001f;
 
 	// never take falling damage if completely underwater
 	if (ent->waterlevel == 3)
@@ -1084,7 +1084,7 @@ void Player_FallDamage(edict_t* ent)
 		return;
 	}
 
-	ent->client->fall_value = delta * 0.5;
+	ent->client->fall_value = delta * 0.5f;
 	if (ent->client->fall_value > 40)
 		ent->client->fall_value = 40;
 	ent->client->fall_time = level.time + FALL_TIME;

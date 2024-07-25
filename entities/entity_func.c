@@ -104,7 +104,7 @@ void Move_Begin(edict_t* ent)
 		return;
 	}
 	VectorScale(ent->moveinfo.dir, ent->moveinfo.speed, ent->velocity);
-	frames = floor((ent->moveinfo.remaining_distance / ent->moveinfo.speed) / FRAMETIME);
+	frames = floorf((ent->moveinfo.remaining_distance / ent->moveinfo.speed) / FRAMETIME);
 	ent->moveinfo.remaining_distance -= frames * ent->moveinfo.speed * FRAMETIME;
 	ent->nextthink = level.time + (frames * FRAMETIME);
 	ent->think = Move_Final;
@@ -197,7 +197,7 @@ void AngleMove_Begin(edict_t* ent)
 		return;
 	}
 
-	frames = floor(traveltime / FRAMETIME);
+	frames = floorf(traveltime / FRAMETIME);
 
 	// scale the destdelta vector by the time spent traveling to get velocity
 	VectorScale(destdelta, 1.0 / traveltime, ent->avelocity);
@@ -254,7 +254,7 @@ void plat_CalcAcceleratedMove(moveinfo_t* moveinfo)
 		float	f;
 
 		f = (moveinfo->accel + moveinfo->decel) / (moveinfo->accel * moveinfo->decel);
-		moveinfo->move_speed = (-2 + sqrt(4 - 4 * f * (-2 * moveinfo->remaining_distance))) / (2 * f);
+		moveinfo->move_speed = (-2.0f + sqrtf(4 - 4 * f * (-2 * moveinfo->remaining_distance))) / (2.0f * f);
 		decel_dist = AccelerationDistance(moveinfo->move_speed, moveinfo->decel);
 	}
 
@@ -289,7 +289,7 @@ void plat_Accelerate(moveinfo_t* moveinfo)
 			float	distance;
 
 			p1_distance = moveinfo->remaining_distance - moveinfo->decel_distance;
-			p2_distance = moveinfo->move_speed * (1.0 - (p1_distance / moveinfo->move_speed));
+			p2_distance = moveinfo->move_speed * (1.0f - (p1_distance / moveinfo->move_speed));
 			distance = p1_distance + p2_distance;
 			moveinfo->current_speed = moveinfo->move_speed;
 			moveinfo->next_speed = moveinfo->move_speed - moveinfo->decel * (p2_distance / distance);
@@ -320,8 +320,8 @@ void plat_Accelerate(moveinfo_t* moveinfo)
 		// and cross over the decel_distance; figure the average speed for the
 		// entire move
 		p1_distance = moveinfo->remaining_distance - moveinfo->decel_distance;
-		p1_speed = (old_speed + moveinfo->move_speed) / 2.0;
-		p2_distance = moveinfo->move_speed * (1.0 - (p1_distance / p1_speed));
+		p1_speed = (old_speed + moveinfo->move_speed) / 2.0f;
+		p2_distance = moveinfo->move_speed * (1.0f - (p1_distance / p1_speed));
 		distance = p1_distance + p2_distance;
 		moveinfo->current_speed = (p1_speed * (p1_distance / distance)) + (moveinfo->move_speed * (p2_distance / distance));
 		moveinfo->next_speed = moveinfo->move_speed - moveinfo->decel * (p2_distance / distance);
@@ -478,12 +478,12 @@ void plat_spawn_inside_trigger(edict_t* ent)
 
 	if (tmax[0] - tmin[0] <= 0)
 	{
-		tmin[0] = (ent->mins[0] + ent->maxs[0]) * 0.5;
+		tmin[0] = (ent->mins[0] + ent->maxs[0]) * 0.5f;
 		tmax[0] = tmin[0] + 1;
 	}
 	if (tmax[1] - tmin[1] <= 0)
 	{
-		tmin[1] = (ent->mins[1] + ent->maxs[1]) * 0.5;
+		tmin[1] = (ent->mins[1] + ent->maxs[1]) * 0.5f;
 		tmax[1] = tmin[1] + 1;
 	}
 
@@ -787,9 +787,9 @@ void SP_func_button(edict_t* ent)
 		st.lip = 4;
 
 	VectorCopy(ent->s.origin, ent->pos1);
-	abs_movedir[0] = fabs(ent->movedir[0]);
-	abs_movedir[1] = fabs(ent->movedir[1]);
-	abs_movedir[2] = fabs(ent->movedir[2]);
+	abs_movedir[0] = fabsf(ent->movedir[0]);
+	abs_movedir[1] = fabsf(ent->movedir[1]);
+	abs_movedir[2] = fabsf(ent->movedir[2]);
 	dist = abs_movedir[0] * ent->size[0] + abs_movedir[1] * ent->size[1] + abs_movedir[2] * ent->size[2] - st.lip;
 	VectorMA(ent->pos1, dist, ent->movedir, ent->pos2);
 
@@ -991,7 +991,7 @@ void Touch_DoorTrigger(edict_t* self, edict_t* other, cplane_t* plane, csurface_
 
 	if (level.time < self->touch_debounce_time)
 		return;
-	self->touch_debounce_time = level.time + 1.0;
+	self->touch_debounce_time = level.time + 1.0f;
 
 	door_use(self->owner, other, other);
 }
@@ -1009,10 +1009,10 @@ void Think_CalcMoveSpeed(edict_t* self)
 		return;		// only the team master does this
 
 	// find the smallest distance any member of the team will be moving
-	min = fabs(self->moveinfo.distance);
+	min = fabsf(self->moveinfo.distance);
 	for (ent = self->teamchain; ent; ent = ent->teamchain)
 	{
-		dist = fabs(ent->moveinfo.distance);
+		dist = fabsf(ent->moveinfo.distance);
 		if (dist < min)
 			min = dist;
 	}
@@ -1022,7 +1022,7 @@ void Think_CalcMoveSpeed(edict_t* self)
 	// adjust speeds so they will all complete at the same time
 	for (ent = self; ent; ent = ent->teamchain)
 	{
-		newspeed = fabs(ent->moveinfo.distance) / time;
+		newspeed = fabsf(ent->moveinfo.distance) / time;
 		ratio = newspeed / ent->moveinfo.speed;
 		if (ent->moveinfo.accel == ent->moveinfo.speed)
 			ent->moveinfo.accel = newspeed;
@@ -1039,7 +1039,7 @@ void Think_CalcMoveSpeed(edict_t* self)
 void Think_SpawnDoorTrigger(edict_t* ent)
 {
 	edict_t* other;
-	vec3_t		mins, maxs;
+	vec3_t	 mins, maxs;
 
 	if (ent->flags & FL_TEAMSLAVE)
 		return;		// only the team leader spawns a trigger
@@ -1142,7 +1142,7 @@ void door_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* surf
 			return;
 	}
 
-	self->touch_debounce_time = level.time + 5.0;
+	self->touch_debounce_time = level.time + 5.0f;
 
 	gi.centerprintf(other, "%s", self->message);
 	gi.sound(other, CHAN_AUTO, gi.soundindex("misc/talk1.wav"), 1, ATTN_NORM, 0);
@@ -1184,9 +1184,9 @@ void SP_func_door(edict_t* ent)
 
 	// calculate second position
 	VectorCopy(ent->s.origin, ent->pos1);
-	abs_movedir[0] = fabs(ent->movedir[0]);
-	abs_movedir[1] = fabs(ent->movedir[1]);
-	abs_movedir[2] = fabs(ent->movedir[2]);
+	abs_movedir[0] = fabsf(ent->movedir[0]);
+	abs_movedir[1] = fabsf(ent->movedir[1]);
+	abs_movedir[2] = fabsf(ent->movedir[2]);
 	ent->moveinfo.distance = abs_movedir[0] * ent->size[0] + abs_movedir[1] * ent->size[1] + abs_movedir[2] * ent->size[2] - st.lip;
 	VectorMA(ent->pos1, ent->moveinfo.distance, ent->movedir, ent->pos2);
 
@@ -1413,9 +1413,9 @@ void SP_func_water(edict_t* self)
 
 	// calculate second position
 	VectorCopy(self->s.origin, self->pos1);
-	abs_movedir[0] = fabs(self->movedir[0]);
-	abs_movedir[1] = fabs(self->movedir[1]);
-	abs_movedir[2] = fabs(self->movedir[2]);
+	abs_movedir[0] = fabsf(self->movedir[0]);
+	abs_movedir[1] = fabsf(self->movedir[1]);
+	abs_movedir[2] = fabsf(self->movedir[2]);
 	self->moveinfo.distance = abs_movedir[0] * self->size[0] + abs_movedir[1] * self->size[1] + abs_movedir[2] * self->size[2] - st.lip;
 	VectorMA(self->pos1, self->moveinfo.distance, self->movedir, self->pos2);
 
@@ -1486,7 +1486,7 @@ void train_blocked(edict_t* self, edict_t* other)
 
 	if (!self->dmg)
 		return;
-	self->touch_debounce_time = level.time + 0.5;
+	self->touch_debounce_time = level.time + 0.5f;
 	Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
 }
 
@@ -1824,7 +1824,7 @@ void SP_func_timer(edict_t* self)
 
 	if (self->spawnflags & 1)
 	{
-		self->nextthink = level.time + 1.0 + st.pausetime + self->delay + self->wait + crandom() * self->random;
+		self->nextthink = level.time + 1.0f + st.pausetime + self->delay + self->wait + crandom() * self->random;
 		self->activator = self;
 	}
 
@@ -1911,7 +1911,7 @@ void door_secret_use(edict_t* self, edict_t* other, edict_t* activator)
 
 void door_secret_move1(edict_t* self)
 {
-	self->nextthink = level.time + 1.0;
+	self->nextthink = level.time + 1.0f;
 	self->think = door_secret_move2;
 }
 
@@ -1935,7 +1935,7 @@ void door_secret_move4(edict_t* self)
 
 void door_secret_move5(edict_t* self)
 {
-	self->nextthink = level.time + 1.0;
+	self->nextthink = level.time + 1.0f;
 	self->think = door_secret_move6;
 }
 
@@ -1968,7 +1968,7 @@ void door_secret_blocked(edict_t* self, edict_t* other)
 
 	if (level.time < self->touch_debounce_time)
 		return;
-	self->touch_debounce_time = level.time + 0.5;
+	self->touch_debounce_time = level.time + 0.5f;
 
 	Player_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
 }
@@ -2016,14 +2016,14 @@ void SP_func_door_secret(edict_t* ent)
 	AngleVectors(ent->s.angles, forward, right, up);
 	VectorClear(ent->s.angles);
 
-	side = 1.0 - (ent->spawnflags & SECRET_1ST_LEFT);
+	side = 1.0f - (ent->spawnflags & SECRET_1ST_LEFT);
 
 	if (ent->spawnflags & SECRET_1ST_DOWN)
-		width = fabs(DotProduct(up, ent->size));
+		width = fabsf(DotProduct(up, ent->size));
 	else
-		width = fabs(DotProduct(right, ent->size));
+		width = fabsf(DotProduct(right, ent->size));
 
-	length = fabs(DotProduct(forward, ent->size));
+	length = fabsf(DotProduct(forward, ent->size));
 
 	if (ent->spawnflags & SECRET_1ST_DOWN)
 		VectorMA(ent->s.origin, -1 * width, up, ent->pos1);
@@ -2064,7 +2064,7 @@ void SP_func_killbox(edict_t* ent)
 	ent->svflags = SVF_NOCLIENT;
 }
 
-void func_trampoline_use(edict_t* self, edict_t* other, edict_t* activator)
+void func_trampoline_use(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* surface)
 {
 	// TODO: Temporary SFX
 	gi.sound(other, CHAN_VOICE, gi.soundindex("*jump1.wav"), 1, ATTN_NORM, 0);
@@ -2166,7 +2166,7 @@ void func_particle_effect_think(edict_t* self)
 		gi.WriteByte(self->particle_effect);
 
 		// send our tempent info
- 		switch (self->particle_effect)
+		switch (self->particle_effect)
 		{
 			// Generic tempent
 		case TE_GENERIC:

@@ -48,7 +48,7 @@ float Client_CalcRoll(vec3_t angles, vec3_t velocity)
 
 	side = DotProduct(velocity, right);
 	sign = side < 0 ? -1 : 1;
-	side = fabs(side);
+	side = fabsf(side);
 
 	value = sv_rollangle->value;
 
@@ -133,7 +133,7 @@ void Player_DamageFeedback(edict_t* player)
 	if ((level.time > player->pain_debounce_time) && !(player->flags & FL_GODMODE) && (client->invincible_framenum <= level.framenum))
 	{
 		r = 1 + (rand() & 1);
-		player->pain_debounce_time = level.time + 0.7;
+		player->pain_debounce_time = level.time + 0.7f;
 		if (player->health < 25)
 			l = 25;
 		else if (player->health < 50)
@@ -146,13 +146,13 @@ void Player_DamageFeedback(edict_t* player)
 	}
 
 	// the total alpha of the blend is always proportional to count
-	if (client->damage_alpha < 0)
-		client->damage_alpha = 0;
-	client->damage_alpha += count * 0.01;
-	if (client->damage_alpha < 0.2)
-		client->damage_alpha = 0.2;
-	if (client->damage_alpha > 0.6)
-		client->damage_alpha = 0.6;		// don't go too saturated
+	if (client->damage_alpha < 0.0f)
+		client->damage_alpha = 0.0f;
+	client->damage_alpha += count * 0.01f;
+	if (client->damage_alpha < 0.2f)
+		client->damage_alpha = 0.2f;
+	if (client->damage_alpha > 0.6f)
+		client->damage_alpha = 0.6f;		// don't go too saturated
 
 	// the color of the blend will vary based on how much was absorbed
 	// by different armors
@@ -174,8 +174,8 @@ void Player_DamageFeedback(edict_t* player)
 	{
 		kick = kick * 100 / player->health;
 
-		if (kick < count * 0.5)
-			kick = count * 0.5;
+		if (kick < count * 0.5f)
+			kick = count * 0.5f;
 		if (kick > 50)
 			kick = 50;
 
@@ -183,10 +183,10 @@ void Player_DamageFeedback(edict_t* player)
 		VectorNormalize(v);
 
 		side = DotProduct(v, right);
-		client->v_dmg_roll = kick * side * 0.3;
+		client->v_dmg_roll = kick * side * 0.3f;
 
 		side = -DotProduct(v, forward);
-		client->v_dmg_pitch = kick * side * 0.3;
+		client->v_dmg_pitch = kick * side * 0.3f;
 
 		client->v_dmg_time = level.time + DAMAGE_TIME;
 	}
@@ -304,7 +304,7 @@ void Client_CalcViewOffset(edict_t* ent)
 	ratio = (ent->client->fall_time - level.time) / FALL_TIME;
 	if (ratio < 0)
 		ratio = 0;
-	v[2] -= ratio * ent->client->fall_value * 0.4;
+	v[2] -= ratio * ent->client->fall_value * 0.4f;
 
 	// add bob height
 
@@ -348,15 +348,15 @@ void Client_CalcGunOffset(edict_t* ent)
 	float	delta;
 
 	// gun angles from bobbing
-	ent->client->ps.gunangles[ROLL] = xyspeed * bobfracsin * 0.005;
-	ent->client->ps.gunangles[YAW] = xyspeed * bobfracsin * 0.01;
+	ent->client->ps.gunangles[ROLL] = xyspeed * bobfracsin * 0.005f;
+	ent->client->ps.gunangles[YAW] = xyspeed * bobfracsin * 0.01f;
 	if (bobcycle & 1)
 	{
 		ent->client->ps.gunangles[ROLL] = -ent->client->ps.gunangles[ROLL];
 		ent->client->ps.gunangles[YAW] = -ent->client->ps.gunangles[YAW];
 	}
 
-	ent->client->ps.gunangles[PITCH] = xyspeed * bobfracsin * 0.005;
+	ent->client->ps.gunangles[PITCH] = xyspeed * bobfracsin * 0.005f;
 
 	// gun angles from delta movement
 	for (i = 0; i < 3; i++)
@@ -666,7 +666,7 @@ G_SetClientEffects
 */
 void Client_SetEffects(edict_t* ent)
 {
-	int32_t	pa_type;
+	int32_t	pa_type = Armor_GetCurrentPowerArmor(ent);
 	int32_t	remaining;
 
 	ent->s.effects = 0;
@@ -686,14 +686,14 @@ void Client_SetEffects(edict_t* ent)
 
 	if (ent->client->quad_framenum > level.framenum)
 	{
-		remaining = ent->client->quad_framenum - level.framenum;
+		remaining = (int32_t)ent->client->quad_framenum - level.framenum;
 		if (remaining > 30 || (remaining & 4))
 			ent->s.effects |= EF_QUAD;
 	}
 
 	if (ent->client->invincible_framenum > level.framenum)
 	{
-		remaining = ent->client->invincible_framenum - level.framenum;
+		remaining = (int32_t)ent->client->invincible_framenum - level.framenum;
 		if (remaining > 30 || (remaining & 4))
 			ent->s.effects |= EF_PENT;
 	}

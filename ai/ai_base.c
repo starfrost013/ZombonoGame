@@ -1104,7 +1104,7 @@ void AI_Run (edict_t *self, float dist)
 			{
 				if (left < 1)
 				{
-					VectorSet(v, d2 * left * 0.5, -16, 0);
+					VectorSet(v, d2 * left * 0.5f, -16, 0);
 					Game_ProjectSource (self->s.origin, v, v_forward, v_right, left_target);
 //					gi.dprintf("incomplete path, go part way and adjust again\n");
 				}
@@ -1121,7 +1121,7 @@ void AI_Run (edict_t *self, float dist)
 			{
 				if (right < 1)
 				{
-					VectorSet(v, d2 * right * 0.5, 16, 0);
+					VectorSet(v, d2 * right * 0.5f, 16, 0);
 					Game_ProjectSource (self->s.origin, v, v_forward, v_right, right_target);
 //					gi.dprintf("incomplete path, go part way and adjust again\n");
 				}

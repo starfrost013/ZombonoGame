@@ -344,10 +344,11 @@ void GameUI_SetStats (edict_t *ent)
 		}
 	}
 
-	if (power_armor_type && (!armor || (level.framenum & 8) ) )
+	if (power_armor_type 
+		&& (!armor || (level.framenum & 8) ) )
 	{	// flash between power armor and other armor icon
 		ent->client->ps.stats[STAT_ARMOR_ICON] = gi.imageindex ("2d/i_powershield");
-		ent->client->ps.stats[STAT_ARMOR] = cells;
+		ent->client->ps.stats[STAT_ARMOR] = cells->amount;
 	}
 	else if (armor)
 	{

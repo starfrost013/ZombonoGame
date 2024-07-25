@@ -116,7 +116,7 @@ void SaveClientData()
 			continue;
 		game.clients[i].pers.health = ent->health;
 		game.clients[i].pers.max_health = ent->max_health;
-		game.clients[i].pers.savedFlags = (ent->flags & (FL_GODMODE | FL_NOTARGET | FL_POWER_ARMOR));
+		game.clients[i].pers.saved_flags = (ent->flags & (FL_GODMODE | FL_NOTARGET | FL_POWER_ARMOR));
 	}
 }
 
@@ -124,7 +124,7 @@ void FetchClientEntData(edict_t* ent)
 {
 	ent->health = ent->client->pers.health;
 	ent->max_health = ent->client->pers.max_health;
-	ent->flags |= ent->client->pers.savedFlags;
+	ent->flags |= ent->client->pers.saved_flags;
 }
 
 /*

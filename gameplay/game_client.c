@@ -408,7 +408,7 @@ void Client_EndServerFrame(edict_t* ent)
 	// calculate speed and cycle to be used for
 	// all cyclic walking effects
 	//
-	xyspeed = sqrt(ent->velocity[0] * ent->velocity[0] + ent->velocity[1] * ent->velocity[1]);
+	xyspeed = sqrtf(ent->velocity[0] * ent->velocity[0] + ent->velocity[1] * ent->velocity[1]);
 
 	if (xyspeed < 5)
 	{
@@ -431,7 +431,7 @@ void Client_EndServerFrame(edict_t* ent)
 		bobtime *= 4;
 
 	bobcycle = (int32_t)bobtime;
-	bobfracsin = fabs(sin(bobtime * M_PI));
+	bobfracsin = fabsf(sinf(bobtime * M_PI));
 
 	// detect hitting the floor
 	Player_FallDamage(ent);

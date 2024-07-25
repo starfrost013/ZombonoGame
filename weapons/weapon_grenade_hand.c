@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <game_local.h>
 #include <mobs/mob_player.h>
 
-#define GRENADE_TIMER		3.0
+#define GRENADE_TIMER		3.0f
 #define GRENADE_MINSPEED	400
 #define GRENADE_MAXSPEED	800
 
@@ -53,7 +53,7 @@ void Weapon_Grenade_fire(edict_t* ent, bool held)
 	if (!((int32_t)gameflags->value & GF_INFINITE_AMMO))
 		ent->client->loadout_current_ammo->amount--;
 
-	ent->client->grenade_time = level.time + 1.0;
+	ent->client->grenade_time = level.time + 1.0f;
 
 	if (ent->deadflag || ent->s.modelindex != 255) // VWep animations screw up corpses
 	{
@@ -144,7 +144,7 @@ void Weapon_Grenade(edict_t* ent)
 		{
 			if (!ent->client->grenade_time)
 			{
-				ent->client->grenade_time = level.time + GRENADE_TIMER + 0.2;
+				ent->client->grenade_time = level.time + GRENADE_TIMER + 0.2f;
 				ent->client->weapon_sound = gi.soundindex("weapons/hgrenc1b.wav");
 			}
 
