@@ -58,7 +58,7 @@ void Client_UpdateCamera(edict_t* ent, usercmd_t* ucmd)
 		return;
 	case camera_type_topdown:
 		//todo: cvar?
-		vec3_t addition = { 0, 0, 150 };
+		vec3_t addition = { 0, 0, 150 };//temp
 		vec3_t viewangle = { 0, 0, -180 };
 		VectorAdd(ent->client->ps.pmove.origin, addition, ent->client->ps.vieworigin);
 		VectorCopy(viewangle, ent->client->ps.viewangles);

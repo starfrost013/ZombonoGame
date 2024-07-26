@@ -777,7 +777,7 @@ void Item_OnTouch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 
 		// change selected item
 		if (ent->item->use)
-			other->client->pers.selected_item = other->client->ps.stats[STAT_SELECTED_ITEM] = ITEM_INDEX(ent->item);
+			other->client->pers.selected_item = ITEM_INDEX(ent->item);
 
 		if (ent->item->pickup == Pickup_Health)
 		{

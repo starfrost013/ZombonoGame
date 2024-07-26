@@ -519,23 +519,15 @@ char* dm_statusbar =
 "endif "
 
 // armor
-"if 4 "
+"if 5 "
 "	xv	200 "
 "	rnum "
 "	xv	250 "
 "	pic 4 "
 "endif "
 
-// selected item
-"if 6 "
-"	xv	296 "
-"	pic 6 "
-"endif "
-
-"yb	-50 "
-
 // timer
-"if 9 "
+"if 8 "
 "	xv	246 "
 "	num	2	10 "
 "	xv	296 "
@@ -548,14 +540,14 @@ char* dm_statusbar =
 "num 3 14 "
 
 // spectator
-"if 17 "
+"if 13 "
 "xv 0 "
 "yb -58 "
 "string ^2\"SPECTATOR MODE\"^7 "
 "endif "
 
 // chase camera
-"if 16 "
+"if 12 "
 "xv 0 "
 "yb -68 "
 "string \"Chasing\" "

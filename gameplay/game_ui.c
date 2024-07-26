@@ -344,15 +344,15 @@ void GameUI_SetStats (edict_t *ent)
 		}
 	}
 
-	if (power_armor_type 
-		&& (!armor || (level.framenum & 8) ) )
+	if (power_armor_type
+	&& (!armor || (level.framenum & 8)) )
 	{	// flash between power armor and other armor icon
-		ent->client->ps.stats[STAT_ARMOR_ICON] = gi.imageindex ("2d/i_powershield");
+		ent->client->ps.stats[STAT_ARMOR_ICON] = gi.imageindex("2d/i_powershield");
 		ent->client->ps.stats[STAT_ARMOR] = cells->amount;
 	}
 	else if (armor)
 	{
-		ent->client->ps.stats[STAT_ARMOR_ICON] = gi.imageindex (armor->icon);
+		ent->client->ps.stats[STAT_ARMOR_ICON] = gi.imageindex(armor->icon);
 		ent->client->ps.stats[STAT_ARMOR] = armor->amount;
 	}
 	else
@@ -400,16 +400,6 @@ void GameUI_SetStats (edict_t *ent)
 	}
 
 	//
-	// selected item
-	//
-	if (ent->client->pers.selected_item == -1)
-		ent->client->ps.stats[STAT_SELECTED_ICON] = 0;
-	else
-		ent->client->ps.stats[STAT_SELECTED_ICON] = gi.imageindex (itemlist[ent->client->pers.selected_item].icon);
-
-	ent->client->ps.stats[STAT_SELECTED_ITEM] = ent->client->pers.selected_item;
-
-	//
 	// layouts
 	//
 	ent->client->ps.stats[STAT_LAYOUTS] = 0;
@@ -421,16 +411,6 @@ void GameUI_SetStats (edict_t *ent)
 	// frags
 	//
 	ent->client->ps.stats[STAT_FRAGS] = ent->client->resp.score;
-
-	//
-	// current weapon if not shown
-	//
-
-	if ( (ent->client->pers.hand == CENTER_HANDED)
-		&& ent->client->pers.weapon)
-		ent->client->ps.stats[STAT_HELPICON] = gi.imageindex (ent->client->pers.weapon->icon);
-	else
-		ent->client->ps.stats[STAT_HELPICON] = 0;
 
 	ent->client->ps.stats[STAT_SPECTATOR] = 0;
 }

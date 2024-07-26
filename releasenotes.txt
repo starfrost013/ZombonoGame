@@ -26,6 +26,8 @@ NEW FEATURES:
 	* A dedicated server binary, on Windows as well as Linux...
 	* Renamed host_speeds cvar to profile_all
 		* Improved strings to be more verbose and use fractions of milliseconds
+	* Added zone memory allocation logging
+		* Gated behind "log_memalloc" cvar (run the game with +set log_memalloc 1)
 	* Implemented localisation into the game
 		* The language is controlled by the language cvar
 		* Strings are loaded from text\<language->value>\strings.txt (max 1024 strings, 64 key length and 512 key value)
@@ -67,6 +69,10 @@ BUG FIXES:
 REMOVALS:
 	* Obsolete Windows-only code
 	* Removed the unused Legacy UI menulist control as first step to removing legacy UI
+	* No longer used (since 0.0.8 or earlier...) stats (replaced with loadout system)
+		* STAT_SELECTED_ICON
+		* STAT_SELECTED_ITEM
+		* STAT_HELPICON
 
 OTHER CHANGES:
 	* Made update prompt game-agnostic

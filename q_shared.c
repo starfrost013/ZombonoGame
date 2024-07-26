@@ -1052,8 +1052,8 @@ char* Info_ValueForKey(char* s, char* key)
 void Info_RemoveKey(char* s, char* key)
 {
 	char* start;
-	char	pkey[512];
-	char	value[512];
+	char pkey[512];
+	char value[512];
 	char* o;
 
 	if (strstr(key, "\\"))

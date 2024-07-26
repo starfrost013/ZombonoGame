@@ -656,20 +656,17 @@ typedef enum
 #define	STAT_HEALTH				1
 #define	STAT_AMMO_ICON			2
 #define	STAT_AMMO				3
-#define	STAT_ARMOR_ICON			4
-#define	STAT_ARMOR				5
-#define	STAT_SELECTED_ICON		6
-#define	STAT_PICKUP_ICON		7
-#define	STAT_PICKUP_STRING		8
-#define	STAT_TIMER_ICON			9
-#define	STAT_TIMER				10
-#define	STAT_HELPICON			11
-#define	STAT_SELECTED_ITEM		12
-#define	STAT_LAYOUTS			13
-#define	STAT_FRAGS				14
-#define	STAT_FLASHES			15		// cleared each frame, 1 = health, 2 = armor
-#define STAT_CHASE				16
-#define STAT_SPECTATOR			17
+#define	STAT_ARMOR				4
+#define STAT_ARMOR_ICON			5
+#define	STAT_PICKUP_ICON		6
+#define	STAT_PICKUP_STRING		7
+#define	STAT_TIMER_ICON			8
+#define	STAT_TIMER				9
+#define	STAT_LAYOUTS			10
+#define	STAT_FRAGS				11
+#define	STAT_FLASHES			12		// cleared each frame, 1 = health, 2 = armor
+#define STAT_CHASE				13
+#define STAT_SPECTATOR			14
 
 #define	MAX_STATS				32
 

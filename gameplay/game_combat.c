@@ -462,7 +462,7 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 			if (targ->client && attacker == targ)
 			{
 				// the rocket jump hack...
-				VectorScale(dir, 1600.0 * (float)knockback / mass, kvel);
+				VectorScale(dir, (160.0/FRAMETIME) * (float)knockback / mass, kvel);
 
 				// make rocket jumping easier
 				//TODO: refactor this whole thing so checks like the rocket jump check can be done in ammo_*
@@ -471,7 +471,7 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 			}
 			else
 			{
-				VectorScale(dir, 500.0 * (float)knockback / mass, kvel);
+				VectorScale(dir, (50.0/FRAMETIME) * (float)knockback / mass, kvel);
 			}
 
 			VectorAdd(targ->velocity, kvel, targ->velocity);
