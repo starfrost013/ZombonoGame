@@ -24,6 +24,8 @@ NEW FEATURES:
 		* This is needed because the original prediction system could not distinguish between the player and the camera, leading to extremely choppy gameplay at a 10Hz tick rate when
 		the player was in a non-normal camera type
 	* A dedicated server binary, on Windows as well as Linux...
+	* Renamed host_speeds cvar to profile_all
+		* Improved strings to be more verbose and use fractions of milliseconds
 	* Implemented localisation into the game
 		* The language is controlled by the language cvar
 		* Strings are loaded from text\<language->value>\strings.txt (max 1024 strings, 64 key length and 512 key value)

@@ -977,8 +977,7 @@ int32_t Q_strcasecmp(char* s1, char* s2)
 
 void Com_sprintf(char* dest, int32_t size, char* fmt, ...)
 {
-	// TODO before 0.1.0 launch: WTF? Is malloc too slow? Investigate
-	char	bigbuffer[0x10000];
+	char bigbuffer[0x10000];
 
 	int32_t  len;
 	va_list	 argptr;
