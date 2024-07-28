@@ -96,7 +96,7 @@ void Move_Final(edict_t* ent)
 
 void Move_Begin(edict_t* ent)
 {
-	float	frames;
+	float frames;
 
 	if ((ent->moveinfo.speed * FRAMETIME) >= ent->moveinfo.remaining_distance)
 	{
@@ -222,7 +222,6 @@ void AngleMove_Calc(edict_t* ent, void(*func)(edict_t*))
 	}
 }
 
-
 /*
 ==============
 Think_AccelMove
@@ -299,11 +298,11 @@ void plat_Accelerate(moveinfo_t* moveinfo)
 	// are we accelerating?
 	if (moveinfo->current_speed < moveinfo->speed)
 	{
-		float	old_speed;
-		float	p1_distance;
-		float	p1_speed;
-		float	p2_distance;
-		float	distance;
+		float old_speed;
+		float p1_distance;
+		float p1_speed;
+		float p2_distance;
+		float distance;
 
 		old_speed = moveinfo->current_speed;
 
