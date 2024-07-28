@@ -972,8 +972,6 @@ typedef struct client_persistant_s
 	int32_t		max_health;
 	int32_t		saved_flags;
 
-	int32_t		selected_item;
-
 	// ammo capacities
 	int32_t		max_bullets;
 	int32_t		max_shells;
@@ -985,7 +983,7 @@ typedef struct client_persistant_s
 	gitem_t*	weapon;
 	gitem_t*	lastweapon;
 
-	//restore this if we have resumable co-op games or that 6-level single player campaign.
+	//restore this if we have resumable co-op/singleplayer campaign levels
 	//int32_t		coop_score;
 
 	bool		spectator;			// client is a spectator
@@ -1000,7 +998,7 @@ typedef struct client_respawn_t
 	int32_t		score_monsters;		// Monster score
 	vec3_t		cmd_angles;			// angles sent over in the last command
 
-	bool	spectator;			// client is a spectator
+	bool		spectator;			// client is a spectator
 } client_respawn_t;
 
 // this structure is cleared on each PutClientInServer(),

@@ -754,7 +754,7 @@ Touch_Item
 */
 void Item_OnTouch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
 {
-	bool	taken;
+	bool taken;
 
 	if (!other->client)
 		return;
@@ -763,6 +763,7 @@ void Item_OnTouch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 	if (!ent->item->pickup)
 		return;		// not a grabbable item?
 
+	// this adds the item to the loadout
 	taken = ent->item->pickup(ent, other);
 
 	if (taken)
@@ -774,10 +775,6 @@ void Item_OnTouch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 		other->client->ps.stats[STAT_PICKUP_ICON] = gi.imageindex(ent->item->icon);
 		other->client->ps.stats[STAT_PICKUP_STRING] = CS_ITEMS+ITEM_INDEX(ent->item);
 		other->client->pickup_msg_time = level.time + 3.0f;
-
-		// change selected item
-		if (ent->item->use)
-			other->client->pers.selected_item = ITEM_INDEX(ent->item);
 
 		if (ent->item->pickup == Pickup_Health)
 		{
@@ -795,8 +792,6 @@ void Item_OnTouch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 			gi.sound(other, CHAN_ITEM, gi.soundindex(ent->item->pickup_sound), 1, ATTN_NORM, 0);
 		}
 	}
-
-	
 
 	if (!(ent->spawnflags & ITEM_TARGETS_USED))
 	{

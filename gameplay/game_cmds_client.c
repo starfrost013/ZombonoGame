@@ -59,14 +59,15 @@ void Player_SelectNextItem(edict_t* ent, int32_t itflags)
 		if (!(it->flags & itflags))
 			continue;
 
-		// cycle if its the first item
-		if (cl->pers.selected_item == it)
+		// make sure we are actually selecting it
+		//  cycle if its the first item
+		if (!strncmp(cl->loadout.client_current_item->item_name, it->pickup_name, LOADOUT_MAX_STRLEN))
 		{
 			int32_t new_item_num = item_num + 1;
 			if (new_item_num > cl->loadout.num_items) new_item_num = 0;
 
 			// get the current weapon
-			cl->pers.selected_item = &cl->loadout.items[new_item_num];
+			cl->loadout.client_current_item = &cl->loadout.items[new_item_num];
 			return;	// successful
 		}
 	}
@@ -110,13 +111,13 @@ void Player_SelectPrevItem(edict_t* ent, int32_t itflags)
 			continue;
 
 		// cycle if its the first item
-		if (cl->pers.selected_item == it)
+		if (!strncmp(cl->loadout.client_current_item->item_name, it->pickup_name, LOADOUT_MAX_STRLEN))
 		{
 			int32_t new_item_num = item_num - 1;
 			if (new_item_num < 0) new_item_num = cl->loadout.num_items;
 
 			// get the current weapon
-			cl->pers.selected_item = &cl->loadout.items[new_item_num];
+			cl->loadout.client_current_item = &cl->loadout.items[new_item_num];
 			return;	// successful
 		}
 	}
@@ -579,18 +580,20 @@ void Client_CommandInvUse(edict_t* ent)
 {
 	gitem_t* it;
 
-	if (ent->client->pers.selected_item == -1)
+	if (ent->client->loadout_current_weapon == NULL)
 	{
 		gi.cprintf(ent, PRINT_HIGH, "No item to use.\n");
 		return;
 	}
 
-	it = &itemlist[ent->client->pers.selected_item];
+	it = Item_FindByPickupName(ent->client->loadout_current_weapon->item_name);
+
 	if (!it->use)
 	{
 		gi.cprintf(ent, PRINT_HIGH, "Item is not usable.\n");
 		return;
 	}
+
 	it->use(ent, it);
 }
 
@@ -723,18 +726,20 @@ void Command_ClientInvDrop(edict_t* ent)
 {
 	gitem_t* it;
 
-	if (ent->client->pers.selected_item == -1)
+	if (ent->client->loadout_current_weapon == NULL)
 	{
-		gi.cprintf(ent, PRINT_HIGH, "No item to drop.\n");
+		gi.cprintf(ent, PRINT_HIGH, "[STRING_ITEM_NO_ITEM_DROP]\n");
 		return;
 	}
 
-	it = &itemlist[ent->client->pers.selected_item];
-	if (!it->drop)
+	it = Item_FindByPickupName(ent->client->loadout_current_weapon->item_name);
+
+	if (!it->use)
 	{
-		gi.cprintf(ent, PRINT_HIGH, "Item is not dropable.\n");
+		gi.cprintf(ent, PRINT_HIGH, "[STRING_ITEM_CANNOT_DROP]\n");
 		return;
 	}
+
 	it->drop(ent, it);
 }
 
