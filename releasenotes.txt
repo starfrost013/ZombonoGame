@@ -23,6 +23,8 @@ NEW FEATURES:
 	* Changed client prediction to be based on the camera origin rather than the player's origin	
 		* This is needed because the original prediction system could not distinguish between the player and the camera, leading to extremely choppy gameplay at a 10Hz tick rate when
 		the player was in a non-normal camera type
+	* The game now runs at 40Hz instead of 10Hz tick rate
+			* This should improve hit registration and many other aspects of network play
 	* A dedicated server binary, on Windows as well as Linux...
 	* Renamed host_speeds cvar to profile_all
 		* Improved strings to be more verbose and use fractions of milliseconds
@@ -50,6 +52,8 @@ NEW FEATURES:
 		* Each gamemode now has its own player spawn and update code
 	* Made the time text larger, removed "Time: " and moved it downwards
 	* Engine limits: Increased MAX_GLTEXTURES from 1024 to 2048
+	* Netservices Framework: Changed useragent from "Zombono" to "EuphoriaEngine"
+	* Netservices Framework: Added HTTP POST as well as GET
 
 BUG FIXES:
 	* Fixed the game crashing on minimise
