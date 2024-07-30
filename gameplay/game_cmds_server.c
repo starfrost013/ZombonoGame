@@ -124,12 +124,15 @@ bool Server_IsClientAllowed(char* from)
 
 	i = 0;
 	p = from;
-	while (*p && i < 4) {
+	while (*p && i < 4)
+	{
 		m[i] = 0;
-		while (*p >= '0' && *p <= '9') {
+		while (*p >= '0' && *p <= '9')
+		{
 			m[i] = m[i] * 10 + (*p - '0');
 			p++;
 		}
+
 		if (!*p || *p == ':')
 			break;
 		i++, p++;
@@ -162,7 +165,7 @@ void Server_CommandAddIP()
 
 	for (i = 0; i < numipfilters; i++)
 		if (ipfilters[i].compare == 0xffffffff)
-			break;	
+			break;
 	// free spot
 	if (i == numipfilters)
 	{
@@ -236,7 +239,7 @@ SV_WriteIP_f
 */
 void SVCmd_WriteIP_f()
 {
-	FILE*	f;
+	FILE* f;
 	char	name[MAX_OSPATH];
 	uint8_t	b[4];
 	int32_t	i;
@@ -278,7 +281,7 @@ The game can issue gi.argc() / gi.argv() commands to get the rest
 of the parameters
 =================
 */
-void	Server_Command()
+void Server_Command()
 {
 	char* cmd;
 

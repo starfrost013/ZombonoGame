@@ -64,6 +64,7 @@ BUG FIXES:
 	* Fixed UI not being reset when disconnecting from server
 	* Fixed the window pointer being used as the GLFW error callback because of inability to read documentation
 	* Fixed incorrect parameters being used for GLFW error callback
+	* Fixed cURL not being properly initialised or deinitialised
 	* Fixed a bug where if an input-capturing UI was running, and the client was disconnected, the client would not send command updates.
 		* This caused an issue where you could not connect to local servers when the main menu UI was running.
 	* Fixed a bug with the code that handled Game DLL changes that would restart the video and sound subsystems even if the game dll had not changed, leading to the renderer 
