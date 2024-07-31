@@ -102,8 +102,10 @@ void Ammo_Blaster(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32
 	bolt->think = Edict_Free;
 	bolt->dmg = damage;
 	bolt->classname = "bolt";
+
 	if (hyper)
 		bolt->spawnflags = 1;
+
 	gi.Edict_Link(bolt);
 
 	if (self->client)
