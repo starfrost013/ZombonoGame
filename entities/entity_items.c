@@ -150,9 +150,10 @@ bool Pickup_Powerup(edict_t* ent, edict_t* other)
 	if (!loadout_entry)
 		loadout_entry = Loadout_AddItem(other, ent->item->pickup_name, ent->item->icon, loadout_entry_type_ammo, 1);
 
-	int32_t		     quantity = loadout_entry->amount;
+	int32_t quantity = loadout_entry->amount;
 
-	if ((skill->value == 1 && quantity >= 2) || (skill->value >= 2 && quantity >= 1))
+	if ((skill->value == 1 && quantity >= 2) 
+		|| (skill->value >= 2 && quantity >= 1))
 		return false;
 
 	loadout_entry->amount++;
@@ -814,7 +815,7 @@ void Item_OnTouch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t* sur
 
 //======================================================================
 
-static void drop_temp_touch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t* surf)
+static void Item_DropTouchTemp(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t* surf)
 {
 	if (other == ent->owner)
 		return;
@@ -868,7 +869,7 @@ edict_t* Item_Drop(edict_t* ent, gitem_t* item)
 	gi.setmodel(dropped, dropped->item->world_model);
 	dropped->solid = SOLID_TRIGGER;
 	dropped->movetype = MOVETYPE_TOSS;
-	dropped->touch = drop_temp_touch;
+	dropped->touch = Item_DropTouchTemp;
 	dropped->owner = ent;
 
 	if (ent->client)

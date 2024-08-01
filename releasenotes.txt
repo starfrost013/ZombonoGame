@@ -2,7 +2,7 @@ Zombono
 Release Notes:
 
 Version 0.1.0-pre2
-July XX, 2024
+August XX, 2024
 
 NEW FEATURES:
 	* Renderer API version 12
@@ -11,14 +11,14 @@ NEW FEATURES:
 		* Renamed import functions to be more consistently named and the same names as the engine when applicable
 		* Exposed Cmd_AddCommand and Cmd_RemoveCommand to the game dll (they were already exposed to the refresh dll)
 	* Camera system changes:
-		* Allowed for multiple camera angles.
+		* The camera can now take multiple angles
 		* The game now renders the view from the "vieworigin" field of pmove instead of the player origin
 			* This is set based on the current camera type - camera types are defined in the Game DLL and positions are relative to the player origin
 			* There are currently four camera types
 				* CAMERA_TYPE_NORMAL - Normal firstperson camera
 				* CAMERA_TYPE_CHASE - A third-person camera
 				* CAMERA_TYPE_TOPDOWN - A top-down camera mode :^)
-				* CAMERA_TYPE_FREE - A freecam
+				* CAMERA_TYPE_FREE - A freecam (presently unimplemented)
 		* Changed the flags for svc_playerinfo from short to int, as more than 16 bits were needed to pack in all of the flags
 	* Changed client prediction to be based on the camera origin rather than the player's origin	
 		* This is needed because the original prediction system could not distinguish between the player and the camera, leading to extremely choppy gameplay at a 10Hz tick rate when
@@ -53,7 +53,7 @@ NEW FEATURES:
 	* Made the time text larger, removed "Time: " and moved it downwards
 	* Engine limits: Increased MAX_GLTEXTURES from 1024 to 2048
 	* Netservices Framework: Changed useragent from "Zombono" to "EuphoriaEngine"
-	* Netservices Framework: Added HTTP POST as well as GET
+	* Netservices Framework: Added HTTP POST as well as GET support
 
 BUG FIXES:
 	* Fixed the game crashing on minimise
@@ -125,11 +125,11 @@ NEW FEATURES:
 	* Began work on a new main menu to replace the old one
 		* This is not very functional right now but can be toggled using +ui_newmenu 1
 	* Added two new fields to the gitem_t type, "touchable_time" and "disappear_time"
-		* Can be used to override the default one second before an item is able to be picked up, and the time from when it drops to when it disappears respectively. 
+		* Can be used to override the default one second after dropping before an item is able to be picked up, and the time from when it drops to when it disappears respectively. 
 		* Default behaviour is set when these items are set to 0.
 		* This is not presently intended for use in games but is only intended for the game code to use
 	* Updated PDJSON library to commit 78fe04b820dc8817f540bdd87fb22887e0ef3981 (February 22, 2024, and yes I'm late)
-		* This fixes an issue where position tracking could go beyond the end of the JSON file by adding more checks for EOF charactersev
+		* This fixes an issue where position tracking could go beyond the end of the JSON file by adding more checks for EOF characters within the JSON stream
 	* Renderer API version 11:
 		* The renderer now can optionally automatically find scaled assets
 		* This uses the use_scaled_assets parameters of Draw_Pic, Draw_PicStretch and Draw_PicRegion
@@ -139,7 +139,7 @@ NEW FEATURES:
 		* Added an sv_debug_heartbeat cvar that sends the heartbeat every two seconds instead of five minutes. It is only present on debug builds, to remove any outside possibility of spamming the server.
 	* Added the ability for the engine to detect when it is in graphics mode (i.e. if the renderer lib has been initalised yet)
 	* Got rid of viddef in the engine (it's now an internal OpenGL renderer cvar) and used gl_width/gl_height cvars everywhere
-	* Rendering API version 10
+	* Renderer API version 10
 		* Vid_ChangeResolution doesn't have parameters anymore
 	* Added more posters to z_tdm_labrats
 	* Added cvars to control the console

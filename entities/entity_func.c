@@ -284,11 +284,12 @@ void plat_Accelerate(moveinfo_t* moveinfo)
 
 	// are we at full speed and need to start decelerating during this move?
 	if (moveinfo->current_speed == moveinfo->move_speed)
+	{
 		if ((moveinfo->remaining_distance - moveinfo->current_speed) < moveinfo->decel_distance)
 		{
-			float	p1_distance;
-			float	p2_distance;
-			float	distance;
+			float p1_distance;
+			float p2_distance;
+			float distance;
 
 			p1_distance = moveinfo->remaining_distance - moveinfo->decel_distance;
 			p2_distance = moveinfo->move_speed * (1.0f - (p1_distance / moveinfo->move_speed));
@@ -297,6 +298,7 @@ void plat_Accelerate(moveinfo_t* moveinfo)
 			moveinfo->next_speed = moveinfo->move_speed - moveinfo->decel * (p2_distance / distance);
 			return;
 		}
+	}
 
 	// are we accelerating?
 	if (moveinfo->current_speed < moveinfo->speed)
@@ -350,7 +352,7 @@ void Think_AccelMove(edict_t* ent)
 		return;
 	}
 
-	VectorScale(ent->moveinfo.dir, ent->moveinfo.current_speed * 10, ent->velocity);
+	VectorScale(ent->moveinfo.dir, ent->moveinfo.current_speed * (1.0f/FRAMETIME), ent->velocity); // 40
 	ent->nextthink = level.time + FRAMETIME;
 	ent->think = Think_AccelMove;
 }
