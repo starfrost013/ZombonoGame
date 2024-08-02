@@ -54,6 +54,8 @@ NEW FEATURES:
 	* Engine limits: Increased MAX_GLTEXTURES from 1024 to 2048
 	* Netservices Framework: Changed useragent from "Zombono" to "EuphoriaEngine"
 	* Netservices Framework: Added HTTP POST as well as GET support
+	* UI: Added hover and pressed colours for Box controls
+		* Set with the UI_SetColorOnHover and UI_SetColorOnClick functions
 
 BUG FIXES:
 	* Fixed the game crashing on minimise
