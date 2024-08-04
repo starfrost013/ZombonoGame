@@ -416,7 +416,7 @@ void Game_RunFrame()
 
 		if (i > 0 && i <= maxclients->value)
 		{
-			Client_BeginServerFrame(ent);
+			Client_BeginServerFrame(ent); 
 			continue;
 		}
 

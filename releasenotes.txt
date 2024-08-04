@@ -56,6 +56,7 @@ NEW FEATURES:
 	* Netservices Framework: Added HTTP POST as well as GET support
 	* UI: Added hover and pressed colours for Box controls
 		* Set with the UI_SetColorOnHover and UI_SetColorOnClick functions
+	* Added arbitrary colour to text, not just color codes (color codes still override the text)
 
 BUG FIXES:
 	* Fixed the game crashing on minimise
@@ -77,6 +78,7 @@ BUG FIXES:
 	* Fixed a bug with the code that handled Game DLL changes that would restart the video and sound subsystems even if the game dll had not changed, leading to the renderer 
 	re-initialising every time after the first that the game connected to a server
 	* Fixed crash bug when picking up cells
+	* Fixed UI controls not having their size re-evaluated when their font was changed
 	* Fixed potential crash with the server WriteIP command 
 	* Fixed 620 compile warnings, 981 to go (most of them are due to the compiler being 64-bit and the default decimal type being DOUBLE instead of float)
 

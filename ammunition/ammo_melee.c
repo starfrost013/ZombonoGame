@@ -36,19 +36,19 @@ bool Ammo_Melee(edict_t* self, vec3_t attack_radius, int32_t damage, int32_t kic
 	vec3_t		forward, right, up;
 	vec3_t		v;
 	vec3_t		point;
-	float		AI_GetRange;
+	float		range;
 	vec3_t		dir;
 
 	//see if enemy is in range
 	VectorSubtract(self->enemy->s.origin, self->s.origin, dir);
-	AI_GetRange = VectorLength(dir);
-	if (AI_GetRange > attack_radius[0])
+	range = VectorLength(dir);
+	if (range > attack_radius[0])
 		return false;
 
 	if (attack_radius[1] > self->mins[0] && attack_radius[1] < self->maxs[0])
 	{
 		// the hit is straight on so back the range up to the edge of their bbox
-		AI_GetRange -= self->enemy->maxs[0];
+		range -= self->enemy->maxs[0];
 	}
 	else
 	{
@@ -59,7 +59,7 @@ bool Ammo_Melee(edict_t* self, vec3_t attack_radius, int32_t damage, int32_t kic
 			attack_radius[1] = self->enemy->maxs[0];
 	}
 
-	VectorMA(self->s.origin, AI_GetRange, dir, point);
+	VectorMA(self->s.origin, range, dir, point);
 
 	tr = gi.trace(self->s.origin, NULL, NULL, point, self, MASK_SHOT);
 
@@ -73,7 +73,7 @@ bool Ammo_Melee(edict_t* self, vec3_t attack_radius, int32_t damage, int32_t kic
 	}
 
 	AngleVectors(self->s.angles, forward, right, up);
-	VectorMA(self->s.origin, AI_GetRange, forward, point);
+	VectorMA(self->s.origin, range, forward, point);
 	VectorMA(point, attack_radius[1], right, point);
 	VectorMA(point, attack_radius[2], up, point);
 	VectorSubtract(point, self->enemy->s.origin, dir);
