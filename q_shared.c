@@ -45,7 +45,7 @@ void RotatePointAroundVector(vec3_t dst, const vec3_t dir, const vec3_t point, f
 	vf[2] = dir[2];
 
 	PerpendicularVector(vr, dir);
-	CrossProduct(vr, vf, vup);
+	VectorCrossProduct(vr, vf, vup);
 
 	m[0][0] = vr[0];
 	m[1][0] = vr[1];
@@ -88,7 +88,6 @@ void RotatePointAroundVector(vec3_t dst, const vec3_t dir, const vec3_t point, f
 #ifdef _WIN32
 #pragma optimize( "", on )
 #endif
-
 
 
 void AngleVectors(vec3_t angles, vec3_t forward, vec3_t right, vec3_t up)
@@ -134,9 +133,9 @@ void ProjectPointOnPlane(vec3_t dst, const vec3_t p, const vec3_t normal)
 	vec3_t n;
 	float inv_denom;
 
-	inv_denom = 1.0F / DotProduct(normal, normal);
+	inv_denom = 1.0F / DotProduct3(normal, normal);
 
-	d = DotProduct(normal, p) * inv_denom;
+	d = DotProduct3(normal, p) * inv_denom;
 
 	n[0] = normal[0] * inv_denom;
 	n[1] = normal[1] * inv_denom;
@@ -179,10 +178,8 @@ void PerpendicularVector(vec3_t dst, const vec3_t src)
 	/*
 	** normalize the result
 	*/
-	VectorNormalize(dst);
+	VectorNormalize3(dst);
 }
-
-
 
 /*
 ================
@@ -211,51 +208,6 @@ void R_ConcatRotations(float in1[3][3], float in2[3][3], float out[3][3])
 		in1[2][2] * in2[2][2];
 }
 
-
-/*
-================
-R_ConcatTransforms
-================
-*/
-void R_ConcatTransforms(float in1[3][4], float in2[3][4], float out[3][4])
-{
-	out[0][0] = in1[0][0] * in2[0][0] + in1[0][1] * in2[1][0] +
-		in1[0][2] * in2[2][0];
-	out[0][1] = in1[0][0] * in2[0][1] + in1[0][1] * in2[1][1] +
-		in1[0][2] * in2[2][1];
-	out[0][2] = in1[0][0] * in2[0][2] + in1[0][1] * in2[1][2] +
-		in1[0][2] * in2[2][2];
-	out[0][3] = in1[0][0] * in2[0][3] + in1[0][1] * in2[1][3] +
-		in1[0][2] * in2[2][3] + in1[0][3];
-	out[1][0] = in1[1][0] * in2[0][0] + in1[1][1] * in2[1][0] +
-		in1[1][2] * in2[2][0];
-	out[1][1] = in1[1][0] * in2[0][1] + in1[1][1] * in2[1][1] +
-		in1[1][2] * in2[2][1];
-	out[1][2] = in1[1][0] * in2[0][2] + in1[1][1] * in2[1][2] +
-		in1[1][2] * in2[2][2];
-	out[1][3] = in1[1][0] * in2[0][3] + in1[1][1] * in2[1][3] +
-		in1[1][2] * in2[2][3] + in1[1][3];
-	out[2][0] = in1[2][0] * in2[0][0] + in1[2][1] * in2[1][0] +
-		in1[2][2] * in2[2][0];
-	out[2][1] = in1[2][0] * in2[0][1] + in1[2][1] * in2[1][1] +
-		in1[2][2] * in2[2][1];
-	out[2][2] = in1[2][0] * in2[0][2] + in1[2][1] * in2[1][2] +
-		in1[2][2] * in2[2][2];
-	out[2][3] = in1[2][0] * in2[0][3] + in1[2][1] * in2[1][3] +
-		in1[2][2] * in2[2][3] + in1[2][3];
-}
-
-
-//============================================================================
-
-
-float Q_fabs(float f)
-{
-	int32_t tmp = *(int32_t*)&f;
-	tmp &= 0x7FFFFFFF;
-	return *(float*)&tmp;
-}
-
 /*
 ===============
 LerpAngle
@@ -276,41 +228,6 @@ float anglemod(float a)
 {
 	a = (360.0f / 65536.0f) * ((int32_t)(a * (65536.0f / 360.0f)) & 65535);
 	return a;
-}
-
-int32_t 	i;
-vec3_t	corners[2];
-
-// this is the slow, general version
-int32_t BoxOnPlaneSide2(vec3_t emins, vec3_t emaxs, struct cplane_s* p)
-{
-	int32_t 	i;
-	float	dist1, dist2;
-	int32_t 	sides;
-	vec3_t	corners[2];
-
-	for (i = 0; i < 3; i++)
-	{
-		if (p->normal[i] < 0)
-		{
-			corners[0][i] = emins[i];
-			corners[1][i] = emaxs[i];
-		}
-		else
-		{
-			corners[1][i] = emins[i];
-			corners[0][i] = emaxs[i];
-		}
-	}
-	dist1 = DotProduct(p->normal, corners[0]) - p->dist;
-	dist2 = DotProduct(p->normal, corners[1]) - p->dist;
-	sides = 0;
-	if (dist1 >= 0)
-		sides = 1;
-	if (dist2 < 0)
-		sides |= 2;
-
-	return sides;
 }
 
 /*
@@ -388,15 +305,9 @@ int32_t BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, struct cplane_s* p)
 	return sides;
 }
 
-void ClearBounds(vec3_t mins, vec3_t maxs)
+void VectorAddPointToBounds3(vec3_t v, vec3_t mins, vec3_t maxs)
 {
-	mins[0] = mins[1] = mins[2] = 99999;
-	maxs[0] = maxs[1] = maxs[2] = -99999;
-}
-
-void AddPointToBounds(vec3_t v, vec3_t mins, vec3_t maxs)
-{
-	int32_t 	i;
+	int32_t i;
 	vec_t	val;
 
 	for (i = 0; i < 3; i++)
@@ -409,22 +320,42 @@ void AddPointToBounds(vec3_t v, vec3_t mins, vec3_t maxs)
 	}
 }
 
-
-int32_t VectorCompare(vec3_t v1, vec3_t v2)
+void VectorAddPointToBounds4(vec4_t v, vec4_t mins, vec4_t maxs)
 {
-	if (v1[0] != v2[0] || v1[1] != v2[1] || v1[2] != v2[2])
-		return 0;
+	int32_t i;
+	vec_t	val;
 
-	return 1;
+	for (i = 0; i < 4; i++)
+	{
+		val = v[i];
+		if (val < mins[i])
+			mins[i] = val;
+		if (val > maxs[i])
+			maxs[i] = val;
+	}
 }
 
-
-vec_t VectorNormalize(vec3_t v)
+bool VectorCompare3(vec3_t v1, vec3_t v2)
 {
-	float	length, ilength;
+	if (v1[0] != v2[0] || v1[1] != v2[1] || v1[2] != v2[2])
+		return false;
 
-	length = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
-	length = sqrtf(length);		// FIXME
+	return true;
+}
+
+bool VectorCompare4(vec4_t v1, vec4_t v2)
+{
+	if (v1[0] != v2[0] || v1[1] != v2[1] || v1[2] != v2[2] || v1[3] != v2[3])
+		return false;
+
+	return true;
+}
+
+vec_t VectorNormalize3(vec3_t v)
+{
+	float length, ilength;
+
+	length = sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 
 	if (length)
 	{
@@ -438,42 +369,48 @@ vec_t VectorNormalize(vec3_t v)
 
 }
 
-vec_t VectorNormalize2(vec3_t v, vec3_t out)
+vec_t VectorNormalize4(vec4_t v)
 {
 	float length, ilength;
 
-	length = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
-	length = (float)sqrt(length);		// FIXME
+	length = sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2] + v[3]);
 
 	if (length)
 	{
 		ilength = 1 / length;
-		out[0] = v[0] * ilength;
-		out[1] = v[1] * ilength;
-		out[2] = v[2] * ilength;
+		v[0] *= ilength;
+		v[1] *= ilength;
+		v[2] *= ilength;
+		v[3] *= ilength;
 	}
 
 	return length;
 
 }
 
-void VectorMA(vec3_t veca, float scale, vec3_t vecb, vec3_t vecc)
+void VectorMA3(vec3_t veca, float scale, vec3_t vecb, vec3_t vecc)
 {
 	vecc[0] = veca[0] + scale * vecb[0];
 	vecc[1] = veca[1] + scale * vecb[1];
 	vecc[2] = veca[2] + scale * vecb[2];
 }
 
-void CrossProduct(vec3_t v1, vec3_t v2, vec3_t cross)
+void VectorMA4(vec4_t veca, float scale, vec4_t vecb, vec4_t vecc)
+{
+	vecc[0] = veca[0] + scale * vecb[0];
+	vecc[1] = veca[1] + scale * vecb[1];
+	vecc[2] = veca[2] + scale * vecb[2];
+	vecc[3] = veca[3] + scale * vecb[3];
+}
+
+void VectorCrossProduct(vec3_t v1, vec3_t v2, vec3_t cross)
 {
 	cross[0] = v1[1] * v2[2] - v1[2] * v2[1];
 	cross[1] = v1[2] * v2[0] - v1[0] * v2[2];
 	cross[2] = v1[0] * v2[1] - v1[1] * v2[0];
 }
 
-double sqrt(double x);
-
-vec_t VectorLength(vec3_t v)
+vec_t VectorLength3(vec3_t v)
 {
 	int32_t 	i;
 	float	length;
@@ -486,27 +423,48 @@ vec_t VectorLength(vec3_t v)
 	return length;
 }
 
-void VectorInverse(vec3_t v)
+vec_t VectorLength4(vec4_t v)
+{
+	int32_t i;
+	float	length;
+
+	length = 0;
+	for (i = 0; i < 4; i++)
+		length += v[i] * v[i];
+	length = sqrtf(length);		// FIXME
+
+	return length;
+}
+
+
+void VectorInverse3(vec3_t v)
 {
 	v[0] = -v[0];
 	v[1] = -v[1];
 	v[2] = -v[2];
 }
 
-void VectorScale(vec3_t in, vec_t scale, vec3_t out)
+void VectorInverse4(vec4_t v)
+{
+	v[0] = -v[0];
+	v[1] = -v[1];
+	v[2] = -v[2];
+	v[3] = -v[3];
+}
+
+void VectorScale3(vec3_t in, vec_t scale, vec3_t out)
 {
 	out[0] = in[0] * scale;
 	out[1] = in[1] * scale;
 	out[2] = in[2] * scale;
 }
 
-
-int32_t Q_log2(int32_t val)
+void VectorScale4(vec4_t in, vec_t scale, vec4_t out)
 {
-	int32_t answer = 0;
-	while (val >>= 1)
-		answer++;
-	return answer;
+	out[0] = in[0] * scale;
+	out[1] = in[1] * scale;
+	out[2] = in[2] * scale;
+	out[3] = in[3] * scale;
 }
 
 

@@ -864,8 +864,8 @@ edict_t* Item_Drop(edict_t* ent, gitem_t* item)
 	dropped->spawnflags = DROPPED_ITEM;
 	dropped->s.effects = item->world_model_flags;
 	dropped->s.renderfx = RF_GLOW;
-	VectorSet(dropped->mins, -15, -15, -15);
-	VectorSet(dropped->maxs, 15, 15, 15);
+	VectorSet3(dropped->mins, -15, -15, -15);
+	VectorSet3(dropped->maxs, 15, 15, 15);
 	gi.setmodel(dropped, dropped->item->world_model);
 	dropped->solid = SOLID_TRIGGER;
 	dropped->movetype = MOVETYPE_TOSS;
@@ -877,19 +877,19 @@ edict_t* Item_Drop(edict_t* ent, gitem_t* item)
 		trace_t	trace;
 
 		AngleVectors(ent->client->v_angle, forward, right, NULL);
-		VectorSet(offset, 24, 0, -16);
+		VectorSet3(offset, 24, 0, -16);
 		Game_ProjectSource(ent->s.origin, offset, forward, right, dropped->s.origin);
 		trace = gi.trace(ent->s.origin, dropped->mins, dropped->maxs,
 			dropped->s.origin, ent, CONTENTS_SOLID);
-		VectorCopy(trace.endpos, dropped->s.origin);
+		VectorCopy3(trace.endpos, dropped->s.origin);
 	}
 	else
 	{
 		AngleVectors(ent->s.angles, forward, right, NULL);
-		VectorCopy(ent->s.origin, dropped->s.origin);
+		VectorCopy3(ent->s.origin, dropped->s.origin);
 	}
 
-	VectorScale(forward, 100, dropped->velocity);
+	VectorScale3(forward, 100, dropped->velocity);
 	dropped->velocity[2] = 300;
 
 	dropped->think = Item_DropMakeTouchable;
@@ -937,9 +937,9 @@ void Item_DropToFloor(edict_t* ent)
 	float* v;
 
 	v = tv(-15, -15, -15);
-	VectorCopy(v, ent->mins);
+	VectorCopy3(v, ent->mins);
 	v = tv(15, 15, 15);
-	VectorCopy(v, ent->maxs);
+	VectorCopy3(v, ent->maxs);
 
 	if (ent->model)
 		gi.setmodel(ent, ent->model);
@@ -950,7 +950,7 @@ void Item_DropToFloor(edict_t* ent)
 	ent->touch = Item_OnTouch;
 
 	v = tv(0, 0, -128);
-	VectorAdd(ent->s.origin, v, dest);
+	VectorAdd3(ent->s.origin, v, dest);
 
 	tr = gi.trace(ent->s.origin, ent->mins, ent->maxs, dest, ent, MASK_SOLID);
 	if (tr.startsolid)
@@ -960,7 +960,7 @@ void Item_DropToFloor(edict_t* ent)
 		return;
 	}
 
-	VectorCopy(tr.endpos, ent->s.origin);
+	VectorCopy3(tr.endpos, ent->s.origin);
 
 	if (ent->team)
 	{

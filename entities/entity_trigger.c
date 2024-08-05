@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void InitTrigger(edict_t* self)
 {
-	if (!VectorCompare(self->s.angles, vec3_origin))
+	if (!VectorCompare3(self->s.angles, vec3_origin))
 		Edict_SetMovedir(self->s.angles, self->movedir);
 
 	self->solid = SOLID_TRIGGER;
@@ -84,12 +84,12 @@ void Touch_Multi(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* sur
 	else
 		return;
 
-	if (!VectorCompare(self->movedir, vec3_origin))
+	if (!VectorCompare3(self->movedir, vec3_origin))
 	{
 		vec3_t	forward;
 
 		AngleVectors(other->s.angles, forward, NULL, NULL);
-		if (DotProduct(forward, self->movedir) < 0)
+		if (DotProduct3(forward, self->movedir) < 0)
 			return;
 	}
 
@@ -142,7 +142,7 @@ void SP_trigger_multiple(edict_t* ent)
 		ent->use = Use_Multi;
 	}
 
-	if (!VectorCompare(ent->s.angles, vec3_origin))
+	if (!VectorCompare3(ent->s.angles, vec3_origin))
 		Edict_SetMovedir(ent->s.angles, ent->movedir);
 
 	gi.setmodel(ent, ent->model);
@@ -173,7 +173,7 @@ void SP_trigger_once(edict_t* ent)
 	{
 		vec3_t	v;
 
-		VectorMA(ent->mins, 0.5, ent->size, v);
+		VectorMA3(ent->mins, 0.5, ent->size, v);
 		ent->spawnflags &= ~1;
 		ent->spawnflags |= 4;
 		gi.dprintf("fixed TRIGGERED flag on %s at %s\n", ent->classname, vtos(v));
@@ -285,16 +285,16 @@ void trigger_push_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface
 {
 	if (strcmp(other->classname, "grenade") == 0)
 	{
-		VectorScale(self->movedir, self->speed * 10, other->velocity);
+		VectorScale3(self->movedir, self->speed * 10, other->velocity);
 	}
 	else if (other->health > 0)
 	{
-		VectorScale(self->movedir, self->speed * 10, other->velocity);
+		VectorScale3(self->movedir, self->speed * 10, other->velocity);
 
 		if (other->client)
 		{
 			// don't take falling damage immediately from this
-			VectorCopy(other->velocity, other->client->oldvelocity);
+			VectorCopy3(other->velocity, other->client->oldvelocity);
 			if (other->fly_sound_debounce_time < level.time)
 			{
 				other->fly_sound_debounce_time = level.time + 1.5f;

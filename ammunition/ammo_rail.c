@@ -36,8 +36,8 @@ void Ammo_Rail(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32
 	int			mask;
 	bool	water;
 
-	VectorMA(start, 8192, aimdir, end);
-	VectorCopy(start, from);
+	VectorMA3(start, 8192, aimdir, end);
+	VectorCopy3(start, from);
 	ignore = self;
 	water = false;
 	mask = MASK_SHOT | CONTENTS_SLIME | CONTENTS_LAVA;
@@ -63,7 +63,7 @@ void Ammo_Rail(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32
 				Player_Damage(tr.ent, self, self, aimdir, tr.endpos, tr.plane.normal, damage, kick, 0, MOD_RAILGUN);
 		}
 
-		VectorCopy(tr.endpos, from);
+		VectorCopy3(tr.endpos, from);
 	}
 
 	// send gun puff / flash

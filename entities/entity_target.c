@@ -331,14 +331,14 @@ void use_target_spawner(edict_t* self, edict_t* other, edict_t* activator)
 
 	ent = Edict_Spawn();
 	ent->classname = self->target;
-	VectorCopy(self->s.origin, ent->s.origin);
-	VectorCopy(self->s.angles, ent->s.angles);
+	VectorCopy3(self->s.origin, ent->s.origin);
+	VectorCopy3(self->s.angles, ent->s.angles);
 	ED_CallSpawn(ent);
 	gi.Edict_Unlink(ent);
 	Game_KillBox(ent);
 	gi.Edict_Link(ent);
 	if (self->speed)
-		VectorCopy(self->movedir, ent->velocity);
+		VectorCopy3(self->movedir, ent->velocity);
 }
 
 void SP_target_spawner(edict_t* self)
@@ -348,7 +348,7 @@ void SP_target_spawner(edict_t* self)
 	if (self->speed)
 	{
 		Edict_SetMovedir(self->s.angles, self->movedir);
-		VectorScale(self->movedir, self->speed, self->movedir);
+		VectorScale3(self->movedir, self->speed, self->movedir);
 	}
 }
 
@@ -457,17 +457,17 @@ void target_laser_think(edict_t* self)
 
 	if (self->enemy)
 	{
-		VectorCopy(self->movedir, last_movedir);
-		VectorMA(self->enemy->absmin, 0.5, self->enemy->size, point);
-		VectorSubtract(point, self->s.origin, self->movedir);
-		VectorNormalize(self->movedir);
-		if (!VectorCompare(self->movedir, last_movedir))
+		VectorCopy3(self->movedir, last_movedir);
+		VectorMA3(self->enemy->absmin, 0.5, self->enemy->size, point);
+		VectorSubtract3(point, self->s.origin, self->movedir);
+		VectorNormalize3(self->movedir);
+		if (!VectorCompare3(self->movedir, last_movedir))
 			self->spawnflags |= 0x80000000;
 	}
 
 	ignore = self;
-	VectorCopy(self->s.origin, start);
-	VectorMA(start, 2048, self->movedir, end);
+	VectorCopy3(self->s.origin, start);
+	VectorMA3(start, 2048, self->movedir, end);
 	while (1)
 	{
 		tr = gi.trace(start, NULL, NULL, end, ignore, CONTENTS_SOLID | CONTENTS_MONSTER | CONTENTS_DEADMONSTER);
@@ -516,10 +516,10 @@ void target_laser_think(edict_t* self)
 		}
 
 		ignore = tr.ent;
-		VectorCopy(tr.endpos, start);
+		VectorCopy3(tr.endpos, start);
 	}
 
-	VectorCopy(tr.endpos, self->s.old_origin);
+	VectorCopy3(tr.endpos, self->s.old_origin);
 
 	self->nextthink = level.time + FRAMETIME;
 }
@@ -584,8 +584,8 @@ void target_laser_start(edict_t* self)
 	if (!self->dmg)
 		self->dmg = 1;
 
-	VectorSet(self->mins, -8, -8, -8);
-	VectorSet(self->maxs, 8, 8, 8);
+	VectorSet3(self->mins, -8, -8, -8);
+	VectorSet3(self->maxs, 8, 8, 8);
 	gi.Edict_Link(self);
 
 	if (self->spawnflags & 1)

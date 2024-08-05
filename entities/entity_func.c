@@ -76,7 +76,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void Move_Done(edict_t* ent)
 {
-	VectorClear(ent->velocity);
+	VectorClear3(ent->velocity);
 	ent->moveinfo.endfunc(ent);
 }
 
@@ -88,7 +88,7 @@ void Move_Final(edict_t* ent)
 		return;
 	}
 
-	VectorScale(ent->moveinfo.dir, ent->moveinfo.remaining_distance / FRAMETIME, ent->velocity);
+	VectorScale3(ent->moveinfo.dir, ent->moveinfo.remaining_distance / FRAMETIME, ent->velocity);
 
 	ent->think = Move_Done;
 	ent->nextthink = level.time + FRAMETIME;
@@ -103,7 +103,7 @@ void Move_Begin(edict_t* ent)
 		Move_Final(ent);
 		return;
 	}
-	VectorScale(ent->moveinfo.dir, ent->moveinfo.speed, ent->velocity);
+	VectorScale3(ent->moveinfo.dir, ent->moveinfo.speed, ent->velocity);
 
 	// scale by static (0.1f/FRAMETIME) to scale for tickrate
 	frames = floorf((ent->moveinfo.remaining_distance / ent->moveinfo.speed) / FRAMETIME);
@@ -117,9 +117,9 @@ void Think_AccelMove(edict_t* ent);
 
 void Move_Calc(edict_t* ent, vec3_t dest, void(*func)(edict_t*))
 {
-	VectorClear(ent->velocity);
-	VectorSubtract(dest, ent->s.origin, ent->moveinfo.dir);
-	ent->moveinfo.remaining_distance = VectorNormalize(ent->moveinfo.dir);
+	VectorClear3(ent->velocity);
+	VectorSubtract3(dest, ent->s.origin, ent->moveinfo.dir);
+	ent->moveinfo.remaining_distance = VectorNormalize3(ent->moveinfo.dir);
 	ent->moveinfo.endfunc = func;
 
 	if (ent->moveinfo.speed == ent->moveinfo.accel && ent->moveinfo.speed == ent->moveinfo.decel)
@@ -150,7 +150,7 @@ void Move_Calc(edict_t* ent, vec3_t dest, void(*func)(edict_t*))
 
 void AngleMove_Done(edict_t* ent)
 {
-	VectorClear(ent->avelocity);
+	VectorClear3(ent->avelocity);
 	ent->moveinfo.endfunc(ent);
 }
 
@@ -159,17 +159,17 @@ void AngleMove_Final(edict_t* ent)
 	vec3_t	move;
 
 	if (ent->moveinfo.state == STATE_UP)
-		VectorSubtract(ent->moveinfo.end_angles, ent->s.angles, move);
+		VectorSubtract3(ent->moveinfo.end_angles, ent->s.angles, move);
 	else
-		VectorSubtract(ent->moveinfo.start_angles, ent->s.angles, move);
+		VectorSubtract3(ent->moveinfo.start_angles, ent->s.angles, move);
 
-	if (VectorCompare(move, vec3_origin))
+	if (VectorCompare3(move, vec3_origin))
 	{
 		AngleMove_Done(ent);
 		return;
 	}
 
-	VectorScale(move, 1.0 / FRAMETIME, ent->avelocity);
+	VectorScale3(move, 1.0 / FRAMETIME, ent->avelocity);
 
 	ent->think = AngleMove_Done;
 	ent->nextthink = level.time + FRAMETIME;
@@ -184,12 +184,12 @@ void AngleMove_Begin(edict_t* ent)
 
 	// set destdelta to the vector needed to move
 	if (ent->moveinfo.state == STATE_UP)
-		VectorSubtract(ent->moveinfo.end_angles, ent->s.angles, destdelta);
+		VectorSubtract3(ent->moveinfo.end_angles, ent->s.angles, destdelta);
 	else
-		VectorSubtract(ent->moveinfo.start_angles, ent->s.angles, destdelta);
+		VectorSubtract3(ent->moveinfo.start_angles, ent->s.angles, destdelta);
 
 	// calculate length of vector
-	len = VectorLength(destdelta);
+	len = VectorLength3(destdelta);
 
 	// divide by speed to get time to reach dest
 	traveltime = len / ent->moveinfo.speed;
@@ -203,7 +203,7 @@ void AngleMove_Begin(edict_t* ent)
 	frames = floorf(traveltime / FRAMETIME);
 
 	// scale the destdelta vector by the time spent traveling to get velocity
-	VectorScale(destdelta, 1.0 / traveltime, ent->avelocity);
+	VectorScale3(destdelta, 1.0 / traveltime, ent->avelocity);
 
 	// set nextthink to trigger a think when dest is reached
 	ent->nextthink = level.time + frames * FRAMETIME;
@@ -212,7 +212,7 @@ void AngleMove_Begin(edict_t* ent)
 
 void AngleMove_Calc(edict_t* ent, void(*func)(edict_t*))
 {
-	VectorClear(ent->avelocity);
+	VectorClear3(ent->avelocity);
 	ent->moveinfo.endfunc = func;
 	if (level.current_entity == ((ent->flags & FL_TEAMSLAVE) ? ent->teammaster : ent))
 	{
@@ -352,7 +352,7 @@ void Think_AccelMove(edict_t* ent)
 		return;
 	}
 
-	VectorScale(ent->moveinfo.dir, ent->moveinfo.current_speed * (1.0f/FRAMETIME), ent->velocity); // 40
+	VectorScale3(ent->moveinfo.dir, ent->moveinfo.current_speed * (1.0f/FRAMETIME), ent->velocity); // 40
 	ent->nextthink = level.time + FRAMETIME;
 	ent->think = Think_AccelMove;
 }
@@ -491,8 +491,8 @@ void plat_spawn_inside_trigger(edict_t* ent)
 		tmax[1] = tmin[1] + 1;
 	}
 
-	VectorCopy(tmin, trigger->mins);
-	VectorCopy(tmax, trigger->maxs);
+	VectorCopy3(tmin, trigger->mins);
+	VectorCopy3(tmax, trigger->maxs);
 
 	gi.Edict_Link(trigger);
 }
@@ -517,7 +517,7 @@ Set "sounds" to one of the following:
 */
 void SP_func_plat(edict_t* ent)
 {
-	VectorClear(ent->s.angles);
+	VectorClear3(ent->s.angles);
 	ent->solid = SOLID_BSP;
 	ent->movetype = MOVETYPE_PUSH;
 
@@ -547,8 +547,8 @@ void SP_func_plat(edict_t* ent)
 		st.lip = 8;
 
 	// pos1 is the top position, pos2 is the bottom
-	VectorCopy(ent->s.origin, ent->pos1);
-	VectorCopy(ent->s.origin, ent->pos2);
+	VectorCopy3(ent->s.origin, ent->pos1);
+	VectorCopy3(ent->s.origin, ent->pos2);
 	if (st.height)
 		ent->pos2[2] -= st.height;
 	else
@@ -564,7 +564,7 @@ void SP_func_plat(edict_t* ent)
 	}
 	else
 	{
-		VectorCopy(ent->pos2, ent->s.origin);
+		VectorCopy3(ent->pos2, ent->s.origin);
 		gi.Edict_Link(ent);
 		ent->moveinfo.state = STATE_BOTTOM;
 	}
@@ -573,10 +573,10 @@ void SP_func_plat(edict_t* ent)
 	ent->moveinfo.accel = ent->accel;
 	ent->moveinfo.decel = ent->decel;
 	ent->moveinfo.wait = ent->wait;
-	VectorCopy(ent->pos1, ent->moveinfo.start_origin);
-	VectorCopy(ent->s.angles, ent->moveinfo.start_angles);
-	VectorCopy(ent->pos2, ent->moveinfo.end_origin);
-	VectorCopy(ent->s.angles, ent->moveinfo.end_angles);
+	VectorCopy3(ent->pos1, ent->moveinfo.start_origin);
+	VectorCopy3(ent->s.angles, ent->moveinfo.start_angles);
+	VectorCopy3(ent->pos2, ent->moveinfo.end_origin);
+	VectorCopy3(ent->s.angles, ent->moveinfo.end_angles);
 
 	ent->moveinfo.sound_start = gi.soundindex("plats/pt1_strt.wav");
 	ent->moveinfo.sound_middle = gi.soundindex("plats/pt1_mid.wav");
@@ -610,16 +610,16 @@ void rotating_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* 
 
 void rotating_use(edict_t* self, edict_t* other, edict_t* activator)
 {
-	if (!VectorCompare(self->avelocity, vec3_origin))
+	if (!VectorCompare3(self->avelocity, vec3_origin))
 	{
 		self->s.sound = 0;
-		VectorClear(self->avelocity);
+		VectorClear3(self->avelocity);
 		self->touch = NULL;
 	}
 	else
 	{
 		self->s.sound = self->moveinfo.sound_middle;
-		VectorScale(self->movedir, self->speed, self->avelocity);
+		VectorScale3(self->movedir, self->speed, self->avelocity);
 		if (self->spawnflags & 16)
 			self->touch = rotating_touch;
 	}
@@ -634,7 +634,7 @@ void SP_func_rotating(edict_t* ent)
 		ent->movetype = MOVETYPE_PUSH;
 
 	// set the axis of rotation
-	VectorClear(ent->movedir);
+	VectorClear3(ent->movedir);
 	if (ent->spawnflags & 4)
 		ent->movedir[2] = 1.0;
 	else if (ent->spawnflags & 8)
@@ -644,7 +644,7 @@ void SP_func_rotating(edict_t* ent)
 
 	// check for reverse rotation
 	if (ent->spawnflags & 2)
-		VectorNegate(ent->movedir, ent->movedir);
+		VectorNegate3(ent->movedir, ent->movedir);
 
 	if (!ent->speed)
 		ent->speed = 100;
@@ -790,12 +790,12 @@ void SP_func_button(edict_t* ent)
 	if (!st.lip)
 		st.lip = 4;
 
-	VectorCopy(ent->s.origin, ent->pos1);
+	VectorCopy3(ent->s.origin, ent->pos1);
 	abs_movedir[0] = fabsf(ent->movedir[0]);
 	abs_movedir[1] = fabsf(ent->movedir[1]);
 	abs_movedir[2] = fabsf(ent->movedir[2]);
 	dist = abs_movedir[0] * ent->size[0] + abs_movedir[1] * ent->size[1] + abs_movedir[2] * ent->size[2] - st.lip;
-	VectorMA(ent->pos1, dist, ent->movedir, ent->pos2);
+	VectorMA3(ent->pos1, dist, ent->movedir, ent->pos2);
 
 	ent->use = button_use;
 	ent->s.effects |= EF_ANIM01;
@@ -815,10 +815,10 @@ void SP_func_button(edict_t* ent)
 	ent->moveinfo.accel = ent->accel;
 	ent->moveinfo.decel = ent->decel;
 	ent->moveinfo.wait = ent->wait;
-	VectorCopy(ent->pos1, ent->moveinfo.start_origin);
-	VectorCopy(ent->s.angles, ent->moveinfo.start_angles);
-	VectorCopy(ent->pos2, ent->moveinfo.end_origin);
-	VectorCopy(ent->s.angles, ent->moveinfo.end_angles);
+	VectorCopy3(ent->pos1, ent->moveinfo.start_origin);
+	VectorCopy3(ent->s.angles, ent->moveinfo.start_angles);
+	VectorCopy3(ent->pos2, ent->moveinfo.end_origin);
+	VectorCopy3(ent->s.angles, ent->moveinfo.end_angles);
 
 	gi.Edict_Link(ent);
 }
@@ -1048,13 +1048,13 @@ void Think_SpawnDoorTrigger(edict_t* ent)
 	if (ent->flags & FL_TEAMSLAVE)
 		return;		// only the team leader spawns a trigger
 
-	VectorCopy(ent->absmin, mins);
-	VectorCopy(ent->absmax, maxs);
+	VectorCopy3(ent->absmin, mins);
+	VectorCopy3(ent->absmax, maxs);
 
 	for (other = ent->teamchain; other; other = other->teamchain)
 	{
-		AddPointToBounds(other->absmin, mins, maxs);
-		AddPointToBounds(other->absmax, mins, maxs);
+		VectorAddPointToBounds3(other->absmin, mins, maxs);
+		VectorAddPointToBounds3(other->absmax, mins, maxs);
 	}
 
 	// expand 
@@ -1064,8 +1064,8 @@ void Think_SpawnDoorTrigger(edict_t* ent)
 	maxs[1] += 60;
 
 	other = Edict_Spawn();
-	VectorCopy(mins, other->mins);
-	VectorCopy(maxs, other->maxs);
+	VectorCopy3(mins, other->mins);
+	VectorCopy3(maxs, other->maxs);
 	other->owner = ent;
 	other->solid = SOLID_TRIGGER;
 	other->movetype = MOVETYPE_NONE;
@@ -1187,19 +1187,19 @@ void SP_func_door(edict_t* ent)
 		ent->dmg = 2;
 
 	// calculate second position
-	VectorCopy(ent->s.origin, ent->pos1);
+	VectorCopy3(ent->s.origin, ent->pos1);
 	abs_movedir[0] = fabsf(ent->movedir[0]);
 	abs_movedir[1] = fabsf(ent->movedir[1]);
 	abs_movedir[2] = fabsf(ent->movedir[2]);
 	ent->moveinfo.distance = abs_movedir[0] * ent->size[0] + abs_movedir[1] * ent->size[1] + abs_movedir[2] * ent->size[2] - st.lip;
-	VectorMA(ent->pos1, ent->moveinfo.distance, ent->movedir, ent->pos2);
+	VectorMA3(ent->pos1, ent->moveinfo.distance, ent->movedir, ent->pos2);
 
 	// if it starts open, switch the positions
 	if (ent->spawnflags & DOOR_START_OPEN)
 	{
-		VectorCopy(ent->pos2, ent->s.origin);
-		VectorCopy(ent->pos1, ent->pos2);
-		VectorCopy(ent->s.origin, ent->pos1);
+		VectorCopy3(ent->pos2, ent->s.origin);
+		VectorCopy3(ent->pos1, ent->pos2);
+		VectorCopy3(ent->s.origin, ent->pos1);
 	}
 
 	ent->moveinfo.state = STATE_BOTTOM;
@@ -1220,10 +1220,10 @@ void SP_func_door(edict_t* ent)
 	ent->moveinfo.accel = ent->accel;
 	ent->moveinfo.decel = ent->decel;
 	ent->moveinfo.wait = ent->wait;
-	VectorCopy(ent->pos1, ent->moveinfo.start_origin);
-	VectorCopy(ent->s.angles, ent->moveinfo.start_angles);
-	VectorCopy(ent->pos2, ent->moveinfo.end_origin);
-	VectorCopy(ent->s.angles, ent->moveinfo.end_angles);
+	VectorCopy3(ent->pos1, ent->moveinfo.start_origin);
+	VectorCopy3(ent->s.angles, ent->moveinfo.start_angles);
+	VectorCopy3(ent->pos2, ent->moveinfo.end_origin);
+	VectorCopy3(ent->s.angles, ent->moveinfo.end_angles);
 
 	if (ent->spawnflags & 16)
 		ent->s.effects |= EF_ANIM_ALL;
@@ -1275,10 +1275,10 @@ REVERSE will cause the door to rotate in the opposite direction.
 
 void SP_func_door_rotating(edict_t* ent)
 {
-	VectorClear(ent->s.angles);
+	VectorClear3(ent->s.angles);
 
 	// set the axis of rotation
-	VectorClear(ent->movedir);
+	VectorClear3(ent->movedir);
 	if (ent->spawnflags & DOOR_X_AXIS)
 		ent->movedir[2] = 1.0;
 	else if (ent->spawnflags & DOOR_Y_AXIS)
@@ -1288,7 +1288,7 @@ void SP_func_door_rotating(edict_t* ent)
 
 	// check for reverse rotation
 	if (ent->spawnflags & DOOR_REVERSE)
-		VectorNegate(ent->movedir, ent->movedir);
+		VectorNegate3(ent->movedir, ent->movedir);
 
 	if (!st.distance)
 	{
@@ -1296,8 +1296,8 @@ void SP_func_door_rotating(edict_t* ent)
 		st.distance = 90;
 	}
 
-	VectorCopy(ent->s.angles, ent->pos1);
-	VectorMA(ent->s.angles, st.distance, ent->movedir, ent->pos2);
+	VectorCopy3(ent->s.angles, ent->pos1);
+	VectorMA3(ent->s.angles, st.distance, ent->movedir, ent->pos2);
 	ent->moveinfo.distance = st.distance;
 
 	ent->movetype = MOVETYPE_PUSH;
@@ -1329,10 +1329,10 @@ void SP_func_door_rotating(edict_t* ent)
 	// if it starts open, switch the positions
 	if (ent->spawnflags & DOOR_START_OPEN)
 	{
-		VectorCopy(ent->pos2, ent->s.angles);
-		VectorCopy(ent->pos1, ent->pos2);
-		VectorCopy(ent->s.angles, ent->pos1);
-		VectorNegate(ent->movedir, ent->movedir);
+		VectorCopy3(ent->pos2, ent->s.angles);
+		VectorCopy3(ent->pos1, ent->pos2);
+		VectorCopy3(ent->s.angles, ent->pos1);
+		VectorNegate3(ent->movedir, ent->movedir);
 	}
 
 	if (ent->health)
@@ -1353,10 +1353,10 @@ void SP_func_door_rotating(edict_t* ent)
 	ent->moveinfo.accel = ent->accel;
 	ent->moveinfo.decel = ent->decel;
 	ent->moveinfo.wait = ent->wait;
-	VectorCopy(ent->s.origin, ent->moveinfo.start_origin);
-	VectorCopy(ent->pos1, ent->moveinfo.start_angles);
-	VectorCopy(ent->s.origin, ent->moveinfo.end_origin);
-	VectorCopy(ent->pos2, ent->moveinfo.end_angles);
+	VectorCopy3(ent->s.origin, ent->moveinfo.start_origin);
+	VectorCopy3(ent->pos1, ent->moveinfo.start_angles);
+	VectorCopy3(ent->s.origin, ent->moveinfo.end_origin);
+	VectorCopy3(ent->pos2, ent->moveinfo.end_angles);
 
 	if (ent->spawnflags & 16)
 		ent->s.effects |= EF_ANIM_ALL;
@@ -1416,25 +1416,25 @@ void SP_func_water(edict_t* self)
 	}
 
 	// calculate second position
-	VectorCopy(self->s.origin, self->pos1);
+	VectorCopy3(self->s.origin, self->pos1);
 	abs_movedir[0] = fabsf(self->movedir[0]);
 	abs_movedir[1] = fabsf(self->movedir[1]);
 	abs_movedir[2] = fabsf(self->movedir[2]);
 	self->moveinfo.distance = abs_movedir[0] * self->size[0] + abs_movedir[1] * self->size[1] + abs_movedir[2] * self->size[2] - st.lip;
-	VectorMA(self->pos1, self->moveinfo.distance, self->movedir, self->pos2);
+	VectorMA3(self->pos1, self->moveinfo.distance, self->movedir, self->pos2);
 
 	// if it starts open, switch the positions
 	if (self->spawnflags & DOOR_START_OPEN)
 	{
-		VectorCopy(self->pos2, self->s.origin);
-		VectorCopy(self->pos1, self->pos2);
-		VectorCopy(self->s.origin, self->pos1);
+		VectorCopy3(self->pos2, self->s.origin);
+		VectorCopy3(self->pos1, self->pos2);
+		VectorCopy3(self->s.origin, self->pos1);
 	}
 
-	VectorCopy(self->pos1, self->moveinfo.start_origin);
-	VectorCopy(self->s.angles, self->moveinfo.start_angles);
-	VectorCopy(self->pos2, self->moveinfo.end_origin);
-	VectorCopy(self->s.angles, self->moveinfo.end_angles);
+	VectorCopy3(self->pos1, self->moveinfo.start_origin);
+	VectorCopy3(self->s.angles, self->moveinfo.start_angles);
+	VectorCopy3(self->pos2, self->moveinfo.end_origin);
+	VectorCopy3(self->s.angles, self->moveinfo.end_angles);
 
 	self->moveinfo.state = STATE_BOTTOM;
 
@@ -1523,7 +1523,7 @@ void train_wait(edict_t* self)
 		{
 			train_next(self);
 			self->spawnflags &= ~TRAIN_START_ON;
-			VectorClear(self->velocity);
+			VectorClear3(self->velocity);
 			self->nextthink = 0;
 		}
 
@@ -1579,8 +1579,8 @@ again:
 			return;
 		}
 		first = false;
-		VectorSubtract(ent->s.origin, self->mins, self->s.origin);
-		VectorCopy(self->s.origin, self->s.old_origin);
+		VectorSubtract3(ent->s.origin, self->mins, self->s.origin);
+		VectorCopy3(self->s.origin, self->s.old_origin);
 		self->s.event = EV_OTHER_TELEPORT;
 		gi.Edict_Link(self);
 		goto again;
@@ -1596,10 +1596,10 @@ again:
 		self->s.sound = self->moveinfo.sound_middle;
 	}
 
-	VectorSubtract(ent->s.origin, self->mins, dest);
+	VectorSubtract3(ent->s.origin, self->mins, dest);
 	self->moveinfo.state = STATE_TOP;
-	VectorCopy(self->s.origin, self->moveinfo.start_origin);
-	VectorCopy(dest, self->moveinfo.end_origin);
+	VectorCopy3(self->s.origin, self->moveinfo.start_origin);
+	VectorCopy3(dest, self->moveinfo.end_origin);
 	Move_Calc(self, dest, train_wait);
 	self->spawnflags |= TRAIN_START_ON;
 }
@@ -1611,10 +1611,10 @@ void train_resume(edict_t* self)
 
 	ent = self->target_ent;
 
-	VectorSubtract(ent->s.origin, self->mins, dest);
+	VectorSubtract3(ent->s.origin, self->mins, dest);
 	self->moveinfo.state = STATE_TOP;
-	VectorCopy(self->s.origin, self->moveinfo.start_origin);
-	VectorCopy(dest, self->moveinfo.end_origin);
+	VectorCopy3(self->s.origin, self->moveinfo.start_origin);
+	VectorCopy3(dest, self->moveinfo.end_origin);
 	Move_Calc(self, dest, train_wait);
 	self->spawnflags |= TRAIN_START_ON;
 }
@@ -1636,7 +1636,7 @@ void func_train_find(edict_t* self)
 	}
 	self->target = ent->target;
 
-	VectorSubtract(ent->s.origin, self->mins, self->s.origin);
+	VectorSubtract3(ent->s.origin, self->mins, self->s.origin);
 	gi.Edict_Link(self);
 
 	// if not triggered, start immediately
@@ -1660,7 +1660,7 @@ void train_use(edict_t* self, edict_t* other, edict_t* activator)
 		if (!(self->spawnflags & TRAIN_TOGGLE))
 			return;
 		self->spawnflags &= ~TRAIN_START_ON;
-		VectorClear(self->velocity);
+		VectorClear3(self->velocity);
 		self->nextthink = 0;
 	}
 	else
@@ -1676,7 +1676,7 @@ void SP_func_train(edict_t* self)
 {
 	self->movetype = MOVETYPE_PUSH;
 
-	VectorClear(self->s.angles);
+	VectorClear3(self->s.angles);
 	self->blocked = train_blocked;
 	if (self->spawnflags & TRAIN_BLOCK_STOPS)
 		self->dmg = 0;
@@ -1906,7 +1906,7 @@ void door_secret_done(edict_t* self);
 void door_secret_use(edict_t* self, edict_t* other, edict_t* activator)
 {
 	// make sure we're not already moving
-	if (!VectorCompare(self->s.origin, vec3_origin))
+	if (!VectorCompare3(self->s.origin, vec3_origin))
 		return;
 
 	Move_Calc(self, self->pos1, door_secret_move1);
@@ -2018,22 +2018,22 @@ void SP_func_door_secret(edict_t* ent)
 
 	// calculate positions
 	AngleVectors(ent->s.angles, forward, right, up);
-	VectorClear(ent->s.angles);
+	VectorClear3(ent->s.angles);
 
 	side = 1.0f - (ent->spawnflags & SECRET_1ST_LEFT);
 
 	if (ent->spawnflags & SECRET_1ST_DOWN)
-		width = fabsf(DotProduct(up, ent->size));
+		width = fabsf(DotProduct3(up, ent->size));
 	else
-		width = fabsf(DotProduct(right, ent->size));
+		width = fabsf(DotProduct3(right, ent->size));
 
-	length = fabsf(DotProduct(forward, ent->size));
+	length = fabsf(DotProduct3(forward, ent->size));
 
 	if (ent->spawnflags & SECRET_1ST_DOWN)
-		VectorMA(ent->s.origin, -1 * width, up, ent->pos1);
+		VectorMA3(ent->s.origin, -1 * width, up, ent->pos1);
 	else
-		VectorMA(ent->s.origin, side * width, right, ent->pos1);
-	VectorMA(ent->pos1, length, forward, ent->pos2);
+		VectorMA3(ent->s.origin, side * width, right, ent->pos1);
+	VectorMA3(ent->pos1, length, forward, ent->pos2);
 
 	if (ent->health)
 	{
@@ -2199,7 +2199,7 @@ void func_particle_effect_think(edict_t* self)
 		case TE_BUBBLETRAIL:
 			vec3_t end = { 0 };
 
-			VectorAdd(self->s.origin, self->s.extents, end);
+			VectorAdd3(self->s.origin, self->s.extents, end);
 
 			gi.WritePos(self->s.origin);
 			gi.WritePos(end);

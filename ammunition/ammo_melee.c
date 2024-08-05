@@ -40,8 +40,8 @@ bool Ammo_Melee(edict_t* self, vec3_t attack_radius, int32_t damage, int32_t kic
 	vec3_t		dir;
 
 	//see if enemy is in range
-	VectorSubtract(self->enemy->s.origin, self->s.origin, dir);
-	range = VectorLength(dir);
+	VectorSubtract3(self->enemy->s.origin, self->s.origin, dir);
+	range = VectorLength3(dir);
 	if (range > attack_radius[0])
 		return false;
 
@@ -59,7 +59,7 @@ bool Ammo_Melee(edict_t* self, vec3_t attack_radius, int32_t damage, int32_t kic
 			attack_radius[1] = self->enemy->maxs[0];
 	}
 
-	VectorMA(self->s.origin, range, dir, point);
+	VectorMA3(self->s.origin, range, dir, point);
 
 	tr = gi.trace(self->s.origin, NULL, NULL, point, self, MASK_SHOT);
 
@@ -73,10 +73,10 @@ bool Ammo_Melee(edict_t* self, vec3_t attack_radius, int32_t damage, int32_t kic
 	}
 
 	AngleVectors(self->s.angles, forward, right, up);
-	VectorMA(self->s.origin, range, forward, point);
-	VectorMA(point, attack_radius[1], right, point);
-	VectorMA(point, attack_radius[2], up, point);
-	VectorSubtract(point, self->enemy->s.origin, dir);
+	VectorMA3(self->s.origin, range, forward, point);
+	VectorMA3(point, attack_radius[1], right, point);
+	VectorMA3(point, attack_radius[2], up, point);
+	VectorSubtract3(point, self->enemy->s.origin, dir);
 
 	// do the damage
 	Player_Damage(tr.ent, self, self, dir, point, vec3_origin, damage, kick / 2, DAMAGE_NO_KNOCKBACK, MOD_HIT);
@@ -85,10 +85,10 @@ bool Ammo_Melee(edict_t* self, vec3_t attack_radius, int32_t damage, int32_t kic
 		return false;
 
 	// do our special form of knockback here
-	VectorMA(self->enemy->absmin, 0.5, self->enemy->size, v);
-	VectorSubtract(v, point, v);
-	VectorNormalize(v);
-	VectorMA(self->enemy->velocity, kick, v, self->enemy->velocity);
+	VectorMA3(self->enemy->absmin, 0.5, self->enemy->size, v);
+	VectorSubtract3(v, point, v);
+	VectorNormalize3(v);
+	VectorMA3(self->enemy->velocity, kick, v, self->enemy->velocity);
 	if (self->enemy->velocity[2] > 0)
 		self->enemy->groundentity = NULL;
 	return true;

@@ -48,17 +48,17 @@ void ChaseCam_Update(edict_t* ent)
 
 	targ = ent->client->chase_target;
 
-	VectorCopy(targ->s.origin, ownerv);
-	VectorCopy(ent->s.origin, oldgoal);
+	VectorCopy3(targ->s.origin, ownerv);
+	VectorCopy3(ent->s.origin, oldgoal);
 
 	ownerv[2] += targ->viewheight;
 
-	VectorCopy(targ->client->v_angle, angles);
+	VectorCopy3(targ->client->v_angle, angles);
 	if (angles[PITCH] > 56)
 		angles[PITCH] = 56;
 	AngleVectors(angles, forward, right, NULL);
-	VectorNormalize(forward);
-	VectorMA(ownerv, -30, forward, o);
+	VectorNormalize3(forward);
+	VectorMA3(ownerv, -30, forward, o);
 
 	if (o[2] < targ->s.origin[2] + 20)
 		o[2] = targ->s.origin[2] + 20;
@@ -69,24 +69,24 @@ void ChaseCam_Update(edict_t* ent)
 
 	trace = gi.trace(ownerv, vec3_origin, vec3_origin, o, targ, MASK_SOLID);
 
-	VectorCopy(trace.endpos, goal);
+	VectorCopy3(trace.endpos, goal);
 
-	VectorMA(goal, 2, forward, goal);
+	VectorMA3(goal, 2, forward, goal);
 
 	// pad for floors and ceilings
-	VectorCopy(goal, o);
+	VectorCopy3(goal, o);
 	o[2] += 6;
 	trace = gi.trace(goal, vec3_origin, vec3_origin, o, targ, MASK_SOLID);
 	if (trace.fraction < 1) {
-		VectorCopy(trace.endpos, goal);
+		VectorCopy3(trace.endpos, goal);
 		goal[2] -= 6;
 	}
 
-	VectorCopy(goal, o);
+	VectorCopy3(goal, o);
 	o[2] -= 6;
 	trace = gi.trace(goal, vec3_origin, vec3_origin, o, targ, MASK_SOLID);
 	if (trace.fraction < 1) {
-		VectorCopy(trace.endpos, goal);
+		VectorCopy3(trace.endpos, goal);
 		goal[2] += 6;
 	}
 
@@ -95,7 +95,7 @@ void ChaseCam_Update(edict_t* ent)
 	else
 		ent->client->ps.pmove.pm_type = PM_FREEZE;
 
-	VectorCopy(goal, ent->s.origin);
+	VectorCopy3(goal, ent->s.origin);
 
 	for (i = 0; i < 3; i++)
 		ent->client->ps.pmove.delta_angles[i] = ANGLE2SHORT(targ->client->v_angle[i] - ent->client->resp.cmd_angles[i]);
@@ -107,8 +107,8 @@ void ChaseCam_Update(edict_t* ent)
 	}
 	else
 	{
-		VectorCopy(targ->client->v_angle, ent->client->ps.viewangles);
-		VectorCopy(targ->client->v_angle, ent->client->v_angle);
+		VectorCopy3(targ->client->v_angle, ent->client->ps.viewangles);
+		VectorCopy3(targ->client->v_angle, ent->client->v_angle);
 	}
 
 	ent->viewheight = 0;

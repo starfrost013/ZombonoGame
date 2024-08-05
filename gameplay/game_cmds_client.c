@@ -917,8 +917,8 @@ void Client_CommandSetTeam(edict_t* ent, player_team team)
 	ent->client->newweapon = ent->client->pers.weapon;
 	Player_WeaponChange(ent);
 
-	VectorCopy(spawn_origin, ent->s.origin);
-	VectorCopy(spawn_angles, ent->s.angles);
+	VectorCopy3(spawn_origin, ent->s.origin);
+	VectorCopy3(spawn_angles, ent->s.angles);
 }
 
 /*

@@ -46,7 +46,7 @@ float Client_CalcRoll(vec3_t angles, vec3_t velocity)
 	float side;
 	float value;
 
-	side = DotProduct(velocity, right);
+	side = DotProduct3(velocity, right);
 	sign = side < 0 ? -1 : 1;
 	side = fabsf(side);
 
@@ -156,14 +156,14 @@ void Player_DamageFeedback(edict_t* player)
 
 	// the color of the blend will vary based on how much was absorbed
 	// by different armors
-	VectorClear(v);
+	VectorClear3(v);
 	if (client->damage_parmor)
-		VectorMA(v, (float)client->damage_parmor / realcount, power_color, v);
+		VectorMA3(v, (float)client->damage_parmor / realcount, power_color, v);
 	if (client->damage_armor)
-		VectorMA(v, (float)client->damage_armor / realcount, acolor, v);
+		VectorMA3(v, (float)client->damage_armor / realcount, acolor, v);
 	if (client->damage_blood)
-		VectorMA(v, (float)client->damage_blood / realcount, bcolor, v);
-	VectorCopy(v, client->damage_blend);
+		VectorMA3(v, (float)client->damage_blood / realcount, bcolor, v);
+	VectorCopy3(v, client->damage_blend);
 
 
 	//
@@ -179,13 +179,13 @@ void Player_DamageFeedback(edict_t* player)
 		if (kick > 50)
 			kick = 50;
 
-		VectorSubtract(client->damage_from, player->s.origin, v);
-		VectorNormalize(v);
+		VectorSubtract3(client->damage_from, player->s.origin, v);
+		VectorNormalize3(v);
 
-		side = DotProduct(v, right);
+		side = DotProduct3(v, right);
 		client->v_dmg_roll = kick * side * 0.3f;
 
-		side = -DotProduct(v, forward);
+		side = -DotProduct3(v, forward);
 		client->v_dmg_pitch = kick * side * 0.3f;
 
 		client->v_dmg_time = level.time + DAMAGE_TIME;
@@ -236,7 +236,7 @@ void Client_CalcViewOffset(edict_t* ent)
 	// if dead, fix the angle and don't add any kick
 	if (ent->deadflag)
 	{
-		VectorClear(angles);
+		VectorClear3(angles);
 
 		ent->client->ps.viewangles[ROLL] = 40;
 		ent->client->ps.viewangles[PITCH] = -15;
@@ -246,7 +246,7 @@ void Client_CalcViewOffset(edict_t* ent)
 	{
 		// add angles based on weapon kick
 
-		VectorCopy(ent->client->kick_angles, angles);
+		VectorCopy3(ent->client->kick_angles, angles);
 
 		// add angles based on damage kick
 
@@ -269,10 +269,10 @@ void Client_CalcViewOffset(edict_t* ent)
 
 		// add angles based on velocity
 
-		delta = DotProduct(ent->velocity, forward);
+		delta = DotProduct3(ent->velocity, forward);
 		angles[PITCH] += delta * run_pitch->value;
 
-		delta = DotProduct(ent->velocity, right);
+		delta = DotProduct3(ent->velocity, right);
 		angles[ROLL] += delta * run_roll->value;
 
 		// add angles based on bob
@@ -293,7 +293,7 @@ void Client_CalcViewOffset(edict_t* ent)
 
 		// base origin
 
-	VectorClear(v);
+	VectorClear3(v);
 
 	// add view height
 
@@ -316,7 +316,7 @@ void Client_CalcViewOffset(edict_t* ent)
 
 	// add kick offset
 
-	VectorAdd(v, ent->client->kick_origin, v);
+	VectorAdd3(v, ent->client->kick_origin, v);
 
 	// absolutely bound offsets
 	// so the view can never be outside the player box
@@ -334,7 +334,7 @@ void Client_CalcViewOffset(edict_t* ent)
 	else if (v[2] > 30)
 		v[2] = 30;
 
-	VectorCopy(v, ent->client->ps.viewoffset);
+	VectorCopy3(v, ent->client->ps.viewoffset);
 }
 
 /*
@@ -376,7 +376,7 @@ void Client_CalcGunOffset(edict_t* ent)
 	}
 
 	// gun height
-	VectorClear(ent->client->ps.gunoffset);
+	VectorClear3(ent->client->ps.gunoffset);
 	//	ent->ps->gunorigin[2] += bob;
 
 		// gun_x / gun_y / gun_z are development tools
@@ -425,7 +425,7 @@ void Client_CalcBlend(edict_t* ent)
 		ent->client->ps.blend[2] = ent->client->ps.blend[3] = 0;
 
 	// add for contents
-	VectorAdd(ent->s.origin, ent->client->ps.viewoffset, vieworg);
+	VectorAdd3(ent->s.origin, ent->client->ps.viewoffset, vieworg);
 	contents = gi.pointcontents(vieworg);
 	if (contents & (CONTENTS_LAVA | CONTENTS_SLIME | CONTENTS_WATER))
 		ent->client->ps.rdflags |= RDF_UNDERWATER;

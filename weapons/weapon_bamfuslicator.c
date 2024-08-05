@@ -61,7 +61,7 @@ void Weapon_Bamfuslicator_Fire(edict_t* ent)
 	AngleVectors(ent->client->v_angle, forward, right, NULL);
 
 	// set offset
-	VectorSet(offset, 0, 8, ent->viewheight - 8);
+	VectorSet3(offset, 0, 8, ent->viewheight - 8);
 
 	Player_ProjectSource(ent, offset, forward, right, start);
 

@@ -37,11 +37,11 @@ void Weapon_grenadelauncher_fire(edict_t* ent)
 	if (is_quad)
 		damage *= 4;
 
-	VectorSet(offset, 8, 8, ent->viewheight - 8);
+	VectorSet3(offset, 8, 8, ent->viewheight - 8);
 	AngleVectors(ent->client->v_angle, forward, right, NULL);
 	Player_ProjectSource(ent, offset, forward, right, start);
 
-	VectorScale(forward, -2, ent->client->kick_origin);
+	VectorScale3(forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
 	Ammo_Grenade(ent, start, forward, damage, 600, 2.5, radius);

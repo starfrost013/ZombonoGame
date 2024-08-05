@@ -43,7 +43,7 @@ void Client_UpdateCamera(edict_t* ent, usercmd_t* ucmd)
 	{
 		// this is the normal camera type that is not handed by anything
 	case camera_type_normal:
-		VectorCopy(ent->s.origin, ent->client->ps.vieworigin);
+		VectorCopy3(ent->s.origin, ent->client->ps.vieworigin);
 		return; 
 		// this is separate to spectator mode
 	case camera_type_chase:
@@ -60,8 +60,8 @@ void Client_UpdateCamera(edict_t* ent, usercmd_t* ucmd)
 		//todo: cvar?
 		vec3_t addition = { 0, 0, 150 };//temp
 		vec3_t viewangle = { 0, 0, -180 };
-		VectorAdd(ent->client->ps.pmove.origin, addition, ent->client->ps.vieworigin);
-		VectorCopy(viewangle, ent->client->ps.viewangles);
+		VectorAdd3(ent->client->ps.pmove.origin, addition, ent->client->ps.vieworigin);
+		VectorCopy3(viewangle, ent->client->ps.viewangles);
 		return;
 	case camera_type_free:
 		Com_Printf("CAMERA_TYPE_FREE NOT IMPLEMENTED!!!!!!!!");
@@ -142,7 +142,7 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 		pm.trace = PM_trace;	// adds default parms
 		pm.pointcontents = gi.pointcontents;
 
-		VectorCopy(client->ps.vieworigin, pm.vieworigin);
+		VectorCopy3(client->ps.vieworigin, pm.vieworigin);
 
 		// perform a pmove
 		gi.Player_Move(&pm);
@@ -151,8 +151,8 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 		client->ps.pmove = pm.s;
 		client->old_pmove = pm.s;
 
-		VectorCopy(pm.mins, ent->mins);
-		VectorCopy(pm.maxs, ent->maxs);
+		VectorCopy3(pm.mins, ent->mins);
+		VectorCopy3(pm.maxs, ent->maxs);
 
 		client->resp.cmd_angles[0] = SHORT2ANGLE(ucmd->angles[0]);
 		client->resp.cmd_angles[1] = SHORT2ANGLE(ucmd->angles[1]);
@@ -185,7 +185,7 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 			}
 
 			if (add_relative_velocity)
-				VectorAdd(pm.s.velocity, ent->groundentity->velocity, pm.s.velocity);
+				VectorAdd3(pm.s.velocity, ent->groundentity->velocity, pm.s.velocity);
 		}
 
 		for (i = 0; i < 3; i++)
@@ -210,8 +210,8 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 		}
 		else
 		{
-			VectorCopy(pm.viewangles, client->v_angle);
-			VectorCopy(pm.viewangles, client->ps.viewangles);
+			VectorCopy3(pm.viewangles, client->v_angle);
+			VectorCopy3(pm.viewangles, client->ps.viewangles);
 		}
 
 		gi.Edict_Link(ent);
@@ -468,12 +468,12 @@ void Client_EndServerFrame(edict_t* ent)
 
 	Client_SetFrame(ent);
 
-	VectorCopy(ent->velocity, ent->client->oldvelocity);
-	VectorCopy(ent->client->ps.viewangles, ent->client->oldviewangles);
+	VectorCopy3(ent->velocity, ent->client->oldvelocity);
+	VectorCopy3(ent->client->ps.viewangles, ent->client->oldviewangles);
 
 	// clear weapon kicks
-	VectorClear(ent->client->kick_origin);
-	VectorClear(ent->client->kick_angles);
+	VectorClear3(ent->client->kick_origin);
+	VectorClear3(ent->client->kick_angles);
 
 	// update the leaderboard every 10 ticks (1 second)
 	// BEFORE IT WAS UPDATING IT EVERY TICK WHILE ACTIVE???

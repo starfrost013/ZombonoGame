@@ -87,7 +87,7 @@ void AI_CheckGround(edict_t* ent)
 
 	if (!trace.startsolid && !trace.allsolid)
 	{
-		VectorCopy(trace.endpos, ent->s.origin);
+		VectorCopy3(trace.endpos, ent->s.origin);
 		ent->groundentity = trace.ent;
 		ent->groundentity_linkcount = trace.ent->linkcount;
 		ent->velocity[2] = 0;
@@ -228,7 +228,7 @@ void AI_MonsterDropToFloor(edict_t* ent)
 	trace_t		trace;
 
 	ent->s.origin[2] += 1;
-	VectorCopy(ent->s.origin, end);
+	VectorCopy3(ent->s.origin, end);
 	end[2] -= 256;
 
 	trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, end, ent, MASK_MONSTERSOLID);
@@ -236,7 +236,7 @@ void AI_MonsterDropToFloor(edict_t* ent)
 	if (trace.fraction == 1 || trace.allsolid)
 		return;
 
-	VectorCopy(trace.endpos, ent->s.origin);
+	VectorCopy3(trace.endpos, ent->s.origin);
 
 	gi.Edict_Link(ent);
 	AI_CheckGround(ent);
@@ -466,7 +466,7 @@ bool AI_MonsterStart(edict_t* self)
 
 	if (!self->monsterinfo.checkattack)
 		self->monsterinfo.checkattack = AI_CheckAttack;
-	VectorCopy(self->s.origin, self->s.old_origin);
+	VectorCopy3(self->s.origin, self->s.old_origin);
 
 	if (st.item)
 	{
@@ -547,7 +547,7 @@ void AI_MonsterStartGo(edict_t* self)
 		}
 		else if (strcmp(self->movetarget->classname, "path_corner") == 0)
 		{
-			VectorSubtract(self->goalentity->s.origin, self->s.origin, v);
+			VectorSubtract3(self->goalentity->s.origin, self->s.origin, v);
 			self->ideal_yaw = self->s.angles[YAW] = vectoyaw(v);
 			self->monsterinfo.walk(self);
 			self->target = NULL;
@@ -664,12 +664,12 @@ void AI_MonsterCheckDodge(edict_t* self, vec3_t start, vec3_t dir, int32_t speed
 		if (random() > 0.25)
 			return;
 	}
-	VectorMA(start, 8192, dir, end);
+	VectorMA3(start, 8192, dir, end);
 	tr = gi.trace(start, NULL, NULL, end, self, MASK_SHOT);
 	if ((tr.ent) && (tr.ent->svflags & SVF_MONSTER) && (tr.ent->health > 0) && (tr.ent->monsterinfo.dodge) && Edict_IsInFront(tr.ent, self))
 	{
-		VectorSubtract(tr.endpos, start, v);
-		eta = (VectorLength(v) - tr.ent->maxs[0]) / speed;
+		VectorSubtract3(tr.endpos, start, v);
+		eta = (VectorLength3(v) - tr.ent->maxs[0]) / speed;
 		tr.ent->monsterinfo.dodge(tr.ent, self, eta);
 	}
 }

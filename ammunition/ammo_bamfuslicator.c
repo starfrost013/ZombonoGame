@@ -117,8 +117,8 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 	// move the zombie to where the player spawned it
 	// the zombie is on director team (this is used so they don't harm directors unless the requisite gameflag is set)
 	monster->team = team_director;
-	VectorCopy(trace.endpos, monster->s.origin);
-	VectorCopy(aimdir, monster->s.angles);
+	VectorCopy3(trace.endpos, monster->s.origin);
+	VectorCopy3(aimdir, monster->s.angles);
 
 	switch (zombie_type)
 	{
@@ -133,8 +133,8 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 		break;
 	}
 
-	VectorSubtract(self->absmin, min_dist, vec_absmin);
-	VectorAdd(self->absmax, min_dist, vec_absmax);
+	VectorSubtract3(self->absmin, min_dist, vec_absmin);
+	VectorAdd3(self->absmax, min_dist, vec_absmax);
 
 	// see if we are trying to spawn inside of the player
 	// 64 to limit time this function takes as it's recursive (also would there really be more than 64 in a 64x64 box around the player???)
@@ -152,8 +152,8 @@ void Ammo_Bamfuslicator(edict_t* self, vec3_t start, vec3_t aimdir, zombie_type 
 	}
 
 	// see if we are trying to spawn inside of a wall
-	VectorSubtract(monster->absmin, min_dist, vec_absmin);
-	VectorAdd(monster->absmax, min_dist, vec_absmax);
+	VectorSubtract3(monster->absmin, min_dist, vec_absmin);
+	VectorAdd3(monster->absmax, min_dist, vec_absmax);
 
 	// now see if we are trying to spawn the zombie within another entity...
 	int32_t num_within_monster_bounds = gi.BoxEdicts(vec_absmin, vec_absmax, &within_monster_bounds, 64, AREA_SOLID);

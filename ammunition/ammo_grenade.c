@@ -43,11 +43,11 @@ static void Ammo_Grenade_explode(edict_t* ent)
 		vec3_t	v;
 		vec3_t	dir;
 
-		VectorAdd(ent->enemy->mins, ent->enemy->maxs, v);
-		VectorMA(ent->enemy->s.origin, 0.5, v, v);
-		VectorSubtract(ent->s.origin, v, v);
-		points = ent->dmg - 0.5f * VectorLength(v);
-		VectorSubtract(ent->enemy->s.origin, ent->s.origin, dir);
+		VectorAdd3(ent->enemy->mins, ent->enemy->maxs, v);
+		VectorMA3(ent->enemy->s.origin, 0.5, v, v);
+		VectorSubtract3(ent->s.origin, v, v);
+		points = ent->dmg - 0.5f * VectorLength3(v);
+		VectorSubtract3(ent->enemy->s.origin, ent->s.origin, dir);
 		if (ent->spawnflags & 1)
 			mod = MOD_HANDGRENADE;
 		else
@@ -65,7 +65,7 @@ static void Ammo_Grenade_explode(edict_t* ent)
 
 	Player_RadiusDamage(ent, ent->owner, ent->dmg, ent->enemy, ent->dmg_radius, mod);
 
-	VectorMA(ent->s.origin, -0.02, ent->velocity, origin);
+	VectorMA3(ent->s.origin, -0.02, ent->velocity, origin);
 	gi.WriteByte(svc_temp_entity);
 	if (ent->waterlevel)
 	{
@@ -128,17 +128,17 @@ void Ammo_Grenade(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, in
 	AngleVectors(dir, forward, right, up);
 
 	grenade = Edict_Spawn();
-	VectorCopy(start, grenade->s.origin);
-	VectorScale(aimdir, speed, grenade->velocity);
-	VectorMA(grenade->velocity, 200 + crandom() * 10.0f, up, grenade->velocity);
-	VectorMA(grenade->velocity, crandom() * 10.0f, right, grenade->velocity);
-	VectorSet(grenade->avelocity, 300, 300, 300);
+	VectorCopy3(start, grenade->s.origin);
+	VectorScale3(aimdir, speed, grenade->velocity);
+	VectorMA3(grenade->velocity, 200 + crandom() * 10.0f, up, grenade->velocity);
+	VectorMA3(grenade->velocity, crandom() * 10.0f, right, grenade->velocity);
+	VectorSet3(grenade->avelocity, 300, 300, 300);
 	grenade->movetype = MOVETYPE_BOUNCE;
 	grenade->clipmask = MASK_SHOT;
 	grenade->solid = SOLID_BBOX;
 	grenade->s.effects |= EF_GRENADE;
-	VectorClear(grenade->mins);
-	VectorClear(grenade->maxs);
+	VectorClear3(grenade->mins);
+	VectorClear3(grenade->maxs);
 	grenade->s.modelindex = gi.modelindex("models/objects/grenade/tris.md2");
 	grenade->owner = self;
 	grenade->touch = Ammo_Grenade_touch;
@@ -161,17 +161,17 @@ void Ammo_Grenade2(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, i
 	AngleVectors(dir, forward, right, up);
 
 	grenade = Edict_Spawn();
-	VectorCopy(start, grenade->s.origin);
-	VectorScale(aimdir, speed, grenade->velocity);
-	VectorMA(grenade->velocity, 200 + crandom() * 10.0f, up, grenade->velocity);
-	VectorMA(grenade->velocity, crandom() * 10.0f, right, grenade->velocity);
-	VectorSet(grenade->avelocity, 300, 300, 300);
+	VectorCopy3(start, grenade->s.origin);
+	VectorScale3(aimdir, speed, grenade->velocity);
+	VectorMA3(grenade->velocity, 200 + crandom() * 10.0f, up, grenade->velocity);
+	VectorMA3(grenade->velocity, crandom() * 10.0f, right, grenade->velocity);
+	VectorSet3(grenade->avelocity, 300, 300, 300);
 	grenade->movetype = MOVETYPE_BOUNCE;
 	grenade->clipmask = MASK_SHOT;
 	grenade->solid = SOLID_BBOX;
 	grenade->s.effects |= EF_GRENADE;
-	VectorClear(grenade->mins);
-	VectorClear(grenade->maxs);
+	VectorClear3(grenade->mins);
+	VectorClear3(grenade->maxs);
 	grenade->s.modelindex = gi.modelindex("models/objects/grenade2/tris.md2");
 	grenade->owner = self;
 	grenade->touch = Ammo_Grenade_touch;

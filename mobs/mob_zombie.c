@@ -318,7 +318,7 @@ void zombie_fire(edict_t* self)
 {
 	vec3_t	aim;
 
-	VectorSet(aim, ZOMBIE_RANGE_STANDARD, 0, 16);
+	VectorSet3(aim, ZOMBIE_RANGE_STANDARD, 0, 16);
 	// todo: types
 	Ammo_Melee(self, aim, ZOMBIE_DAMAGE_STANDARD, 0);
 }
@@ -595,8 +595,8 @@ void zombie_dodge(edict_t* self, edict_t* attacker, float eta)
 
 void zombie_dead(edict_t* self)
 {
-	VectorSet(self->mins, -16, -16, -24);
-	VectorSet(self->maxs, 16, 16, -8);
+	VectorSet3(self->mins, -16, -16, -24);
+	VectorSet3(self->maxs, 16, 16, -8);
 	self->movetype = MOVETYPE_TOSS;
 	self->svflags |= SVF_DEADMONSTER;
 	self->nextthink = 0;
@@ -695,8 +695,8 @@ void SP_monster_zombie_x(edict_t* self)
 	self->classname = "monster_zombie"; // for Bamfuslicator
 	self->s.modelindex = gi.modelindex("models/monsters/zombie/tris.md2");
 	self->monsterinfo.scale = MODEL_SCALE;
-	VectorSet(self->mins, -12, -12, -24);
-	VectorSet(self->maxs, 12, 12, 24);
+	VectorSet3(self->mins, -12, -12, -24);
+	VectorSet3(self->maxs, 12, 12, 24);
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
 	self->monsterinfo.aiflags |= AI_WANDER;

@@ -87,9 +87,9 @@ void Weapon_Machinegun_Fire(edict_t* ent)
 	ent->client->kick_angles[0] = ent->client->machinegun_shots * -1.5;
 
 	// get start / end positions
-	VectorAdd(ent->client->v_angle, ent->client->kick_angles, angles);
+	VectorAdd3(ent->client->v_angle, ent->client->kick_angles, angles);
 	AngleVectors(angles, forward, right, NULL);
-	VectorSet(offset, 0, 8, ent->viewheight - 8);
+	VectorSet3(offset, 0, 8, ent->viewheight - 8);
 	Player_ProjectSource(ent, offset, forward, right, start);
 	Ammo_Bullet(ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_MACHINEGUN);
 

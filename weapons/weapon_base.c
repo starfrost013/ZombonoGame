@@ -32,7 +32,7 @@ void Player_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t 
 	float* point = ent->s.origin;
 	vec3_t     _distance;
 
-	VectorCopy(distance, _distance);
+	VectorCopy3(distance, _distance);
 	if (client->pers.hand == LEFT_HANDED)
 		_distance[1] *= -1;
 	else if (client->pers.hand == CENTER_HANDED)
@@ -43,14 +43,14 @@ void Player_ProjectSource(edict_t* ent, vec3_t distance, vec3_t forward, vec3_t 
 	if (aimfix->value)
 	{
 		vec3_t start, end;
-		VectorSet(start, ent->s.origin[0], ent->s.origin[1], ent->s.origin[2] + ent->viewheight);
-		VectorMA(start, 8192, forward, end);
+		VectorSet3(start, ent->s.origin[0], ent->s.origin[1], ent->s.origin[2] + ent->viewheight);
+		VectorMA3(start, 8192, forward, end);
 
 		trace_t	tr = gi.trace(start, NULL, NULL, end, ent, MASK_SHOT);
 		if (tr.fraction < 1)
 		{
-			VectorSubtract(tr.endpos, result, forward);
-			VectorNormalize(forward);
+			VectorSubtract3(tr.endpos, result, forward);
+			VectorNormalize3(forward);
 		}
 	}
 }
@@ -88,16 +88,16 @@ void Player_Noise(edict_t* who, vec3_t where, int32_t type)
 	{
 		noise = Edict_Spawn();
 		noise->classname = "player_noise";
-		VectorSet(noise->mins, -8, -8, -8);
-		VectorSet(noise->maxs, 8, 8, 8);
+		VectorSet3(noise->mins, -8, -8, -8);
+		VectorSet3(noise->maxs, 8, 8, 8);
 		noise->owner = who;
 		noise->svflags = SVF_NOCLIENT;
 		who->mynoise = noise;
 
 		noise = Edict_Spawn();
 		noise->classname = "player_noise";
-		VectorSet(noise->mins, -8, -8, -8);
-		VectorSet(noise->maxs, 8, 8, 8);
+		VectorSet3(noise->mins, -8, -8, -8);
+		VectorSet3(noise->maxs, 8, 8, 8);
 		noise->owner = who;
 		noise->svflags = SVF_NOCLIENT;
 		who->mynoise2 = noise;
@@ -116,9 +116,9 @@ void Player_Noise(edict_t* who, vec3_t where, int32_t type)
 		level.sound2_entity_framenum = level.framenum;
 	}
 
-	VectorCopy(where, noise->s.origin);
-	VectorSubtract(where, noise->maxs, noise->absmin);
-	VectorAdd(where, noise->maxs, noise->absmax);
+	VectorCopy3(where, noise->s.origin);
+	VectorSubtract3(where, noise->maxs, noise->absmin);
+	VectorAdd3(where, noise->maxs, noise->absmax);
 	noise->teleport_time = level.time;
 	gi.Edict_Link(noise);
 }

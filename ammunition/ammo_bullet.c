@@ -50,14 +50,14 @@ static void Ammo_Bullet_generic(edict_t* self, vec3_t start, vec3_t aimdir, int3
 
 		r = crandom() * hspread;
 		u = crandom() * vspread;
-		VectorMA(start, 8192, forward, end);
-		VectorMA(end, r, right, end);
-		VectorMA(end, u, up, end);
+		VectorMA3(start, 8192, forward, end);
+		VectorMA3(end, r, right, end);
+		VectorMA3(end, u, up, end);
 
 		if (gi.pointcontents(start) & MASK_WATER)
 		{
 			water = true;
-			VectorCopy(start, water_start);
+			VectorCopy3(start, water_start);
 			content_mask &= ~MASK_WATER;
 		}
 
@@ -69,9 +69,9 @@ static void Ammo_Bullet_generic(edict_t* self, vec3_t start, vec3_t aimdir, int3
 			int		color;
 
 			water = true;
-			VectorCopy(tr.endpos, water_start);
+			VectorCopy3(tr.endpos, water_start);
 
-			if (!VectorCompare(start, tr.endpos))
+			if (!VectorCompare3(start, tr.endpos))
 			{
 				if (tr.contents & CONTENTS_WATER)
 				{
@@ -99,14 +99,14 @@ static void Ammo_Bullet_generic(edict_t* self, vec3_t start, vec3_t aimdir, int3
 				}
 
 				// change bullet's course when it enters water
-				VectorSubtract(end, start, dir);
+				VectorSubtract3(end, start, dir);
 				vectoangles(dir, dir);
 				AngleVectors(dir, forward, right, up);
 				r = crandom() * hspread * 2;
 				u = crandom() * vspread * 2;
-				VectorMA(water_start, 8192, forward, end);
-				VectorMA(end, r, right, end);
-				VectorMA(end, u, up, end);
+				VectorMA3(water_start, 8192, forward, end);
+				VectorMA3(end, r, right, end);
+				VectorMA3(end, u, up, end);
 			}
 
 			// re-trace ignoring water this time
@@ -145,16 +145,16 @@ static void Ammo_Bullet_generic(edict_t* self, vec3_t start, vec3_t aimdir, int3
 	{
 		vec3_t	pos;
 
-		VectorSubtract(tr.endpos, water_start, dir);
-		VectorNormalize(dir);
-		VectorMA(tr.endpos, -2, dir, pos);
+		VectorSubtract3(tr.endpos, water_start, dir);
+		VectorNormalize3(dir);
+		VectorMA3(tr.endpos, -2, dir, pos);
 		if (gi.pointcontents(pos) & MASK_WATER)
-			VectorCopy(pos, tr.endpos);
+			VectorCopy3(pos, tr.endpos);
 		else
 			tr = gi.trace(pos, NULL, NULL, water_start, tr.ent, MASK_WATER);
 
-		VectorAdd(water_start, tr.endpos, pos);
-		VectorScale(pos, 0.5, pos);
+		VectorAdd3(water_start, tr.endpos, pos);
+		VectorScale3(pos, 0.5, pos);
 
 		gi.WriteByte(svc_temp_entity);
 		gi.WriteByte(TE_BUBBLETRAIL);

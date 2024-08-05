@@ -164,8 +164,8 @@ float PlayersRangeFromSpot(edict_t* spot)
 		if (player->health <= 0)
 			continue;
 
-		VectorSubtract(spot->s.origin, player->s.origin, v);
-		playerdistance = VectorLength(v);
+		VectorSubtract3(spot->s.origin, player->s.origin, v);
+		playerdistance = VectorLength3(v);
 
 		if (playerdistance < bestplayerdistance)
 			bestplayerdistance = playerdistance;
@@ -413,9 +413,9 @@ void Player_SelectSpawnPoint(edict_t* ent, vec3_t origin, vec3_t angles)
 		spot = Player_SpawnSelectUnassigned();
 	}
 
-	VectorCopy(spot->s.origin, origin);
+	VectorCopy3(spot->s.origin, origin);
 	origin[2] += 9;
-	VectorCopy(spot->s.angles, angles);
+	VectorCopy3(spot->s.angles, angles);
 }
 
 
@@ -467,11 +467,11 @@ void Player_CopyToBodyQue(edict_t* ent)
 	body->s.number = body - g_edicts;
 
 	body->svflags = ent->svflags;
-	VectorCopy(ent->mins, body->mins);
-	VectorCopy(ent->maxs, body->maxs);
-	VectorCopy(ent->absmin, body->absmin);
-	VectorCopy(ent->absmax, body->absmax);
-	VectorCopy(ent->size, body->size);
+	VectorCopy3(ent->mins, body->mins);
+	VectorCopy3(ent->maxs, body->maxs);
+	VectorCopy3(ent->absmin, body->absmin);
+	VectorCopy3(ent->absmax, body->absmax);
+	VectorCopy3(ent->size, body->size);
 	body->solid = ent->solid;
 	body->clipmask = ent->clipmask;
 	body->owner = ent->owner;
@@ -660,9 +660,9 @@ void Client_JoinServer(edict_t* ent)
 	ent->flags &= ~FL_NO_KNOCKBACK;
 	ent->svflags &= ~SVF_DEADMONSTER;
 
-	VectorCopy(mins, ent->mins);
-	VectorCopy(maxs, ent->maxs);
-	VectorClear(ent->velocity);
+	VectorCopy3(mins, ent->mins);
+	VectorCopy3(maxs, ent->maxs);
+	VectorClear3(ent->velocity);
 
 	// clear playerstate values
 	memset(&ent->client->ps, 0, sizeof(client->ps));
@@ -672,7 +672,7 @@ void Client_JoinServer(edict_t* ent)
 	client->ps.pmove.origin[2] = spawn_origin[2];
 
 	// move the client's camera around
-	VectorCopy(client->ps.pmove.origin, client->ps.vieworigin);
+	VectorCopy3(client->ps.pmove.origin, client->ps.vieworigin);
 
 	client->ps.fov = atoi(Info_ValueForKey(client->pers.userinfo, "fov"));
 	if (client->ps.fov < 1)
@@ -691,9 +691,9 @@ void Client_JoinServer(edict_t* ent)
 	ent->s.skinnum = ent - g_edicts - 1;
 
 	ent->s.frame = 0;
-	VectorCopy(spawn_origin, ent->s.origin);
+	VectorCopy3(spawn_origin, ent->s.origin);
 	ent->s.origin[2] += 1;	// make sure off ground
-	VectorCopy(ent->s.origin, ent->s.old_origin);
+	VectorCopy3(ent->s.origin, ent->s.old_origin);
 
 	// set the delta angle
 	for (i = 0; i < 3; i++)
@@ -704,8 +704,8 @@ void Client_JoinServer(edict_t* ent)
 	ent->s.angles[PITCH] = 0;
 	ent->s.angles[YAW] = spawn_angles[YAW];
 	ent->s.angles[ROLL] = 0;
-	VectorCopy(ent->s.angles, client->ps.viewangles);
-	VectorCopy(ent->s.angles, client->v_angle);
+	VectorCopy3(ent->s.angles, client->ps.viewangles);
+	VectorCopy3(ent->s.angles, client->v_angle);
 
 	// spawn a spectator
 	if (client->pers.spectator) 

@@ -93,7 +93,7 @@ edict_t* Game_FindEdictsWithinRadius(edict_t* from, vec3_t org, float rad)
 			continue;
 		for (j = 0; j < 3; j++)
 			eorg[j] = org[j] - (from->s.origin[j] + (from->mins[j] + from->maxs[j]) * 0.5f);
-		if (VectorLength(eorg) > rad)
+		if (VectorLength3(eorg) > rad)
 			continue;
 		return from;
 	}
@@ -311,20 +311,20 @@ vec3_t MOVEDIR_DOWN = { 0, 0, -1 };
 
 void Edict_SetMovedir(vec3_t angles, vec3_t movedir)
 {
-	if (VectorCompare(angles, VEC_UP))
+	if (VectorCompare3(angles, VEC_UP))
 	{
-		VectorCopy(MOVEDIR_UP, movedir);
+		VectorCopy3(MOVEDIR_UP, movedir);
 	}
-	else if (VectorCompare(angles, VEC_DOWN))
+	else if (VectorCompare3(angles, VEC_DOWN))
 	{
-		VectorCopy(MOVEDIR_DOWN, movedir);
+		VectorCopy3(MOVEDIR_DOWN, movedir);
 	}
 	else
 	{
 		AngleVectors(angles, movedir, NULL, NULL);
 	}
 
-	VectorClear(angles);
+	VectorClear3(angles);
 }
 
 

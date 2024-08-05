@@ -42,8 +42,8 @@ bool M_CheckBottom(edict_t* ent)
 	int		x, y;
 	float	mid, bottom;
 
-	VectorAdd(ent->s.origin, ent->mins, mins);
-	VectorAdd(ent->s.origin, ent->maxs, maxs);
+	VectorAdd3(ent->s.origin, ent->mins, mins);
+	VectorAdd3(ent->s.origin, ent->maxs, maxs);
 
 	// if all of the points under the corners are solid world, don't bother
 	// with the tougher checks
@@ -121,8 +121,8 @@ bool SV_movestep(edict_t* ent, vec3_t move, bool relink)
 	int			contents;
 
 	// try the move	
-	VectorCopy(ent->s.origin, oldorg);
-	VectorAdd(ent->s.origin, move, neworg);
+	VectorCopy3(ent->s.origin, oldorg);
+	VectorAdd3(ent->s.origin, move, neworg);
 
 	// flying monsters don't step up
 	if (ent->flags & (FL_SWIM | FL_FLY))
@@ -130,7 +130,7 @@ bool SV_movestep(edict_t* ent, vec3_t move, bool relink)
 		// try one move with vertical motion, then one without
 		for (i = 0; i < 2; i++)
 		{
-			VectorAdd(ent->s.origin, move, neworg);
+			VectorAdd3(ent->s.origin, move, neworg);
 			if (i == 0 && ent->enemy)
 			{
 				if (!ent->goalentity)
@@ -188,7 +188,7 @@ bool SV_movestep(edict_t* ent, vec3_t move, bool relink)
 
 			if (trace.fraction == 1)
 			{
-				VectorCopy(trace.endpos, ent->s.origin);
+				VectorCopy3(trace.endpos, ent->s.origin);
 				if (relink)
 				{
 					gi.Edict_Link(ent);
@@ -211,7 +211,7 @@ bool SV_movestep(edict_t* ent, vec3_t move, bool relink)
 		stepsize = 1;
 
 	neworg[2] += stepsize;
-	VectorCopy(neworg, end);
+	VectorCopy3(neworg, end);
 	end[2] -= stepsize * 2;
 
 	trace = gi.trace(neworg, ent->mins, ent->maxs, end, ent, MASK_MONSTERSOLID);
@@ -245,7 +245,7 @@ bool SV_movestep(edict_t* ent, vec3_t move, bool relink)
 		// if monster had the ground pulled out, go ahead and fall
 		if (ent->flags & FL_PARTIALGROUND)
 		{
-			VectorAdd(ent->s.origin, move, ent->s.origin);
+			VectorAdd3(ent->s.origin, move, ent->s.origin);
 			if (relink)
 			{
 				gi.Edict_Link(ent);
@@ -259,7 +259,7 @@ bool SV_movestep(edict_t* ent, vec3_t move, bool relink)
 	}
 
 	// check point traces down for dangling corners
-	VectorCopy(trace.endpos, ent->s.origin);
+	VectorCopy3(trace.endpos, ent->s.origin);
 
 	if (!M_CheckBottom(ent))
 	{
@@ -273,7 +273,7 @@ bool SV_movestep(edict_t* ent, vec3_t move, bool relink)
 			}
 			return true;
 		}
-		VectorCopy(oldorg, ent->s.origin);
+		VectorCopy3(oldorg, ent->s.origin);
 		return false;
 	}
 
@@ -364,13 +364,13 @@ bool SV_StepDirection(edict_t* ent, float yaw, float dist)
 	move[1] = sinf(yaw) * dist;
 	move[2] = 0;
 
-	VectorCopy(ent->s.origin, oldorigin);
+	VectorCopy3(ent->s.origin, oldorigin);
 	if (SV_movestep(ent, move, false))
 	{
 		delta = ent->s.angles[YAW] - ent->ideal_yaw;
 		if (delta > 45 && delta < 315)
 		{		// not turned far enough, so don't take the step
-			VectorCopy(oldorigin, ent->s.origin);
+			VectorCopy3(oldorigin, ent->s.origin);
 		}
 		gi.Edict_Link(ent);
 		Edict_TouchTriggers(ent);

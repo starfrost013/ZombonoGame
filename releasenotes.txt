@@ -41,13 +41,17 @@ NEW FEATURES:
 		* Changed references to Zombono to the value of the name field of the gameinfo_t structure (loaded from gameinfo.json)
 	* Changed build output directory from $(SolutionDir)/build/out to $(SolutionDir)/build/$(Configuration)
 		* This was meant to be temporary but took 7 months to change...
+	* Implemented a CPUID subsystem
+		* It stores the name, vendor and some features of cpu in the cpu_name, cpu_vendor and cpu_features cvars respectively.
+		* This is done to detect potentially defective 13th and 14th Gen intel CPUs currently.
+			* For more information: https://alderongames.com/intel-crashes
 	* Changed game binary name to be EuphoriaEngine.exe as this engine will be used for many games to come (hopefully)
 	* Changed intro graphic
 	* Made the engine version a cvar
+	* Added the time of build to the version cvar
 	* Renamed many gamedll functions for consistency
 	* Wrote a tool to generate an updateinfo.json file automatically:
 		* Changed the updater to use automatically generated updateinfo.json files
-	* Added the time of build to the version cvar
 	* Refactored gamemodes
 		* Each gamemode now has its own player spawn and update code
 	* Made the time text larger, removed "Time: " and moved it downwards

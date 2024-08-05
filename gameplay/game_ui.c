@@ -33,11 +33,11 @@ INTERMISSION
 void Player_MoveToIntermission(edict_t* ent, player_team winning_team)
 {
 
-	VectorCopy(level.intermission_origin, ent->s.origin);
+	VectorCopy3(level.intermission_origin, ent->s.origin);
 	ent->client->ps.pmove.origin[0] = level.intermission_origin[0] * 8;
 	ent->client->ps.pmove.origin[1] = level.intermission_origin[1] * 8;
 	ent->client->ps.pmove.origin[2] = level.intermission_origin[2] * 8;
-	VectorCopy(level.intermission_angle, ent->client->ps.viewangles);
+	VectorCopy3(level.intermission_angle, ent->client->ps.viewangles);
 	ent->client->ps.pmove.pm_type = PM_FREEZE;
 	ent->client->ps.gunindex = 0;
 	ent->client->ps.blend[3] = 0;
@@ -169,8 +169,8 @@ void Game_TransitionToNextMatch (edict_t *targ)
 		}
 	}
 
-	VectorCopy (ent->s.origin, level.intermission_origin);
-	VectorCopy (ent->s.angles, level.intermission_angle);
+	VectorCopy3 (ent->s.origin, level.intermission_origin);
+	VectorCopy3 (ent->s.angles, level.intermission_angle);
 
 	// move all clients to the intermission point
 	for (i = 0; i < maxclients->value; i++)

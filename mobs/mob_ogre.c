@@ -326,13 +326,13 @@ void ogre_fire(edict_t* self)
 	// test for 3/23/2024
 	if (attack_random > 0.75)
 	{
-		VectorSet(aim, OGRE_RANGE_FUNNY_SHREK, 0, 16);
+		VectorSet3(aim, OGRE_RANGE_FUNNY_SHREK, 0, 16);
 		AngleVectors(self->s.angles, forward, NULL, NULL);
 		Ammo_Rocket(self, self->s.origin, forward, OGRE_DAMAGE_FUNNY_SHREK, OGRE_SPEED_FUNNY_SHREK, 120, 120);
 	}
 	else
 	{
-		VectorSet(aim, OGRE_RANGE_MELEE, 0, 16);
+		VectorSet3(aim, OGRE_RANGE_MELEE, 0, 16);
 		// todo: types
 		Ammo_Melee(self, aim, OGRE_RANGE_MELEE, 0);
 	}
@@ -612,8 +612,8 @@ void ogre_dodge(edict_t* self, edict_t* attacker, float eta)
 
 void ogre_dead(edict_t* self)
 {
-	VectorSet(self->mins, -16, -16, -24);
-	VectorSet(self->maxs, 16, 16, -8);
+	VectorSet3(self->mins, -16, -16, -24);
+	VectorSet3(self->maxs, 16, 16, -8);
 	self->movetype = MOVETYPE_TOSS;
 	self->svflags |= SVF_DEADMONSTER;
 	self->nextthink = 0;
@@ -711,8 +711,8 @@ void SP_monster_ogre_x(edict_t* self)
 	self->classname = "monster_ogre"; // for Bamfuslicator
 	self->s.modelindex = gi.modelindex("models/monsters/ogre/tris.md2");
 	self->monsterinfo.scale = MODEL_SCALE;
-	VectorSet(self->mins, -12, -12, -24);
-	VectorSet(self->maxs, 12, 12, 24);
+	VectorSet3(self->mins, -12, -12, -24);
+	VectorSet3(self->maxs, 12, 12, 24);
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
 	self->monsterinfo.aiflags |= AI_WANDER;

@@ -42,7 +42,7 @@ void Weapon_Grenade_fire(edict_t* ent, bool held)
 	if (is_quad)
 		damage *= 4;
 
-	VectorSet(offset, 8, 8, ent->viewheight - 8);
+	VectorSet3(offset, 8, 8, ent->viewheight - 8);
 	AngleVectors(ent->client->v_angle, forward, right, NULL);
 	Player_ProjectSource(ent, offset, forward, right, start);
 

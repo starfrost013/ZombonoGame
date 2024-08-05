@@ -59,7 +59,7 @@ void Ammo_Tangfuslicator_Touch(edict_t* self, edict_t* other, cplane_t* plane, c
 		// the zombie is on director team (this is used so they don't harm directors unless the requisite gameflag is set)
 		zombie->team = team_director;
 
-		VectorCopy(self->s.origin, zombie->s.origin);
+		VectorCopy3(self->s.origin, zombie->s.origin);
 
 		// make him upright
 		zombie->s.angles[0] = 0;
@@ -112,10 +112,10 @@ void Ammo_Tangfuslicator(edict_t* self, vec3_t trace_start, vec3_t aimdir)
 	lightning_bolt->think = Edict_Free;
 	lightning_bolt->clipmask = MASK_SHOT;
 	lightning_bolt->s.effects |= EF_LIGHTNING; // see cl_ents.c
-	VectorCopy(trace_start, lightning_bolt->s.origin);
-	VectorCopy(aimdir, lightning_bolt->s.angles);
+	VectorCopy3(trace_start, lightning_bolt->s.origin);
+	VectorCopy3(aimdir, lightning_bolt->s.angles);
 
-	VectorScale(aimdir, lightning_velocity, lightning_bolt->velocity);
+	VectorScale3(aimdir, lightning_velocity, lightning_bolt->velocity);
 	lightning_bolt->solid = SOLID_BBOX;
 	lightning_bolt->touch = Ammo_Tangfuslicator_Touch;
 
@@ -127,8 +127,8 @@ void Ammo_Tangfuslicator(edict_t* self, vec3_t trace_start, vec3_t aimdir)
 
 	// since the only visual indication is the lightning particles
 	// player edict size
-	VectorSet(lightning_bolt->mins, -bolt_half_size_x, -bolt_half_size_y, -8);
-	VectorSet(lightning_bolt->maxs, bolt_half_size_x, bolt_half_size_y, 8);
+	VectorSet3(lightning_bolt->mins, -bolt_half_size_x, -bolt_half_size_y, -8);
+	VectorSet3(lightning_bolt->maxs, bolt_half_size_x, bolt_half_size_y, 8);
 
 	do_not_zombify = self;
 

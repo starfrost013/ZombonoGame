@@ -41,8 +41,8 @@ bool Player_CanDamage(edict_t* targ, edict_t* inflictor)
 	// bmodels need special checking because their origin is 0,0,0
 	if (targ->movetype == MOVETYPE_PUSH)
 	{
-		VectorAdd(targ->absmin, targ->absmax, dest);
-		VectorScale(dest, 0.5, dest);
+		VectorAdd3(targ->absmin, targ->absmax, dest);
+		VectorScale3(dest, 0.5, dest);
 		trace = gi.trace(inflictor->s.origin, vec3_origin, vec3_origin, dest, inflictor, MASK_SOLID);
 		if (trace.fraction == 1.0)
 			return true;
@@ -55,28 +55,28 @@ bool Player_CanDamage(edict_t* targ, edict_t* inflictor)
 	if (trace.fraction == 1.0)
 		return true;
 
-	VectorCopy(targ->s.origin, dest);
+	VectorCopy3(targ->s.origin, dest);
 	dest[0] += 15.0;
 	dest[1] += 15.0;
 	trace = gi.trace(inflictor->s.origin, vec3_origin, vec3_origin, dest, inflictor, MASK_SOLID);
 	if (trace.fraction == 1.0)
 		return true;
 
-	VectorCopy(targ->s.origin, dest);
+	VectorCopy3(targ->s.origin, dest);
 	dest[0] += 15.0;
 	dest[1] -= 15.0;
 	trace = gi.trace(inflictor->s.origin, vec3_origin, vec3_origin, dest, inflictor, MASK_SOLID);
 	if (trace.fraction == 1.0)
 		return true;
 
-	VectorCopy(targ->s.origin, dest);
+	VectorCopy3(targ->s.origin, dest);
 	dest[0] -= 15.0;
 	dest[1] += 15.0;
 	trace = gi.trace(inflictor->s.origin, vec3_origin, vec3_origin, dest, inflictor, MASK_SOLID);
 	if (trace.fraction == 1.0)
 		return true;
 
-	VectorCopy(targ->s.origin, dest);
+	VectorCopy3(targ->s.origin, dest);
 	dest[0] -= 15.0;
 	dest[1] -= 15.0;
 	trace = gi.trace(inflictor->s.origin, vec3_origin, vec3_origin, dest, inflictor, MASK_SOLID);
@@ -437,7 +437,7 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 	else
 		te_sparks = TE_SPARKS;
 
-	VectorNormalize(dir);
+	VectorNormalize3(dir);
 
 	// bonus damage for suprising a monster
 	if (!(dflags & DAMAGE_RADIUS) && (targ->svflags & SVF_MONSTER) && (attacker->client) && (!targ->enemy) && (targ->health > 0))
@@ -462,7 +462,7 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 			if (targ->client && attacker == targ)
 			{
 				// the rocket jump hack...
-				VectorScale(dir, (80.0f/FRAMETIME) * (float)knockback / mass, kvel);
+				VectorScale3(dir, (80.0f/FRAMETIME) * (float)knockback / mass, kvel);
 
 				// make rocket jumping easier
 				//TODO: refactor this whole thing so checks like the rocket jump check can be done in ammo_*
@@ -471,10 +471,10 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 			}
 			else
 			{
-				VectorScale(dir, (25.0f / FRAMETIME) * (float)knockback / mass, kvel);
+				VectorScale3(dir, (25.0f / FRAMETIME) * (float)knockback / mass, kvel);
 			}
 
-			VectorAdd(targ->velocity, kvel, targ->velocity);
+			VectorAdd3(targ->velocity, kvel, targ->velocity);
 		}
 	}
 
@@ -561,7 +561,7 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 		client->damage_armor += asave;
 		client->damage_blood += take;
 		client->damage_knockback += knockback;
-		VectorCopy(point, client->damage_from);
+		VectorCopy3(point, client->damage_from);
 	}
 }
 
@@ -585,17 +585,17 @@ void Player_RadiusDamage(edict_t* inflictor, edict_t* attacker, float damage, ed
 		if (!ent->takedamage)
 			continue;
 
-		VectorAdd(ent->mins, ent->maxs, v);
-		VectorMA(ent->s.origin, 0.5f, v, v);
-		VectorSubtract(inflictor->s.origin, v, v);
-		points = damage - 0.5f * VectorLength(v);
+		VectorAdd3(ent->mins, ent->maxs, v);
+		VectorMA3(ent->s.origin, 0.5f, v, v);
+		VectorSubtract3(inflictor->s.origin, v, v);
+		points = damage - 0.5f * VectorLength3(v);
 		if (ent == attacker)
 			points = points * 0.5f;
 		if (points > 0)
 		{
 			if (Player_CanDamage(ent, inflictor))
 			{
-				VectorSubtract(ent->s.origin, inflictor->s.origin, dir);
+				VectorSubtract3(ent->s.origin, inflictor->s.origin, dir);
 				Player_Damage(ent, inflictor, attacker, dir, inflictor->s.origin, vec3_origin, (int32_t)points, (int32_t)points, DAMAGE_RADIUS, mod);
 			}
 		}
@@ -897,11 +897,11 @@ void Player_LookAtKiller(edict_t* self, edict_t* inflictor, edict_t* attacker)
 
 	if (attacker && attacker != world && attacker != self)
 	{
-		VectorSubtract(attacker->s.origin, self->s.origin, dir);
+		VectorSubtract3(attacker->s.origin, self->s.origin, dir);
 	}
 	else if (inflictor && inflictor != world && inflictor != self)
 	{
-		VectorSubtract(inflictor->s.origin, self->s.origin, dir);
+		VectorSubtract3(inflictor->s.origin, self->s.origin, dir);
 	}
 	else
 	{
@@ -933,7 +933,7 @@ void Player_Die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t da
 {
 	int32_t n;
 
-	VectorClear(self->avelocity);
+	VectorClear3(self->avelocity);
 
 	self->takedamage = DAMAGE_YES;
 	self->movetype = MOVETYPE_TOSS;
@@ -1102,7 +1102,7 @@ void Player_FallDamage(edict_t* ent)
 		damage = (delta - 30) / 2;
 		if (damage < 1)
 			damage = 1;
-		VectorSet(dir, 0, 0, 1);
+		VectorSet3(dir, 0, 0, 1);
 
 		if (!((int32_t)gameflags->value & GF_NO_FALL_DAMAGE))
 		{

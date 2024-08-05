@@ -48,7 +48,7 @@ void Ammo_Rocket_touch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t
 		Player_Noise(ent->owner, ent->s.origin, PNOISE_IMPACT);
 
 	// calculate position for the explosion entity
-	VectorMA(ent->s.origin, -0.02, ent->velocity, origin);
+	VectorMA3(ent->s.origin, -0.02, ent->velocity, origin);
 
 	if (other->takedamage)
 	{
@@ -82,16 +82,16 @@ void Ammo_Rocket(edict_t* self, vec3_t start, vec3_t dir, int32_t damage, int32_
 	edict_t* rocket;
 
 	rocket = Edict_Spawn();
-	VectorCopy(start, rocket->s.origin);
-	VectorCopy(dir, rocket->movedir);
+	VectorCopy3(start, rocket->s.origin);
+	VectorCopy3(dir, rocket->movedir);
 	vectoangles(dir, rocket->s.angles);
-	VectorScale(dir, speed, rocket->velocity);
+	VectorScale3(dir, speed, rocket->velocity);
 	rocket->movetype = MOVETYPE_FLYMISSILE;
 	rocket->clipmask = MASK_SHOT;
 	rocket->solid = SOLID_BBOX;
 	rocket->s.effects |= EF_ROCKET;
-	VectorClear(rocket->mins);
-	VectorClear(rocket->maxs);
+	VectorClear3(rocket->mins);
+	VectorClear3(rocket->maxs);
 	rocket->s.modelindex = gi.modelindex("models/objects/rocket/tris.md2");
 	rocket->owner = self;
 	rocket->touch = Ammo_Rocket_touch;

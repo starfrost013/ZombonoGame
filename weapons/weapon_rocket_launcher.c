@@ -45,10 +45,10 @@ void Weapon_RocketLauncher_Fire(edict_t* ent)
 
 	AngleVectors(ent->client->v_angle, forward, right, NULL);
 
-	VectorScale(forward, -2, ent->client->kick_origin);
+	VectorScale3(forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
-	VectorSet(offset, 8, 8, ent->viewheight - 8);
+	VectorSet3(offset, 8, 8, ent->viewheight - 8);
 	Player_ProjectSource(ent, offset, forward, right, start);
 	Ammo_Rocket(ent, start, forward, damage, ROCKETLAUNCHER_SPEED, damage_radius, radius_damage);
 

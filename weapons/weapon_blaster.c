@@ -32,11 +32,11 @@ void Blaster_Fire(edict_t* ent, vec3_t g_offset, int32_t damage, bool hyper, int
 	if (is_quad)
 		damage *= 4;
 	AngleVectors(ent->client->v_angle, forward, right, NULL);
-	VectorSet(offset, 24, 8, ent->viewheight - 8);
-	VectorAdd(offset, g_offset, offset);
+	VectorSet3(offset, 24, 8, ent->viewheight - 8);
+	VectorAdd3(offset, g_offset, offset);
 	Player_ProjectSource(ent, offset, forward, right, start);
 
-	VectorScale(forward, -2, ent->client->kick_origin);
+	VectorScale3(forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
 	Ammo_Blaster(ent, start, forward, damage, 1000, effect, hyper);
