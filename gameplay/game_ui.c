@@ -66,7 +66,8 @@ void Player_MoveToIntermission(edict_t* ent, player_team winning_team)
 	GameUI_SendLeaderboard(ent);
 
 	// make it draw the leaderboard (hack, reliable)
-	gi.WriteByte(svc_leaderboarddraw);
+	gi.WriteByte(svc_event);
+	gi.WriteByte(event_type_sv_leaderboard_draw);
 	gi.unicast(ent, true);
 
 	// ...and if they won or lost
@@ -208,7 +209,8 @@ void GameUI_SendLeaderboard(edict_t* ent)
 
 	edict_t* client_edict;
 	// tell the client there is a leaderboard update coming
-	gi.WriteByte(svc_leaderboard);
+	gi.WriteByte(svc_event);
+	gi.WriteByte(event_type_sv_leaderboard_update);
 
 	int32_t client_count = Game_CountClients();
 	int32_t total = 0, score = 0;

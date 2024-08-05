@@ -39,19 +39,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define	svc_muzzleflash			1
 #define	svc_muzzleflash2		2
 #define	svc_temp_entity			3
-#define	svc_layout				4				// THIS IS GOING TO BE REMOVED FOR BEING A MESS !!!!!
-#define svc_uidraw				5
-#define svc_uisettext			6
-#define svc_uisetimage			7
-#define svc_leaderboard			8
-#define svc_leaderboarddraw		9				// hack for tdm mode
-#define svc_drawtext			10
-#define	svc_loadout_add			11
-#define svc_loadout_remove		12
-#define svc_loadout_setcurrent	13	
-#define svc_loadout_clear		14
+#define svc_drawtext			4
+#define svc_event				5
 
-#define	svc_stufftext			19
+#define	svc_stufftext			10
 
 //==================================================================
 
@@ -73,29 +64,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SPAWNFLAG_NOT_TOURNAMENT	0x00010000 //tentative
 
 // edict->flags
-#define	FL_FLY					0x00000001
-#define	FL_SWIM					0x00000002	// implied immunity to drowining
-#define FL_IMMUNE_LASER			0x00000004
-#define	FL_INWATER				0x00000008
-#define	FL_GODMODE				0x00000010
-#define	FL_NOTARGET				0x00000020
-#define FL_IMMUNE_SLIME			0x00000040
-#define FL_IMMUNE_LAVA			0x00000080
-#define	FL_PARTIALGROUND		0x00000100	// not all corners are valid
-#define	FL_WATERJUMP			0x00000200	// player jumping out of water
-#define	FL_TEAMSLAVE			0x00000400	// not the first on the team
-#define FL_NO_KNOCKBACK			0x00000800
-#define FL_POWER_ARMOR			0x00001000	// power armor (if any) is active
-#define FL_NO_SAVE				0x40000000	// do not save item
-#define FL_RESPAWN				0x80000000	// used for item respawning
+#define	FL_FLY						0x00000001
+#define	FL_SWIM						0x00000002	// implied immunity to drowining
+#define FL_IMMUNE_LASER				0x00000004
+#define	FL_INWATER					0x00000008
+#define	FL_GODMODE					0x00000010
+#define	FL_NOTARGET					0x00000020
+#define FL_IMMUNE_SLIME				0x00000040
+#define FL_IMMUNE_LAVA				0x00000080
+#define	FL_PARTIALGROUND			0x00000100	// not all corners are valid
+#define	FL_WATERJUMP				0x00000200	// player jumping out of water
+#define	FL_TEAMSLAVE				0x00000400	// not the first on the team
+#define FL_NO_KNOCKBACK				0x00000800
+#define FL_POWER_ARMOR				0x00001000	// power armor (if any) is active
+#define FL_NO_SAVE					0x40000000	// do not save item
+#define FL_RESPAWN					0x80000000	// used for item respawning
 
 // memory tags to allow dynamic memory to be cleaned up
-#define	TAG_GAME	765		// clear when unloading the dll
-#define	TAG_LEVEL	766		// clear when loading a new level
+#define	TAG_GAME					765			// clear when unloading the dll
+#define	TAG_LEVEL					766			// clear when loading a new level
 
-#define MELEE_DISTANCE	80					// Vector magnitude distance within which an enemy can melee.
+#define MELEE_DISTANCE				80				// Vector magnitude distance within which an enemy can melee.
 
-#define BODY_QUEUE_SIZE		8
+#define BODY_QUEUE_SIZE				8
 
 // for gameplay/game_client.c
 

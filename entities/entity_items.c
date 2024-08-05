@@ -500,7 +500,8 @@ void Drop_Ammo(edict_t* ent, gitem_t* item)
 	{
 		Loadout_DeleteItem(ent, item->pickup_name);
 
-		gi.WriteByte(svc_loadout_remove);
+		gi.WriteByte(svc_event);
+		gi.WriteByte(event_type_sv_loadout_remove);
 		gi.WriteString(item->pickup_name);
 	}
 

@@ -516,7 +516,8 @@ void Client_CommandLoadout(edict_t* ent)
 		// now clamp to available items
 		if (index >= ent->client->loadout.num_items) index = ent->client->loadout.num_items - 1;
 
-		gi.WriteByte(svc_loadout_setcurrent);
+		gi.WriteByte(svc_event);
+		gi.WriteByte(event_type_sv_loadout_setcurrent);
 		gi.WriteByte(index);
 		gi.unicast(ent, true); // rare
 

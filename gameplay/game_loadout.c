@@ -34,7 +34,8 @@ loadout_entry_t* Loadout_AddItem(edict_t *ent, const char* name, const char* ico
 
 	if (ent->client->pers.connected)
 	{
-		gi.WriteByte(svc_loadout_add);
+		gi.WriteByte(svc_event);
+		gi.WriteByte(event_type_sv_loadout_add);
 		gi.WriteString(name);
 		gi.WriteString(icon);
 		gi.WriteByte(type);
@@ -65,7 +66,8 @@ void Loadout_DeleteItem(edict_t* ent, const char* name)
 		ent->client->loadout.num_items--;
 
 	// tell the client
-	gi.WriteByte(svc_loadout_remove);
+	gi.WriteByte(svc_event);
+	gi.WriteByte(event_type_sv_loadout_remove);
 	gi.WriteString(name);
 	
 	gi.unicast(ent, true);

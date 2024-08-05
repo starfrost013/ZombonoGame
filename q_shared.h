@@ -613,6 +613,33 @@ typedef struct
 
 extern vec3_t monster_flash_offset [];
 
+// svc_event is a way for the server to tell the client when something happens that it needs to know about
+// e.g. a UI changed, a player was killed or something...
+
+typedef enum event_type_sv_e
+{
+	event_type_sv_game_start,			// A game started.
+	event_type_sv_game_end,				// A game ended.
+	event_type_sv_leaderboard_update,	// A leaderboard update occurred.
+	event_type_sv_leaderboard_draw,		// ****REMOVE THIS EVENT WHEN CODE REFACTORED****
+	event_type_sv_loadout_add,			// A loadout item was added (<loadout_entry_t struct>)
+	event_type_sv_loadout_remove,		// A loadout item was removed (<index, or -1 for current>)
+	event_type_sv_loadout_setcurrent,	// A loadout item was changed (<item id>)
+	event_type_sv_loadout_clear,		// The loadout was cleared
+	event_type_sv_player_joined,		// A player joined the game
+	event_type_sv_player_left,			// A player left the game
+	event_type_sv_player_killed,		// A player was killed (<player 1 name> <player 2 name> <method of death>)
+	event_type_sv_ui_draw,				// Draw a user interface
+	event_type_sv_ui_set_text,			// Update a UI's text
+	event_type_sv_ui_set_image,			// Update a UI's image
+} event_type_sv;
+
+// client to server events (clc_event)
+typedef enum event_type_cl_e
+{
+	event_type_cl_player_set_team,		// Set a player's team
+} event_type_cl;
+
 // temp entity events
 //
 // Temp entity events are for things that happen

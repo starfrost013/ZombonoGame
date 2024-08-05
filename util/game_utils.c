@@ -591,7 +591,8 @@ ZombonoUI-related utilities
 // Sends a UI. ent NULL = multicast
 void GameUI_Send(edict_t* ent, char* ui_name, bool enabled, bool activated, bool reliable)
 {
-	gi.WriteByte(svc_uidraw);
+	gi.WriteByte(svc_event);
+	gi.WriteByte(event_type_sv_ui_draw);
 	gi.WriteString(ui_name);
 	gi.WriteByte(enabled);
 	gi.WriteByte(activated);
@@ -615,7 +616,8 @@ void GameUI_Send(edict_t* ent, char* ui_name, bool enabled, bool activated, bool
 
 void GameUI_SetText(edict_t* ent, char* ui_name, char* control_name, char* text, bool reliable)
 {
-	gi.WriteByte(svc_uisettext);
+	gi.WriteByte(svc_event);
+	gi.WriteByte(event_type_sv_ui_set_text);
 	gi.WriteString(ui_name);
 	gi.WriteString(control_name);
 	gi.WriteString(text);
@@ -639,7 +641,8 @@ void GameUI_SetText(edict_t* ent, char* ui_name, char* control_name, char* text,
 
 void GameUI_SetImage(edict_t* ent, char* ui_name, char* control_name, char* image_path, bool reliable)
 {
-	gi.WriteByte(svc_uisetimage);
+	gi.WriteByte(svc_event);
+	gi.WriteByte(event_type_sv_ui_set_image);
 	gi.WriteString(ui_name);
 	gi.WriteString(control_name);
 	gi.WriteString(image_path);

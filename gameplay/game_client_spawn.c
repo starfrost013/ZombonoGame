@@ -328,7 +328,8 @@ edict_t* Player_SpawnSelectFarthest(char* spawn_class_name)
 
 void Player_SetupGamemodeTDM(edict_t* ent, vec3_t origin, vec3_t angles)
 {
-	gi.WriteByte(svc_loadout_clear);
+	gi.WriteByte(svc_event);
+	gi.WriteByte(event_type_sv_loadout_clear);
 	gi.unicast(ent, true);
 
 	if (timelimit->value)
@@ -351,7 +352,8 @@ void Player_SetupGamemodeTDM(edict_t* ent, vec3_t origin, vec3_t angles)
 
 void Player_SetupGamemodeWaves(edict_t* ent, vec3_t origin, vec3_t angles)
 {
-	gi.WriteByte(svc_loadout_clear);
+	gi.WriteByte(svc_event);
+	gi.WriteByte(event_type_sv_loadout_clear);
 	gi.unicast(ent, true);
 
 	if (timelimit->value)
@@ -610,7 +612,8 @@ void Client_JoinServer(edict_t* ent)
 	// TEMPORARY HACK FOR PLAYTEST - TODO: THIS *WILL* BREAK FOR EXISTING CLIENTS IF THE TIMELIMIT OR FRAGLIMIT IS CHANGED AFTER SERVER CREATION UNTIL YOU RESPAWN
 
 	// tell the client to wipe its loadout information
-	gi.WriteByte(svc_loadout_clear);
+	gi.WriteByte(svc_event);
+	gi.WriteByte(event_type_sv_loadout_clear);
 	gi.unicast(ent, true);
 
 	// every player starts out as unassigned
