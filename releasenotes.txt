@@ -7,9 +7,11 @@ August XX, 2024
 NEW FEATURES:
 	* Renderer API version 12
 		* Renamed Game_Init and Game_Shutdown to Init and Shutdown (as they are intended to be called, I fucked up renaming things)
-	* Game API version 9
+	* Game API version 10 (9 was used for private test build)
 		* Renamed import functions to be more consistently named and the same names as the engine when applicable
 		* Exposed Cmd_AddCommand and Cmd_RemoveCommand to the game dll (they were already exposed to the refresh dll)
+		* Exposed MSG_Read* functions to the game to read dll from a client's network stream
+		* Removed noconsole client commands and replaced with clc_event (event system described below)
 	* Camera system changes:
 		* The camera can now take multiple angles
 		* The game now renders the view from the "vieworigin" field of pmove instead of the player origin
@@ -32,6 +34,20 @@ NEW FEATURES:
 		* Improved strings to be more verbose and use fractions of milliseconds
 	* Added zone memory allocation logging
 		* Gated behind "log_memalloc" cvar (run the game with +set log_memalloc 1)
+	* Rewrote part of the network protocol (Current protocol version 46)
+		* Added the concept of "svc_event" and "clc_event". An svc_event signifies to the client that something has happened on the game side that needs to be handled.
+		A clc_event is the same but for client to server.
+		* This replaces the following network messages: 
+			* svc_uidraw
+			* svc_uisettext
+			* svc_uisetimage
+			* svc_leaderboard
+			* svc_leaderboarddraw
+			* svc_loadout_add
+			* svc_loadout_remove
+			* svc_loadout_setcurrent
+			* svc_loadout_clear
+			* clc_clientcommand_noconsole
 	* Implemented localisation into the game
 		* The language is controlled by the language cvar
 		* Strings are loaded from text\<language->value>\strings.txt (max 1024 strings, 64 key length and 512 key value)

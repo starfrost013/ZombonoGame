@@ -43,6 +43,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define NULL ((void *)0)
 #endif
 
+// Z_Malloc tags
+#define TAG_LOCALISATION	6666	// clear when Localisation_Shutdown
+#define TAG_TEXT_ENGINE		6667	// freed once work with it done
+
 // angle indexes
 #define	PITCH				0		// up / down
 #define	YAW					1		// left / right

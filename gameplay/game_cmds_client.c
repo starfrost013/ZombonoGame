@@ -882,7 +882,7 @@ Cmd_SetTeam_f
 (noconsole)
 ==================
 */
-void Client_CommandSetTeam(edict_t* ent, player_team team)
+void Client_SetTeam(edict_t* ent, player_team team)
 {
 	// anti cheating:
 	// on TDM mode, unassigneds are invincible (for spectating, and also for )
@@ -1205,17 +1205,17 @@ void Client_Command(edict_t* ent)
 }
 
 // ClientCommands that cannot be entered from teh console.
-void Client_CommandNoConsole(edict_t* ent)
+void Client_Event(edict_t* ent)
 {
-	char* cmd;
-
 	if (!ent->client)
 		return;		// not fully in game yet
 
-	cmd = gi.Cmd_Argv(0);
+	event_type_cl cl = gi.ReadByte();
 
-	if (!Q_stricmp(cmd, "setteam"))
+	switch (cl)
 	{
-		Client_CommandSetTeam(ent, atoi(gi.Cmd_Argv(1)));
+	case event_type_cl_player_set_team:
+		Client_SetTeam(ent, gi.ReadByte());
+		break;
 	}
 }

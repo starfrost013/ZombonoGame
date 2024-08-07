@@ -92,7 +92,7 @@ bool Client_Connect(edict_t* ent, char* userinfo);
 void Client_Disconnect(edict_t* ent);
 void Client_OnConnected(edict_t* ent);
 void Client_Command(edict_t* ent);
-void Client_CommandNoConsole(edict_t* ent);
+void Client_Event(edict_t* ent);
 
 //===================================================================
 
@@ -136,7 +136,7 @@ game_export_t * GetGameAPI(game_import_t * import)
 	globals.Client_Disconnect = Client_Disconnect;
 	globals.Client_OnConnected = Client_OnConnected;
 	globals.Client_Command = Client_Command;
-	globals.Client_CommandNoConsole = Client_CommandNoConsole;
+	globals.Client_Event = Client_Event;
 
 	globals.Server_Command = Server_Command;
 
