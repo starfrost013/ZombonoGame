@@ -32,8 +32,12 @@ NEW FEATURES:
 	* A dedicated server binary, on Windows as well as Linux...
 	* Renamed host_speeds cvar to profile_all
 		* Improved strings to be more verbose and use fractions of milliseconds
-	* Added zone memory allocation logging
+	* Zone memory allocation changes
+		* Made it use calloc instead of malloc+memset, this is often faster due to operating system memory pooling and allocation behaviour
+		* Removed all non-tracked callocs and changed them to Z_TagMalloc
+		* Added zone memory allocation logging
 		* Gated behind "log_memalloc" cvar (run the game with +set log_memalloc 1)
+
 	* Rewrote part of the network protocol (Current protocol version 46)
 		* Added the concept of "svc_event" and "clc_event". An svc_event signifies to the client that something has happened on the game side that needs to be handled.
 		A clc_event is the same but for client to server.
