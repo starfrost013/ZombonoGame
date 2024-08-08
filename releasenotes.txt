@@ -37,7 +37,6 @@ NEW FEATURES:
 		* Removed all non-tracked callocs and changed them to Z_TagMalloc
 		* Added zone memory allocation logging
 		* Gated behind "log_memalloc" cvar (run the game with +set log_memalloc 1)
-
 	* Rewrote part of the network protocol (Current protocol version 46)
 		* Added the concept of "svc_event" and "clc_event". An svc_event signifies to the client that something has happened on the game side that needs to be handled.
 		A clc_event is the same but for client to server.
@@ -70,6 +69,11 @@ NEW FEATURES:
 	* Massively refactored vector handling code
 		* Split most functions into Vector3 and Vector4 code
 		* Removed obsolete, unused, or only for ancient compiler defines
+	* Netservices Framework: Changed useragent from "Zombono" to "EuphoriaEngine"
+	* Netservices Framework: Added HTTP POST as well as GET support
+	* UI: Added hover and pressed colours for Box controls
+		* Set with the UI_SetColorOnHover and UI_SetColorOnClick functions
+	* UI: Added an update event that fires every client frame
 	* Changed game binary name to be EuphoriaEngine.exe as this engine will be used for many games to come (hopefully)
 	* Changed intro graphic
 	* Made the engine version a cvar
@@ -77,14 +81,9 @@ NEW FEATURES:
 	* Renamed many gamedll functions for consistency
 	* Wrote a tool to generate an updateinfo.json file automatically:
 		* Changed the updater to use automatically generated updateinfo.json files
-
 	* Made the time text larger, removed "Time: " and moved it downwards
 	* Engine limits: Increased MAX_GLTEXTURES from 1024 to 2048
-	* Netservices Framework: Changed useragent from "Zombono" to "EuphoriaEngine"
-	* Netservices Framework: Added HTTP POST as well as GET support
-	* UI: Added hover and pressed colours for Box controls
-		* Set with the UI_SetColorOnHover and UI_SetColorOnClick functions
-	* Added arbitrary colour to text, not just color codes (color codes still override the text)
+	* Added arbitrary colour to text, not just color codes (color codes still override the set text colour if they are found within the text)
 
 BUG FIXES:
 	* Fixed the game crashing on minimise
@@ -107,6 +106,8 @@ BUG FIXES:
 	re-initialising every time after the first that the game connected to a server
 	* Fixed crash bug when picking up cells
 	* Fixed UI controls not having their size re-evaluated when their font was changed
+	* Fixed UI callback error messages referring to the wrong callback
+	* Fixed UI callback error messages referring to the current UI instead of the UI causing the error
 	* Fixed potential crash with the server WriteIP command 
 	* Fixed 620 compile warnings, 981 to go (most of them are due to the compiler being 64-bit and the default decimal type being DOUBLE instead of float)
 
