@@ -73,7 +73,9 @@ NEW FEATURES:
 	* Netservices Framework: Added HTTP POST as well as GET support
 	* UI: Added hover and pressed colours for Box controls
 		* Set with the UI_SetColorOnHover and UI_SetColorOnClick functions
-	* UI: Added an update event that fires every client frame
+	* UI: Added an update event, for both UI controls and entire UIs that fires every client frame
+	* UI: Added the ability to set the position and size of a UI control after it's completed
+	* UI: Removed the requirement for `current_ui` to be set for events to be received, the ui only has to be activated
 	* Changed game binary name to be EuphoriaEngine.exe as this engine will be used for many games to come (hopefully)
 	* Changed intro graphic
 	* Made the engine version a cvar

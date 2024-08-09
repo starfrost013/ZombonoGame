@@ -652,17 +652,22 @@ bool Player_IsNeutral(edict_t* ent)
 	return false;
 }
 
+#define MOD_BUFFER_SIZE	128
+
 void Player_Obituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 {
+	// todo: restructure this function
+
 	int32_t	mod;
 	char* message;
 	char* message2;
-	bool	ff;
+	bool friendly_fire;
+	char msg_buffer[MOD_BUFFER_SIZE] = { 0 };
 
 	if ((!(int32_t)(gameflags->value) & GF_NO_FRIENDLY_FIRE) && attacker->client)
 		means_of_death |= MOD_FRIENDLY_FIRE;
 
-	ff = means_of_death & MOD_FRIENDLY_FIRE;
+	friendly_fire = means_of_death & MOD_FRIENDLY_FIRE;
 	mod = means_of_death & ~MOD_FRIENDLY_FIRE;
 	message = NULL;
 	message2 = "";
@@ -753,9 +758,17 @@ void Player_Obituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 			break;
 		}
 	}
+
+
 	if (message)
 	{
-		gi.bprintf(PRINT_MEDIUM, "%s %s!\n", self->client->pers.netname, message);
+		snprintf(msg_buffer, MOD_BUFFER_SIZE, "%s %s!", self->client->pers.netname, message);
+		// player suicided
+		gi.WriteByte(svc_event);
+		gi.WriteByte(event_type_sv_player_killed);
+		gi.WriteString(msg_buffer);
+		gi.WriteString("none"); //no icon
+		
 		self->client->resp.score--;
 		self->enemy = NULL;
 		return;
@@ -823,12 +836,18 @@ void Player_Obituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 			message2 = "'s personal space";
 			break;
 		}
+
 		if (message)
 		{
-			// TODO: send a message if you friendly fired, and then kick
-			gi.bprintf(PRINT_MEDIUM, "%s %s %s%s!\n", self->client->pers.netname, message, attacker->client->pers.netname, message2);
+			// optional kick for friendly fire on tdm
+			snprintf(msg_buffer, MOD_BUFFER_SIZE, "%s %s %s%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
+			// player suicided
+			gi.WriteByte(svc_event);
+			gi.WriteByte(event_type_sv_player_killed);
+			gi.WriteString(msg_buffer);
+			gi.WriteString("none"); //no icon
 
-			if (ff)
+			if (friendly_fire)
 				attacker->client->resp.score--;
 			else
 				attacker->client->resp.score++;
@@ -957,6 +976,7 @@ void Player_Die(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t da
 		Player_LookAtKiller(self, inflictor, attacker);
 		self->client->ps.pmove.pm_type = PM_DEAD;
 		Player_Obituary(self, inflictor, attacker);
+	
 		Player_TossWeapon(self);
 
 		// show scores
