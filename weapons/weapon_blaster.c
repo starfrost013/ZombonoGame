@@ -60,7 +60,13 @@ void Weapon_Blaster_Fire(edict_t* ent)
 	damage = 15;
 
 	Blaster_Fire(ent, vec3_origin, damage, false, EF_BLASTER);
-	ent->client->ps.gunframe++;
+
+	if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+	{
+		// todo: separate primary and secondary fire frames
+		ent->client->ps.gunframe++; // increment anim frame
+	}
+
 }
 
 void Weapon_Blaster(edict_t* ent)

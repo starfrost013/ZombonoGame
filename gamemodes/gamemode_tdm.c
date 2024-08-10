@@ -43,7 +43,7 @@ void Gamemode_TDMCheckRules()
 		}
 
 		// update every 1 second roughly
-		if (level.framenum % (int)(1 / FRAMETIME) == 0)
+		if (level.framenum % (int32_t)(1.0f / FRAMETIME) == 0)
 		{
 			char text[TIME_BUF_LENGTH] = { 0 };
 
@@ -82,7 +82,7 @@ void Gamemode_TDMCheckRules()
 	}
 
 	// every second update each team's score
-	if (level.framenum % (int)(1 / FRAMETIME) == 0)
+	if (level.framenum % (int32_t)(1.0f / FRAMETIME) == 0)
 	{
 		team_scores_t team_scores = Gamemode_TDMGetScores();
 		char text[SCORE_BUF_LENGTH] = { 0 };

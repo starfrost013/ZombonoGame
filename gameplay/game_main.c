@@ -423,8 +423,7 @@ void Game_RunFrame()
 		Physics_RunEntity(ent);
 	}
 
-	// update the gamemode 
-	// see if it is time to end a deathmatch
+	// let the current gamemode think
 	Gamemode_Update();
 
 	// see if needpass needs updated

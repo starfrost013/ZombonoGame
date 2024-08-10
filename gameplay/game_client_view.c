@@ -789,7 +789,8 @@ void Client_SetFrame(edict_t* ent)
 			return;
 		}
 	}
-	else if (ent->s.frame < client->anim_end)
+	else if (ent->s.frame < client->anim_end
+		&& !(level.framenum % (int32_t)(0.1f / FRAMETIME))) // this is a complete hack until we have a new time-based animation system. DON'T MODIFY !
 	{	// continue an animation
 		ent->s.frame++;
 		return;

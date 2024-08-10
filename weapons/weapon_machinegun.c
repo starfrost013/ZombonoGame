@@ -44,7 +44,12 @@ void Weapon_Machinegun_Fire(edict_t* ent)
 	if (!(ent->client->buttons & BUTTON_ATTACK1))
 	{
 		ent->client->machinegun_shots = 0;
-		ent->client->ps.gunframe++;
+		if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+		{
+			// todo: separate primary and secondary fire frames
+			ent->client->ps.gunframe++; // increment anim frame
+		}
+
 		return;
 	}
 

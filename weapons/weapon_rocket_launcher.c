@@ -58,7 +58,12 @@ void Weapon_RocketLauncher_Fire(edict_t* ent)
 	gi.WriteByte(MZ_ROCKET | is_silenced);
 	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
-	ent->client->ps.gunframe++;
+	if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+	{
+		// todo: separate primary and secondary fire frames
+		ent->client->ps.gunframe++; // increment anim frame
+	}
+
 
 	Player_Noise(ent, start, PNOISE_WEAPON);
 

@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <game_local.h>
 #include <mobs/mob_player.h>
 
-void Weapon_grenadelauncher_fire(edict_t* ent)
+void Weapon_GrenadeLauncher_Fire(edict_t* ent)
 {
 	vec3_t	offset;
 	vec3_t	forward, right;
@@ -51,7 +51,12 @@ void Weapon_grenadelauncher_fire(edict_t* ent)
 	gi.WriteByte(MZ_GRENADE | is_silenced);
 	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
-	ent->client->ps.gunframe++;
+	if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+	{
+		// todo: separate primary and secondary fire frames
+		ent->client->ps.gunframe++; // increment anim frame
+	}
+
 
 	Player_Noise(ent, start, PNOISE_WEAPON);
 
@@ -64,6 +69,6 @@ void Weapon_GrenadeLauncher(edict_t* ent)
 	static int32_t pause_frames[] = { 34, 51, 59, 0 };
 	static int32_t fire_frames[] = { 6, 0 };
 
-	Weapon_Generic(ent, 5, 16, 59, 64, pause_frames, fire_frames, NULL, Weapon_grenadelauncher_fire, NULL);
+	Weapon_Generic(ent, 5, 16, 59, 64, pause_frames, fire_frames, NULL, Weapon_GrenadeLauncher_Fire, NULL);
 }
 

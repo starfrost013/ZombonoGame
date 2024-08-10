@@ -90,8 +90,13 @@ gibs
 */
 void gib_think(edict_t* self)
 {
+	// hack until new animation system
+
+	int32_t next_frame_time = (0.1f / FRAMETIME);
+
 	self->s.frame++;
-	self->nextthink = level.time + FRAMETIME;
+	self->nextthink = level.time + FRAMETIME * next_frame_time;
+
 
 	if (self->s.frame == 10)
 	{
@@ -1156,9 +1161,11 @@ void SP_misc_deadsoldier(edict_t* ent)
 */
 void misc_satellite_dish_think(edict_t* self)
 {
+	int32_t next_frame_time = (0.1f / FRAMETIME);
+
 	self->s.frame++;
 	if (self->s.frame < 38)
-		self->nextthink = level.time + FRAMETIME;
+		self->nextthink = level.time + FRAMETIME * next_frame_time;
 }
 
 void misc_satellite_dish_use(edict_t* self, edict_t* other, edict_t* activator)

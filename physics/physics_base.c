@@ -103,8 +103,10 @@ bool SV_RunThink(edict_t* ent)
 		return true;
 
 	ent->nextthink = 0;
+
 	if (!ent->think)
 		gi.error("NULL ent->think");
+
 	ent->think(ent);
 
 	return false;
@@ -146,7 +148,7 @@ int32_t ClipVelocity(vec3_t in, vec3_t normal, vec3_t out, float overbounce)
 {
 	float	backoff;
 	float	change;
-	int		i, blocked;
+	int32_t i, blocked;
 
 	blocked = 0;
 	if (normal[2] > 0)

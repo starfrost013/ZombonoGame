@@ -305,9 +305,15 @@ void AI_MonsterMove(edict_t* self)
 		{
 			if (!(self->monsterinfo.aiflags & AI_HOLD_FRAME))
 			{
-				self->s.frame++;
-				if (self->s.frame > move->lastframe)
-					self->s.frame = move->firstframe;
+				// hack until new animation system
+				if (level.framenum
+					& (int32_t)(0.1f / FRAMETIME))
+				{
+					self->s.frame++;
+					if (self->s.frame > move->lastframe)
+						self->s.frame = move->firstframe;
+				}
+
 			}
 		}
 	}

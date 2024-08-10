@@ -41,8 +41,12 @@ void Weapon_Bamfuslicator_SetType(edict_t* ent)
 		break;
 	}
 
-	// todo: separate primary and secondary fire frames
-	ent->client->ps.gunframe++; // increment anim frame
+	if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+	{
+		// todo: separate primary and secondary fire frames
+		ent->client->ps.gunframe++; // increment anim frame
+	}
+
 }
 
 void Weapon_Bamfuslicator_Fire(edict_t* ent)
@@ -67,7 +71,12 @@ void Weapon_Bamfuslicator_Fire(edict_t* ent)
 
 	Ammo_Bamfuslicator(ent, start, forward, ent->client->pers.weapon->spawn_type); // will always store current spawn type
 
-	ent->client->ps.gunframe++; // increment anim frame
+	if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+	{
+		// todo: separate primary and secondary fire frames
+		ent->client->ps.gunframe++; // increment anim frame
+	}
+
 }
 
 void Weapon_Bamfuslicator(edict_t* ent)

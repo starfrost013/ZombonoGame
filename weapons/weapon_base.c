@@ -470,7 +470,12 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 			}
 		}
 
-		ent->client->ps.gunframe++;
+		if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+		{
+			// todo: separate primary and secondary fire frames
+			ent->client->ps.gunframe++; // increment anim frame
+		}
+
 		return;
 	}
 
@@ -483,7 +488,12 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 			return;
 		}
 
-		ent->client->ps.gunframe++;
+		if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+		{
+			// todo: separate primary and secondary fire frames
+			ent->client->ps.gunframe++; // increment anim frame
+		}
+
 		return;
 	}
 
@@ -588,7 +598,12 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 				}
 			}
 
-			ent->client->ps.gunframe++;
+			if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+			{
+				// todo: separate primary and secondary fire frames
+				ent->client->ps.gunframe++; // increment anim frame
+			}
+
 			return;
 		}
 
@@ -619,7 +634,14 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 		}
 
 		if (!fire_frames_primary[n])
-			ent->client->ps.gunframe++;
+		{
+			if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+			{
+				// todo: separate primary and secondary fire frames
+				ent->client->ps.gunframe++; // increment anim frame
+			}
+
+		};
 
 		if (ent->client->ps.gunframe == FRAME_IDLE_FIRST + 1)
 			ent->client->weaponstate = WEAPON_READY;
@@ -641,7 +663,13 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 		}
 
 		if (!fire_frames_secondary[n])
-			ent->client->ps.gunframe++;
+		{
+			if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+			{
+				// todo: separate primary and secondary fire frames
+				ent->client->ps.gunframe++; // increment anim frame
+			}
+		}
 
 		if (ent->client->ps.gunframe == FRAME_IDLE_FIRST + 1)
 			ent->client->weaponstate = WEAPON_READY;

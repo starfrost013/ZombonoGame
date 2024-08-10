@@ -30,6 +30,9 @@ NEW FEATURES:
 	* The game now runs at 40Hz instead of 10Hz tick rate
 			* This should improve hit registration and many other aspects of network play
 	* A dedicated server binary, on Windows as well as Linux...
+	* Added a real-time killfeed
+		* It replaces death strings being printed to the chat
+		* You can use the ui_killfeed_entry_time cvar (default: 7500 milliseconds) to change the length of a killfeed entry in milliseconds
 	* Renamed host_speeds cvar to profile_all
 		* Improved strings to be more verbose and use fractions of milliseconds
 	* Zone memory allocation changes

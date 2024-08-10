@@ -36,7 +36,12 @@ void Weapon_HyperBlaster_Fire(edict_t* ent)
 
 	if (!(ent->client->buttons & BUTTON_ATTACK1))
 	{
-		ent->client->ps.gunframe++;
+		if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+		{
+			// todo: separate primary and secondary fire frames
+			ent->client->ps.gunframe++; // increment anim frame
+		}
+
 	}
 	else
 	{
@@ -81,7 +86,12 @@ void Weapon_HyperBlaster_Fire(edict_t* ent)
 			}
 		}
 
-		ent->client->ps.gunframe++;
+		if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+		{
+			// todo: separate primary and secondary fire frames
+			ent->client->ps.gunframe++; // increment anim frame
+		}
+
 		if (ent->client->ps.gunframe == 12 && ent->client->loadout_current_ammo)
 			ent->client->ps.gunframe = 6;
 	}
