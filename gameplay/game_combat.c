@@ -762,13 +762,30 @@ void Player_Obituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 
 	if (message)
 	{
-		snprintf(msg_buffer, MOD_BUFFER_SIZE, "%s %s!", self->client->pers.netname, message);
+		if ((int32_t)gamemode->value == GAMEMODE_TDM)
+		{
+			if (self->team & team_director)
+			{
+				snprintf(msg_buffer, MOD_BUFFER_SIZE, "^c%s^7 %s!", self->client->pers.netname, message);
+			}
+			else
+			{
+				snprintf(msg_buffer, MOD_BUFFER_SIZE, "^a%s^7 %s!", self->client->pers.netname, message);
+			}
+		}
+		else
+		{
+			snprintf(msg_buffer, MOD_BUFFER_SIZE, "%s %s!", self->client->pers.netname, message);
+		}
+
+
 		// player suicided
 		gi.WriteByte(svc_event);
 		gi.WriteByte(event_type_sv_player_killed);
 		gi.WriteString(msg_buffer);
 		gi.WriteString("none"); //no icon
-		
+		gi.multicast(vec3_origin, MULTICAST_ALL);
+
 		self->client->resp.score--;
 		self->enemy = NULL;
 		return;
@@ -840,12 +857,35 @@ void Player_Obituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 		if (message)
 		{
 			// optional kick for friendly fire on tdm
-			snprintf(msg_buffer, MOD_BUFFER_SIZE, "%s %s %s%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
+
+			if ((int32_t)gamemode->value == GAMEMODE_TDM)
+			{
+				if (self->team & team_director)
+				{
+					if (attacker->team & team_director)
+						snprintf(msg_buffer, MOD_BUFFER_SIZE, "Friendly Fire: ^c%s^7 %s ^c%s^7%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
+					else
+						snprintf(msg_buffer, MOD_BUFFER_SIZE, "^c%s^7 %s ^a%s^7%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
+				}
+				else
+				{
+					if (attacker->team & team_director)
+						snprintf(msg_buffer, MOD_BUFFER_SIZE, "Friendly Fire: ^a%s^7 %s ^a%s^7%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
+					else
+						snprintf(msg_buffer, MOD_BUFFER_SIZE, "^a%s^7 %s ^c%s^7%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
+				}
+			}
+			else
+			{
+				snprintf(msg_buffer, MOD_BUFFER_SIZE, "%s %s %s%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
+			}
+
 			// player suicided
 			gi.WriteByte(svc_event);
 			gi.WriteByte(event_type_sv_player_killed);
 			gi.WriteString(msg_buffer);
 			gi.WriteString("none"); //no icon
+			gi.multicast(vec3_origin, MULTICAST_ALL);
 
 			if (friendly_fire)
 				attacker->client->resp.score--;

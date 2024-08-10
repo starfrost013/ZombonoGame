@@ -5,8 +5,9 @@ Version 0.1.0-pre2
 August XX, 2024
 
 NEW FEATURES:
-	* Renderer API version 12
+	* Renderer API version 13 (12 was used internally for test builds)
 		* Renamed Game_Init and Game_Shutdown to Init and Shutdown (as they are intended to be called, I fucked up renaming things)
+		* Exposed Cvar_ForceSet to refresh api
 	* Game API version 10 (9 was used for private test build)
 		* Renamed import functions to be more consistently named and the same names as the engine when applicable
 		* Exposed Cmd_AddCommand and Cmd_RemoveCommand to the game dll (they were already exposed to the refresh dll)
