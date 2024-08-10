@@ -154,7 +154,7 @@ float PlayersRangeFromSpot(edict_t* spot)
 
 	bestplayerdistance = 9999999;
 
-	for (n = 1; n <= maxclients->value; n++)
+	for (n = 1; n <= sv_maxclients->value; n++)
 	{
 		player = &g_edicts[n];
 
@@ -457,7 +457,7 @@ void Player_CopyToBodyQue(edict_t* ent)
 	edict_t* body;
 
 	// grab a body que and cycle to the next one
-	body = &g_edicts[(int32_t)maxclients->value + level.body_que + 1];
+	body = &g_edicts[(int32_t)sv_maxclients->value + level.body_que + 1];
 	level.body_que = (level.body_que + 1) % BODY_QUEUE_SIZE;
 
 	// FIXME: send an effect on the removed body
@@ -531,7 +531,7 @@ void Client_RespawnSpectator(edict_t* ent)
 		}
 
 		// count spectators
-		for (i = 1, numspec = 0; i <= maxclients->value; i++)
+		for (i = 1, numspec = 0; i <= sv_maxclients->value; i++)
 			if (g_edicts[i].inuse && g_edicts[i].client->pers.spectator)
 				numspec++;
 

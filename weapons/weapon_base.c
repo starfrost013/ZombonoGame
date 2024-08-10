@@ -199,7 +199,7 @@ void Player_WeaponChange(edict_t* ent)
 	{
 		ent->client->grenade_time = level.time;
 		ent->client->weapon_sound = 0;
-		Weapon_Grenade_fire(ent, false);
+		Weapon_Grenade_Fire(ent, false);
 		ent->client->grenade_time = 0;
 	}
 

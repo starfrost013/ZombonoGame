@@ -41,7 +41,7 @@ cvar_t* timelimit;
 cvar_t* password;
 cvar_t* spectator_password;
 cvar_t* needpass;
-cvar_t* maxclients;
+cvar_t* sv_maxclients;
 cvar_t* maxspectators;
 cvar_t* g_select_empty;
 cvar_t* dedicated;
@@ -188,7 +188,7 @@ void ClientEndServerFrames()
 
 	// calc the player views now that all pushing
 	// and damage has been added
-	for (i = 0; i < maxclients->value; i++)
+	for (i = 0; i < sv_maxclients->value; i++)
 	{
 		ent = g_edicts + 1 + i;
 		if (!ent->inuse || !ent->client)
@@ -352,7 +352,7 @@ void Level_Exit()
 	ClientEndServerFrames();
 
 	// clear some things before going to next level
-	for (i = 0; i < maxclients->value; i++)
+	for (i = 0; i < sv_maxclients->value; i++)
 	{
 		ent = g_edicts + 1 + i;
 		if (!ent->inuse)
@@ -414,7 +414,7 @@ void Game_RunFrame()
 			}
 		}
 
-		if (i > 0 && i <= maxclients->value)
+		if (i > 0 && i <= sv_maxclients->value)
 		{
 			Client_BeginServerFrame(ent); 
 			continue;

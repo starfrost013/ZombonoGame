@@ -94,7 +94,7 @@ void Gamemode_TDMCheckRules()
 
 	if (fraglimit->value)
 	{
-		for (i = 0; i < maxclients->value; i++)
+		for (i = 0; i < sv_maxclients->value; i++)
 		{
 			if ((int32_t)gameflags->value & GF_INDIVIDUAL_FRAGLIMIT)
 			{

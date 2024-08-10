@@ -158,7 +158,7 @@ bool Client_Connect(edict_t* ent, char* userinfo)
 		}
 
 		// count spectators
-		for (i = numspec = 0; i < maxclients->value; i++)
+		for (i = numspec = 0; i < sv_maxclients->value; i++)
 		{
 			if (g_edicts[i + 1].inuse && g_edicts[i + 1].client->pers.spectator)
 				numspec++;

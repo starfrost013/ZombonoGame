@@ -49,7 +49,7 @@ void Client_UpdateCamera(edict_t* ent, usercmd_t* ucmd)
 	case camera_type_chase:
 
 		// update chase cam if being followed
-		for (int32_t i = 1; i <= maxclients->value; i++)
+		for (int32_t i = 1; i <= sv_maxclients->value; i++)
 		{
 			other = g_edicts + i;
 			if (other->inuse && other->client->chase_target == ent)

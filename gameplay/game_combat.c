@@ -462,7 +462,7 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 			if (targ->client && attacker == targ)
 			{
 				// the rocket jump hack...
-				VectorScale3(dir, (80.0f/FRAMETIME) * (float)knockback / mass, kvel);
+				VectorScale3(dir, (160.0f/FRAMETIME) * (float)knockback / (0.1f/FRAMETIME) / mass, kvel);
 
 				// make rocket jumping easier
 				//TODO: refactor this whole thing so checks like the rocket jump check can be done in ammo_*
@@ -471,7 +471,7 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 			}
 			else
 			{
-				VectorScale3(dir, (25.0f / FRAMETIME) * (float)knockback / mass, kvel);
+				VectorScale3(dir, (50.0f / FRAMETIME) * (float)knockback / (0.1f / FRAMETIME) / mass, kvel);
 			}
 
 			VectorAdd3(targ->velocity, kvel, targ->velocity);
@@ -607,7 +607,7 @@ void Player_RadiusDamage(edict_t* inflictor, edict_t* attacker, float damage, ed
 
 void Player_Pain(edict_t* self, edict_t* other, float kick, int32_t damage)
 {
-	// player pain is handled at the end of the frame in P_DamageFeedback
+	// player pain is handled at the end of the frame in Player_DamageFeedback
 }
 
 bool Player_IsFemale(edict_t* ent)
@@ -863,14 +863,14 @@ void Player_Obituary(edict_t* self, edict_t* inflictor, edict_t* attacker)
 				if (self->team & team_director)
 				{
 					if (attacker->team & team_director)
-						snprintf(msg_buffer, MOD_BUFFER_SIZE, "Friendly Fire: ^c%s^7 %s ^c%s^7%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
+						snprintf(msg_buffer, MOD_BUFFER_SIZE, "Friendly Fire! ^c%s^7 %s ^c%s^7%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
 					else
 						snprintf(msg_buffer, MOD_BUFFER_SIZE, "^c%s^7 %s ^a%s^7%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
 				}
 				else
 				{
 					if (attacker->team & team_director)
-						snprintf(msg_buffer, MOD_BUFFER_SIZE, "Friendly Fire: ^a%s^7 %s ^a%s^7%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
+						snprintf(msg_buffer, MOD_BUFFER_SIZE, "Friendly Fire! ^a%s^7 %s ^a%s^7%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
 					else
 						snprintf(msg_buffer, MOD_BUFFER_SIZE, "^a%s^7 %s ^c%s^7%s!", self->client->pers.netname, message, attacker->client->pers.netname, message2);
 				}

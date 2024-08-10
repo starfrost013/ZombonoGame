@@ -11,7 +11,7 @@ NEW FEATURES:
 	* Game API version 10 (9 was used for private test build)
 		* Renamed import functions to be more consistently named and the same names as the engine when applicable
 		* Exposed Cmd_AddCommand and Cmd_RemoveCommand to the game dll (they were already exposed to the refresh dll)
-		* Exposed MSG_Read* functions to the game to read dll from a client's network stream
+		* Exposed MSG_Read* functions to the game to read dll from the current client's network stream
 		* Removed noconsole client commands and replaced with clc_event (event system described below)
 	* Camera system changes:
 		* The camera can now take multiple angles
@@ -41,6 +41,7 @@ NEW FEATURES:
 		* Removed all non-tracked callocs and changed them to Z_TagMalloc
 		* Added zone memory allocation logging
 		* Gated behind "log_memalloc" cvar (run the game with +set log_memalloc 1)
+	* On debug builds, added the total amount of memory used by zone and hunk to cl_showinfo
 	* Rewrote part of the network protocol (Current protocol version 46)
 		* Added the concept of "svc_event" and "clc_event". An svc_event signifies to the client that something has happened on the game side that needs to be handled.
 		A clc_event is the same but for client to server.

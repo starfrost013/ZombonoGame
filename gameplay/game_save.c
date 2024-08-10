@@ -197,7 +197,7 @@ void Game_Init ()
 	gi.Cvar_Get("gamedate", __DATE__, CVAR_SERVERINFO | CVAR_LATCH);
 	gi.Cvar_Get("gameversion", GAME_VERSION, CVAR_SERVERINFO | CVAR_LATCH);
 
-	maxclients = gi.Cvar_Get("maxclients", "4", CVAR_SERVERINFO | CVAR_LATCH);
+	sv_maxclients = gi.Cvar_Get("sv_maxclients", "4", CVAR_SERVERINFO | CVAR_LATCH);
 	maxspectators = gi.Cvar_Get("maxspectators", "4", CVAR_SERVERINFO);
 	gamemode = gi.Cvar_Get("gamemode", "0", CVAR_SERVERINFO | CVAR_LATCH);
 	skill = gi.Cvar_Get("skill", "1", CVAR_LATCH);
@@ -240,7 +240,7 @@ void Game_Init ()
 	globals.max_edicts = game.maxentities;
 
 	// initialize all clients for this game
-	game.maxclients = (int32_t)maxclients->value;
+	game.maxclients = (int32_t)sv_maxclients->value;
 	game.clients = gi.TagMalloc(game.maxclients * sizeof(game.clients[0]), TAG_GAME);
 	globals.num_edicts = game.maxclients + 1;
 }
@@ -733,7 +733,7 @@ void Level_Read (char *filename)
 
 	// wipe all the entities
 	memset (g_edicts, 0, game.maxentities*sizeof(g_edicts[0]));
-	globals.num_edicts = maxclients->value+1;
+	globals.num_edicts = sv_maxclients->value+1;
 
 	// check edict size
 	fread (&i, sizeof(i), 1, f);
@@ -773,7 +773,7 @@ void Level_Read (char *filename)
 	fclose (f);
 
 	// mark all clients as unconnected
-	for (i=0 ; i<maxclients->value ; i++)
+	for (i=0 ; i<sv_maxclients->value ; i++)
 	{
 		ent = &g_edicts[i+1];
 		ent->client = game.clients + i;

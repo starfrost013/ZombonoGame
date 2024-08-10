@@ -129,7 +129,7 @@ void ChaseCam_Next(edict_t* ent)
 	{
 		i++;
 
-		if (i > maxclients->value)
+		if (i > sv_maxclients->value)
 			i = 1;
 		e = g_edicts + i;
 		if (!e->inuse)
@@ -156,7 +156,7 @@ void ChaseCam_Prev(edict_t* ent)
 		i--;
 
 		if (i < 1)
-			i = maxclients->value;
+			i = sv_maxclients->value;
 
 		e = g_edicts + i;
 
@@ -177,7 +177,7 @@ void ChaseCam_GetTarget(edict_t* ent)
 	int32_t i;
 	edict_t* other;
 
-	for (i = 1; i <= maxclients->value; i++)
+	for (i = 1; i <= sv_maxclients->value; i++)
 	{
 		other = g_edicts + i;
 		if (other->inuse && !other->client->resp.spectator) 

@@ -137,7 +137,7 @@ void Game_TransitionToNextMatch (edict_t *targ)
 	game.autosaved = false;
 
 	// respawn any dead clients
-	for (i=0 ; i<maxclients->value ; i++)
+	for (i=0 ; i<sv_maxclients->value ; i++)
 	{
 		client = g_edicts + 1 + i;
 		if (!client->inuse)
@@ -174,7 +174,7 @@ void Game_TransitionToNextMatch (edict_t *targ)
 	VectorCopy3 (ent->s.angles, level.intermission_angle);
 
 	// move all clients to the intermission point
-	for (i = 0; i < maxclients->value; i++)
+	for (i = 0; i < sv_maxclients->value; i++)
 	{
 		client = g_edicts + 1 + i;
 		if (!client->inuse)
@@ -427,7 +427,7 @@ void GameUI_CheckChaseStats (edict_t *ent)
 	int32_t i;
 	gclient_t *cl;
 
-	for (i = 1; i <= maxclients->value; i++) {
+	for (i = 1; i <= sv_maxclients->value; i++) {
 		cl = g_edicts[i].client;
 		if (!g_edicts[i].inuse || cl->chase_target != ent)
 			continue;

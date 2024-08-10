@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <game_local.h>
 
 bool AI_FindTarget (edict_t *self);
-extern cvar_t* maxclients;
+extern cvar_t* sv_maxclients;
 
 bool AI_CheckForAttack (edict_t *self, float dist);
 
