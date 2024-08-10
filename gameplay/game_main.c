@@ -33,6 +33,8 @@ int32_t means_of_death;
 
 edict_t* g_edicts;
 
+cvar_t* sv_tickrate;
+
 cvar_t* gamemode;
 cvar_t* gameflags;
 cvar_t* skill;
@@ -376,7 +378,7 @@ void Game_RunFrame()
 	edict_t* ent;
 
 	level.framenum++;
-	level.time = level.framenum * FRAMETIME;
+	level.time = level.framenum * TICK_TIME;
 
 	// choose a client for monsters to target this frame
 	AI_SetSightClient();

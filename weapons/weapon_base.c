@@ -470,7 +470,7 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 			}
 		}
 
-		if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+		if (!(level.framenum % (int32_t)(0.1f / TICK_TIME)))
 		{
 			// todo: separate primary and secondary fire frames
 			ent->client->ps.gunframe++; // increment anim frame
@@ -488,7 +488,7 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 			return;
 		}
 
-		if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+		if (!(level.framenum % (int32_t)(0.1f / TICK_TIME)))
 		{
 			// todo: separate primary and secondary fire frames
 			ent->client->ps.gunframe++; // increment anim frame
@@ -598,7 +598,7 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 				}
 			}
 
-			if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+			if (!(level.framenum % (int32_t)(0.1f / TICK_TIME)))
 			{
 				// todo: separate primary and secondary fire frames
 				ent->client->ps.gunframe++; // increment anim frame
@@ -635,7 +635,7 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 
 		if (!fire_frames_primary[n])
 		{
-			if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+			if (!(level.framenum % (int32_t)(0.1f / TICK_TIME)))
 			{
 				// todo: separate primary and secondary fire frames
 				ent->client->ps.gunframe++; // increment anim frame
@@ -664,7 +664,7 @@ void Weapon_Generic(edict_t* ent, int32_t FRAME_ACTIVATE_LAST, int32_t FRAME_FIR
 
 		if (!fire_frames_secondary[n])
 		{
-			if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+			if (!(level.framenum % (int32_t)(0.1f / TICK_TIME)))
 			{
 				// todo: separate primary and secondary fire frames
 				ent->client->ps.gunframe++; // increment anim frame

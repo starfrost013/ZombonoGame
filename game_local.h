@@ -36,19 +36,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define GAME_VERSION GAME_NAME " v0.1.0 " __DATE__
 
 // protocol bytes that can be directly added to messages
-#define	svc_muzzleflash			1
-#define	svc_muzzleflash2		2
-#define	svc_temp_entity			3
-#define svc_drawtext			4
-#define svc_event				5
+#define	svc_muzzleflash		1
+#define	svc_muzzleflash2	2
+#define	svc_temp_entity		3
+#define svc_drawtext		4
+#define svc_event			5
 
-#define	svc_stufftext			10
+#define	svc_stufftext		10
+
+// Tickrate information
+extern cvar_t* sv_tickrate;
+
+#define	TICK_TIME			(1.0f/sv_tickrate->value)	//1/(sv_tickrate->value) = tickrate - currently 40hz (in brackets for bodmas)
 
 //==================================================================
 
 // view pitching times
-#define DAMAGE_TIME		0.5f
-#define	FALL_TIME		0.3f
+#define DAMAGE_TIME			0.5f
+#define	FALL_TIME			0.3f
 
 // edict->spawnflags
 // these are set with checkboxes on each entity in the map editor
@@ -573,6 +578,7 @@ extern cvar_t* bob_roll;
 
 extern cvar_t* sv_cheats;
 extern cvar_t* sv_maxclients;
+
 extern cvar_t* maxspectators;
 extern cvar_t* flood_msgs;
 extern cvar_t* flood_persecond;

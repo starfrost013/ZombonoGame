@@ -163,7 +163,7 @@ bool Pickup_Powerup(edict_t* ent, edict_t* other)
 	if (((int32_t)gameflags->value & GF_INSTANT_ITEMS) || ((ent->item->use == Use_Quad) && (ent->spawnflags & DROPPED_PLAYER_ITEM)))
 	{
 		if ((ent->item->use == Use_Quad) && (ent->spawnflags & DROPPED_PLAYER_ITEM))
-			quad_drop_timeout_hack = (ent->nextthink - level.time) / FRAMETIME;
+			quad_drop_timeout_hack = (ent->nextthink - level.time) / TICK_TIME;
 		ent->item->use(other, ent->item);
 	}
 
@@ -973,7 +973,7 @@ void Item_DropToFloor(edict_t* ent)
 		ent->solid = SOLID_NOT;
 		if (ent == ent->teammaster)
 		{
-			ent->nextthink = level.time + FRAMETIME;
+			ent->nextthink = level.time + TICK_TIME;
 			ent->think = DoRespawn;
 		}
 	}
@@ -1121,7 +1121,7 @@ void Item_Spawn(edict_t* ent, gitem_t* item)
 	}
 
 	ent->item = item;
-	ent->nextthink = level.time + 2 * FRAMETIME;    // items start after other solids
+	ent->nextthink = level.time + 2 * TICK_TIME;    // items start after other solids
 	ent->think = Item_DropToFloor;
 	ent->s.effects = item->world_model_flags;
 	ent->s.renderfx = RF_GLOW;

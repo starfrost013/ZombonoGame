@@ -272,7 +272,7 @@ void AI_MonsterMove(edict_t* self)
 	int32_t	index;
 
 	move = self->monsterinfo.currentmove;
-	self->nextthink = level.time + FRAMETIME;
+	self->nextthink = level.time + TICK_TIME;
 
 	if ((self->monsterinfo.nextframe) && (self->monsterinfo.nextframe >= move->firstframe) && (self->monsterinfo.nextframe <= move->lastframe))
 	{
@@ -307,7 +307,7 @@ void AI_MonsterMove(edict_t* self)
 			{
 				// hack until new animation system
 				if (level.framenum
-					& (int32_t)(0.1f / FRAMETIME))
+					& (int32_t)(0.1f / TICK_TIME))
 				{
 					self->s.frame++;
 					if (self->s.frame > move->lastframe)
@@ -398,7 +398,7 @@ void AI_MonsterTriggeredSpawnUse(edict_t* self, edict_t* other, edict_t* activat
 {
 	// we have a one frame delay here so we don't telefrag the guy who activated us
 	self->think = AI_MonsterTriggeredSpawn;
-	self->nextthink = level.time + FRAMETIME;
+	self->nextthink = level.time + TICK_TIME;
 	if (activator->client)
 		self->enemy = activator;
 	self->use = AI_MonsterActivate;
@@ -457,7 +457,7 @@ bool AI_MonsterStart(edict_t* self)
 	if (!(self->monsterinfo.aiflags & AI_GOOD_GUY))
 		level.total_monsters++;
 
-	self->nextthink = level.time + FRAMETIME;
+	self->nextthink = level.time + TICK_TIME;
 	self->svflags |= SVF_MONSTER;
 	self->s.renderfx |= RF_FRAMELERP;
 	self->takedamage = DAMAGE_AIM;
@@ -572,7 +572,7 @@ void AI_MonsterStartGo(edict_t* self)
 	}
 
 	self->think = AI_MonsterThink;
-	self->nextthink = level.time + FRAMETIME;
+	self->nextthink = level.time + TICK_TIME;
 }
 
 

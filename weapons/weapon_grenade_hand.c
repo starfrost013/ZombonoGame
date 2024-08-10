@@ -182,7 +182,7 @@ void Weapon_Grenade(edict_t* ent)
 		if ((ent->client->ps.gunframe == 15) && (level.time < ent->client->grenade_time))
 			return;
 
-		if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+		if (!(level.framenum % (int32_t)(0.1f / TICK_TIME)))
 		{
 			// todo: separate primary and secondary fire frames
 			ent->client->ps.gunframe++; // increment anim frame

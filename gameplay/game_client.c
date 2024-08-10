@@ -477,6 +477,6 @@ void Client_EndServerFrame(edict_t* ent)
 
 	// update the leaderboard every 10 ticks (1 second)
 	// BEFORE IT WAS UPDATING IT EVERY TICK WHILE ACTIVE???
-	if ((level.framenum % (int32_t)(1 / FRAMETIME)) == 0)
+	if ((level.framenum % (int32_t)(1 / TICK_TIME)) == 0)
 		GameUI_SendLeaderboard(ent);
 }

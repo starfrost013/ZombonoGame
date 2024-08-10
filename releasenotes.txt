@@ -5,10 +5,10 @@ Version 0.1.0-pre2
 August XX, 2024
 
 NEW FEATURES:
-	* Renderer API version 13 (12 was used internally for test builds)
+	* Renderer API version 13 (12 was used for private test builds)
 		* Renamed Game_Init and Game_Shutdown to Init and Shutdown (as they are intended to be called, I fucked up renaming things)
 		* Exposed Cvar_ForceSet to refresh api
-	* Game API version 10 (9 was used for private test build)
+	* Game API version 10 (9 was used for private test builds)
 		* Renamed import functions to be more consistently named and the same names as the engine when applicable
 		* Exposed Cmd_AddCommand and Cmd_RemoveCommand to the game dll (they were already exposed to the refresh dll)
 		* Exposed MSG_Read* functions to the game to read dll from the current client's network stream
@@ -28,7 +28,8 @@ NEW FEATURES:
 	* Changed client prediction to be based on the camera origin rather than the player's origin	
 		* This is needed because the original prediction system could not distinguish between the player and the camera, leading to extremely choppy gameplay at a 10Hz tick rate when
 		the player was in a non-normal camera type
-	* The game now runs at 40Hz instead of 10Hz tick rate
+	* Added the ability to customise the tickrate with the sv_tickrate cvar
+	* The game now runs at 40Hz instead of 10Hz tick rate by default
 			* This should improve hit registration and many other aspects of network play
 	* A dedicated server binary, on Windows as well as Linux...
 	* Added a real-time killfeed
@@ -130,6 +131,7 @@ REMOVALS:
 OTHER CHANGES:
 	* Made update prompt game-agnostic
 	* Changed default windowed resolution to 1366*768 (instead of 1024*768), so the game runs in 16:9 widescreen by default
+	* Renamed maxclients cvar to sv_maxclients
 
 * NOTE: con_line_length only has any effect on dedicated servers
 

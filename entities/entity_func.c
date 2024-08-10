@@ -88,17 +88,17 @@ void Move_Final(edict_t* ent)
 		return;
 	}
 
-	VectorScale3(ent->moveinfo.dir, ent->moveinfo.remaining_distance / FRAMETIME, ent->velocity);
+	VectorScale3(ent->moveinfo.dir, ent->moveinfo.remaining_distance / TICK_TIME, ent->velocity);
 
 	ent->think = Move_Done;
-	ent->nextthink = level.time + FRAMETIME;
+	ent->nextthink = level.time + TICK_TIME;
 }
 
 void Move_Begin(edict_t* ent)
 {
 	float frames;
 
-	if ((ent->moveinfo.speed * FRAMETIME) >= ent->moveinfo.remaining_distance)
+	if ((ent->moveinfo.speed * TICK_TIME) >= ent->moveinfo.remaining_distance)
 	{
 		Move_Final(ent);
 		return;
@@ -106,10 +106,10 @@ void Move_Begin(edict_t* ent)
 	VectorScale3(ent->moveinfo.dir, ent->moveinfo.speed, ent->velocity);
 
 	// scale by static (0.1f/FRAMETIME) to scale for tickrate
-	frames = floorf((ent->moveinfo.remaining_distance / ent->moveinfo.speed) / FRAMETIME);
-	ent->moveinfo.remaining_distance -= frames * ent->moveinfo.speed * FRAMETIME;
+	frames = floorf((ent->moveinfo.remaining_distance / ent->moveinfo.speed) / TICK_TIME);
+	ent->moveinfo.remaining_distance -= frames * ent->moveinfo.speed * TICK_TIME;
 
-	ent->nextthink = level.time + (frames * FRAMETIME);
+	ent->nextthink = level.time + (frames * TICK_TIME);
 	ent->think = Move_Final;
 }
 
@@ -130,7 +130,7 @@ void Move_Calc(edict_t* ent, vec3_t dest, void(*func)(edict_t*))
 		}
 		else
 		{
-			ent->nextthink = level.time + FRAMETIME;
+			ent->nextthink = level.time + TICK_TIME;
 			ent->think = Move_Begin;
 		}
 	}
@@ -139,7 +139,7 @@ void Move_Calc(edict_t* ent, vec3_t dest, void(*func)(edict_t*))
 		// accelerative
 		ent->moveinfo.current_speed = 0;
 		ent->think = Think_AccelMove;
-		ent->nextthink = level.time + FRAMETIME;
+		ent->nextthink = level.time + TICK_TIME;
 	}
 }
 
@@ -169,10 +169,10 @@ void AngleMove_Final(edict_t* ent)
 		return;
 	}
 
-	VectorScale3(move, 1.0 / FRAMETIME, ent->avelocity);
+	VectorScale3(move, 1.0 / TICK_TIME, ent->avelocity);
 
 	ent->think = AngleMove_Done;
-	ent->nextthink = level.time + FRAMETIME;
+	ent->nextthink = level.time + TICK_TIME;
 }
 
 void AngleMove_Begin(edict_t* ent)
@@ -194,19 +194,19 @@ void AngleMove_Begin(edict_t* ent)
 	// divide by speed to get time to reach dest
 	traveltime = len / ent->moveinfo.speed;
 
-	if (traveltime < FRAMETIME)
+	if (traveltime < TICK_TIME)
 	{
 		AngleMove_Final(ent);
 		return;
 	}
 
-	frames = floorf(traveltime / FRAMETIME);
+	frames = floorf(traveltime / TICK_TIME);
 
 	// scale the destdelta vector by the time spent traveling to get velocity
 	VectorScale3(destdelta, 1.0 / traveltime, ent->avelocity);
 
 	// set nextthink to trigger a think when dest is reached
-	ent->nextthink = level.time + frames * FRAMETIME;
+	ent->nextthink = level.time + frames * TICK_TIME;
 	ent->think = AngleMove_Final;
 }
 
@@ -220,7 +220,7 @@ void AngleMove_Calc(edict_t* ent, void(*func)(edict_t*))
 	}
 	else
 	{
-		ent->nextthink = level.time + FRAMETIME;
+		ent->nextthink = level.time + TICK_TIME;
 		ent->think = AngleMove_Begin;
 	}
 }
@@ -352,8 +352,8 @@ void Think_AccelMove(edict_t* ent)
 		return;
 	}
 
-	VectorScale3(ent->moveinfo.dir, ent->moveinfo.current_speed * (1.0f/FRAMETIME), ent->velocity); // 40
-	ent->nextthink = level.time + FRAMETIME;
+	VectorScale3(ent->moveinfo.dir, ent->moveinfo.current_speed * (1.0f/TICK_TIME), ent->velocity); // 40
+	ent->nextthink = level.time + TICK_TIME;
 	ent->think = Think_AccelMove;
 }
 
@@ -1236,7 +1236,7 @@ void SP_func_door(edict_t* ent)
 
 	gi.Edict_Link(ent);
 
-	ent->nextthink = level.time + FRAMETIME;
+	ent->nextthink = level.time + TICK_TIME;
 	if (ent->health || ent->targetname)
 		ent->think = Think_CalcMoveSpeed;
 	else
@@ -1367,7 +1367,7 @@ void SP_func_door_rotating(edict_t* ent)
 
 	gi.Edict_Link(ent);
 
-	ent->nextthink = level.time + FRAMETIME;
+	ent->nextthink = level.time + TICK_TIME;
 	if (ent->health || ent->targetname)
 		ent->think = Think_CalcMoveSpeed;
 	else
@@ -1645,7 +1645,7 @@ void func_train_find(edict_t* self)
 
 	if (self->spawnflags & TRAIN_START_ON)
 	{
-		self->nextthink = level.time + FRAMETIME;
+		self->nextthink = level.time + TICK_TIME;
 		self->think = train_next;
 		self->activator = self;
 	}
@@ -1705,7 +1705,7 @@ void SP_func_train(edict_t* self)
 	{
 		// start trains on the second frame, to make sure their targets have had
 		// a chance to spawn
-		self->nextthink = level.time + FRAMETIME;
+		self->nextthink = level.time + TICK_TIME;
 		self->think = func_train_find;
 	}
 	else
@@ -1770,7 +1770,7 @@ void trigger_elevator_init(edict_t* self)
 void SP_trigger_elevator(edict_t* self)
 {
 	self->think = trigger_elevator_init;
-	self->nextthink = level.time + FRAMETIME;
+	self->nextthink = level.time + TICK_TIME;
 }
 
 
@@ -1822,7 +1822,7 @@ void SP_func_timer(edict_t* self)
 
 	if (self->random >= self->wait)
 	{
-		self->random = self->wait - FRAMETIME;
+		self->random = self->wait - TICK_TIME;
 		gi.dprintf("func_timer at %s has random >= wait\n", vtos(self->s.origin));
 	}
 
@@ -2128,10 +2128,10 @@ void func_particle_effect_think(edict_t* self)
 	}
 
 	// get rid of the start off spawnflag, since we finished raitng
-	self->nextthink = level.time + FRAMETIME;
+	self->nextthink = level.time + TICK_TIME;
 
 	// if it's lower than the tickrate, don't spawn an entity until we hit that tickrate
-	if (self->particle_rate < TICK_RATE)
+	if (self->particle_rate < sv_tickrate->value)
 	{
 		if (level.framenum % self->particle_rate != 0)
 			return;
@@ -2142,7 +2142,7 @@ void func_particle_effect_think(edict_t* self)
 	{
 		if (self->particles_next_frame == 0)
 		{
-			float particles_per_tick = (self->particle_rate) / TICK_RATE;
+			float particles_per_tick = (self->particle_rate) / sv_tickrate->value;
 			float rounded = roundf(particles_per_tick);
 
 			// we rounded down
@@ -2255,7 +2255,7 @@ void SP_func_particle_effect(edict_t* ent)
 {
 	ent->classname = "func_particle_effect";
 	ent->think = func_particle_effect_think;
-	ent->nextthink = level.time + FRAMETIME;
+	ent->nextthink = level.time + TICK_TIME;
 	ent->timestamp = level.time;
 	gi.Edict_Link(ent);
 }

@@ -462,7 +462,7 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 			if (targ->client && attacker == targ)
 			{
 				// the rocket jump hack...
-				VectorScale3(dir, (160.0f/FRAMETIME) * (float)knockback / (0.1f/FRAMETIME) / mass, kvel);
+				VectorScale3(dir, (160.0f/TICK_TIME) * (float)knockback / (0.1f/TICK_TIME) / mass, kvel);
 
 				// make rocket jumping easier
 				//TODO: refactor this whole thing so checks like the rocket jump check can be done in ammo_*
@@ -471,7 +471,7 @@ void Player_Damage(edict_t* targ, edict_t* inflictor, edict_t* attacker, vec3_t 
 			}
 			else
 			{
-				VectorScale3(dir, (50.0f / FRAMETIME) * (float)knockback / (0.1f / FRAMETIME) / mass, kvel);
+				VectorScale3(dir, (50.0f / TICK_TIME) * (float)knockback / (0.1f / TICK_TIME) / mass, kvel);
 			}
 
 			VectorAdd3(targ->velocity, kvel, targ->velocity);
@@ -940,7 +940,7 @@ void Player_TossWeapon(edict_t* self)
 		drop->spawnflags |= DROPPED_PLAYER_ITEM;
 
 		drop->touch = Item_OnTouch;
-		drop->nextthink = level.time + (self->client->quad_framenum - level.framenum) * FRAMETIME;
+		drop->nextthink = level.time + (self->client->quad_framenum - level.framenum) * TICK_TIME;
 		drop->think = Edict_Free;
 	}
 }

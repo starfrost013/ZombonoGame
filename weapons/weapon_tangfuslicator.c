@@ -38,7 +38,7 @@ void Weapon_Tangfuslicator_Fire(edict_t* ent)
 
 	Ammo_Tangfuslicator(ent, start, forward); // will always store current spawn type
 
-	if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+	if (!(level.framenum % (int32_t)(0.1f / TICK_TIME)))
 	{
 		// todo: separate primary and secondary fire frames
 		ent->client->ps.gunframe++; // increment anim frame

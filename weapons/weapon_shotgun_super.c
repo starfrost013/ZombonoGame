@@ -62,7 +62,7 @@ void Weapon_supershotgun_fire(edict_t* ent)
 	gi.WriteByte(MZ_SSHOTGUN | is_silenced);
 	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
-	if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+	if (!(level.framenum % (int32_t)(0.1f / TICK_TIME)))
 	{
 		// todo: separate primary and secondary fire frames
 		ent->client->ps.gunframe++; // increment anim frame

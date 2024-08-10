@@ -174,6 +174,8 @@ void Game_Init ()
 {
 	gi.dprintf("==== InitGame ====\n");
 
+	sv_tickrate = gi.Cvar_Get("sv_tickrate", "40", CVAR_SERVERINFO | CVAR_LATCH);
+
 	gun_x = gi.Cvar_Get("gun_x", "0", 0);
 	gun_y = gi.Cvar_Get("gun_y", "0", 0);
 	gun_z = gi.Cvar_Get("gun_z", "0", 0);

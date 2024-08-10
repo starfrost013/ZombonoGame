@@ -53,7 +53,7 @@ void Chaingun_Fire(edict_t* ent)
 	}
 	else
 	{
-		if (!(level.framenum % (int32_t)(0.1f / FRAMETIME)))
+		if (!(level.framenum % (int32_t)(0.1f / TICK_TIME)))
 		{
 			// todo: separate primary and secondary fire frames
 			ent->client->ps.gunframe++; // increment anim frame

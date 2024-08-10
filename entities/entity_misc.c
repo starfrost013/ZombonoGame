@@ -92,10 +92,10 @@ void gib_think(edict_t* self)
 {
 	// hack until new animation system
 
-	int32_t next_frame_time = (0.1f / FRAMETIME);
+	int32_t next_frame_time = (0.1f / TICK_TIME);
 
 	self->s.frame++;
-	self->nextthink = level.time + FRAMETIME * next_frame_time;
+	self->nextthink = level.time + TICK_TIME * next_frame_time;
 
 
 	if (self->s.frame == 10)
@@ -126,7 +126,7 @@ void gib_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* surf)
 		{
 			self->s.frame++;
 			self->think = gib_think;
-			self->nextthink = level.time + FRAMETIME;
+			self->nextthink = level.time + TICK_TIME;
 		}
 	}
 }
@@ -752,7 +752,7 @@ void SP_func_object(edict_t* self)
 		self->solid = SOLID_BSP;
 		self->movetype = MOVETYPE_PUSH;
 		self->think = func_object_release;
-		self->nextthink = level.time + 2 * FRAMETIME;
+		self->nextthink = level.time + 2 * TICK_TIME;
 	}
 	else
 	{
@@ -919,7 +919,7 @@ void barrel_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* su
 
 	ratio = (float)other->mass / (float)self->mass;
 	VectorSubtract3(self->s.origin, other->s.origin, v);
-	AI_MoveWalk(self, vectoyaw(v), 20 * ratio * FRAMETIME);
+	AI_MoveWalk(self, vectoyaw(v), 20 * ratio * TICK_TIME);
 }
 
 void barrel_explode(edict_t* self)
@@ -1004,7 +1004,7 @@ void barrel_explode(edict_t* self)
 void barrel_delay(edict_t* self, edict_t* inflictor, edict_t* attacker, int32_t damage, vec3_t point)
 {
 	self->takedamage = DAMAGE_NO;
-	self->nextthink = level.time + 2 * FRAMETIME;
+	self->nextthink = level.time + 2 * TICK_TIME;
 	self->think = barrel_explode;
 	self->activator = attacker;
 }
@@ -1037,7 +1037,7 @@ void SP_misc_explobox(edict_t* self)
 	self->touch = barrel_touch;
 
 	self->think = AI_MonsterDropToFloor;
-	self->nextthink = level.time + 2 * FRAMETIME;
+	self->nextthink = level.time + 2 * TICK_TIME;
 
 	gi.Edict_Link(self);
 }
@@ -1064,11 +1064,11 @@ void misc_blackhole_use(edict_t* ent, edict_t* other, edict_t* activator)
 void misc_blackhole_think(edict_t* self)
 {
 	if (++self->s.frame < 19)
-		self->nextthink = level.time + FRAMETIME;
+		self->nextthink = level.time + TICK_TIME;
 	else
 	{
 		self->s.frame = 0;
-		self->nextthink = level.time + FRAMETIME;
+		self->nextthink = level.time + TICK_TIME;
 	}
 }
 
@@ -1082,7 +1082,7 @@ void SP_misc_blackhole(edict_t* ent)
 	ent->s.renderfx = RF_TRANSLUCENT;
 	ent->use = misc_blackhole_use;
 	ent->think = misc_blackhole_think;
-	ent->nextthink = level.time + 2 * FRAMETIME;
+	ent->nextthink = level.time + 2 * TICK_TIME;
 	gi.Edict_Link(ent);
 }
 
@@ -1094,7 +1094,7 @@ The banner is 128 tall.
 void misc_banner_think(edict_t* ent)
 {
 	ent->s.frame = (ent->s.frame + 1) % 16;
-	ent->nextthink = level.time + FRAMETIME;
+	ent->nextthink = level.time + TICK_TIME;
 }
 
 void SP_misc_banner(edict_t* ent)
@@ -1106,7 +1106,7 @@ void SP_misc_banner(edict_t* ent)
 	gi.Edict_Link(ent);
 
 	ent->think = misc_banner_think;
-	ent->nextthink = level.time + FRAMETIME;
+	ent->nextthink = level.time + TICK_TIME;
 }
 
 /*QUAKED misc_deadsoldier (1 .5 0) (-16 -16 0) (16 16 16) ON_BACK ON_STOMACH BACK_DECAP FETAL_POS SIT_DECAP IMPALED
@@ -1161,18 +1161,18 @@ void SP_misc_deadsoldier(edict_t* ent)
 */
 void misc_satellite_dish_think(edict_t* self)
 {
-	int32_t next_frame_time = (0.1f / FRAMETIME);
+	int32_t next_frame_time = (0.1f / TICK_TIME);
 
 	self->s.frame++;
 	if (self->s.frame < 38)
-		self->nextthink = level.time + FRAMETIME * next_frame_time;
+		self->nextthink = level.time + TICK_TIME * next_frame_time;
 }
 
 void misc_satellite_dish_use(edict_t* self, edict_t* other, edict_t* activator)
 {
 	self->s.frame = 0;
 	self->think = misc_satellite_dish_think;
-	self->nextthink = level.time + FRAMETIME;
+	self->nextthink = level.time + TICK_TIME;
 }
 
 void SP_misc_satellite_dish(edict_t* ent)

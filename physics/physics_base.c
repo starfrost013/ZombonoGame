@@ -323,7 +323,7 @@ SV_AddGravity
 */
 void SV_AddGravity(edict_t* ent)
 {
-	ent->velocity[2] -= ent->gravity * sv_gravity->value * FRAMETIME;
+	ent->velocity[2] -= ent->gravity * sv_gravity->value * TICK_TIME;
 }
 
 /*
@@ -581,8 +581,8 @@ void SV_Physics_Pusher(edict_t* ent)
 			part->avelocity[0] || part->avelocity[1] || part->avelocity[2]
 			)
 		{	// object is moving
-			VectorScale3(part->velocity, FRAMETIME, move);
-			VectorScale3(part->avelocity, FRAMETIME, amove);
+			VectorScale3(part->velocity, TICK_TIME, move);
+			VectorScale3(part->avelocity, TICK_TIME, amove);
 
 			if (!SV_Push(part, move, amove))
 				break;	// move was blocked
@@ -597,7 +597,7 @@ void SV_Physics_Pusher(edict_t* ent)
 		for (mv = ent; mv; mv = mv->teamchain)
 		{
 			if (mv->nextthink > 0)
-				mv->nextthink += FRAMETIME;
+				mv->nextthink += TICK_TIME;
 		}
 
 		// if the pusher has a "blocked" function, call it
@@ -643,8 +643,8 @@ void SV_Physics_Noclip(edict_t* ent)
 	if (!SV_RunThink(ent))
 		return;
 
-	VectorMA3(ent->s.angles, FRAMETIME, ent->avelocity, ent->s.angles);
-	VectorMA3(ent->s.origin, FRAMETIME, ent->velocity, ent->s.origin);
+	VectorMA3(ent->s.angles, TICK_TIME, ent->avelocity, ent->s.angles);
+	VectorMA3(ent->s.origin, TICK_TIME, ent->velocity, ent->s.origin);
 
 	gi.Edict_Link(ent);
 }
@@ -703,10 +703,10 @@ void SV_Physics_Toss(edict_t* ent)
 		SV_AddGravity(ent);
 
 	// move angles
-	VectorMA3(ent->s.angles, FRAMETIME, ent->avelocity, ent->s.angles);
+	VectorMA3(ent->s.angles, TICK_TIME, ent->avelocity, ent->s.angles);
 
 	// move origin
-	VectorScale3(ent->velocity, FRAMETIME, move);
+	VectorScale3(ent->velocity, TICK_TIME, move);
 	trace = SV_PushEntity(ent, move);
 	if (!ent->inuse)
 		return;
@@ -787,8 +787,8 @@ void SV_AddRotationalFriction(edict_t* ent)
 	int32_t	n;
 	float	adjustment;
 
-	VectorMA3(ent->s.angles, FRAMETIME, ent->avelocity, ent->s.angles);
-	adjustment = FRAMETIME * sv_stopspeed->value * sv_friction->value;
+	VectorMA3(ent->s.angles, TICK_TIME, ent->avelocity, ent->s.angles);
+	adjustment = TICK_TIME * sv_stopspeed->value * sv_friction->value;
 
 	for (n = 0; n < 3; n++)
 	{
@@ -856,7 +856,7 @@ void SV_Physics_Step(edict_t* ent)
 		speed = fabsf(ent->velocity[2]);
 		control = speed < sv_stopspeed->value ? sv_stopspeed->value : speed;
 		friction = sv_friction->value / 3;
-		newspeed = speed - (FRAMETIME * control * friction);
+		newspeed = speed - (TICK_TIME * control * friction);
 		if (newspeed < 0)
 			newspeed = 0;
 		newspeed /= speed;
@@ -868,7 +868,7 @@ void SV_Physics_Step(edict_t* ent)
 	{
 		speed = fabsf(ent->velocity[2]);
 		control = speed < sv_stopspeed->value ? sv_stopspeed->value : speed;
-		newspeed = speed - (FRAMETIME * control * sv_waterfriction->value * ent->waterlevel);
+		newspeed = speed - (TICK_TIME * control * sv_waterfriction->value * ent->waterlevel);
 		if (newspeed < 0)
 			newspeed = 0;
 		newspeed /= speed;
@@ -891,7 +891,7 @@ void SV_Physics_Step(edict_t* ent)
 					friction = sv_friction->value;
 
 					control = speed < sv_stopspeed->value ? sv_stopspeed->value : speed;
-					newspeed = speed - FRAMETIME * control * friction;
+					newspeed = speed - TICK_TIME * control * friction;
 
 					if (newspeed < 0)
 						newspeed = 0;
@@ -909,7 +909,7 @@ void SV_Physics_Step(edict_t* ent)
 		else
 			mask = MASK_SOLID;
 
-		SV_FlyMove(ent, FRAMETIME, mask);
+		SV_FlyMove(ent, TICK_TIME, mask);
 
 		gi.Edict_Link(ent);
 

@@ -58,7 +58,7 @@ void multi_trigger(edict_t* ent)
 	{	// we can't just remove (self) here, because this is a touch function
 		// called while looping through area links...
 		ent->touch = NULL;
-		ent->nextthink = level.time + FRAMETIME;
+		ent->nextthink = level.time + TICK_TIME;
 		ent->think = Edict_Free;
 	}
 }
@@ -368,11 +368,11 @@ void hurt_touch(edict_t* self, edict_t* other, cplane_t* plane, csurface_t* surf
 	if (self->spawnflags & 16)
 		self->timestamp = level.time + 1;
 	else
-		self->timestamp = level.time + FRAMETIME;
+		self->timestamp = level.time + TICK_TIME;
 
 	if (!(self->spawnflags & 4))
 	{
-		if ((level.framenum % (int32_t)(1.0f / FRAMETIME)) == 0)
+		if ((level.framenum % (int32_t)(1.0f / TICK_TIME)) == 0)
 			gi.sound(other, CHAN_AUTO, self->noise_index, 1, ATTN_NORM, 0);
 	}
 

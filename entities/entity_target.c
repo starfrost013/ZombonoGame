@@ -521,7 +521,7 @@ void target_laser_think(edict_t* self)
 
 	VectorCopy3(tr.endpos, self->s.old_origin);
 
-	self->nextthink = level.time + FRAMETIME;
+	self->nextthink = level.time + TICK_TIME;
 }
 
 void target_laser_on(edict_t* self)
@@ -612,13 +612,13 @@ void target_lightramp_think(edict_t* self)
 {
 	char	style[2];
 
-	style[0] = 'a' + self->movedir[0] + (level.time - self->timestamp) / FRAMETIME * self->movedir[2];
+	style[0] = 'a' + self->movedir[0] + (level.time - self->timestamp) / TICK_TIME * self->movedir[2];
 	style[1] = 0;
 	gi.configstring(CS_LIGHTS + self->enemy->style, style);
 
 	if ((level.time - self->timestamp) < self->speed)
 	{
-		self->nextthink = level.time + FRAMETIME;
+		self->nextthink = level.time + TICK_TIME;
 	}
 	else if (self->spawnflags & 1)
 	{
@@ -690,7 +690,7 @@ void SP_target_lightramp(edict_t* self)
 
 	self->movedir[0] = self->message[0] - 'a';
 	self->movedir[1] = self->message[1] - 'a';
-	self->movedir[2] = (self->movedir[1] - self->movedir[0]) / (self->speed / FRAMETIME);
+	self->movedir[2] = (self->movedir[1] - self->movedir[0]) / (self->speed / TICK_TIME);
 }
 
 //==========================================================
@@ -729,13 +729,13 @@ void target_earthquake_think(edict_t* self)
 	}
 
 	if (level.time < self->timestamp)
-		self->nextthink = level.time + FRAMETIME;
+		self->nextthink = level.time + TICK_TIME;
 }
 
 void target_earthquake_use(edict_t* self, edict_t* other, edict_t* activator)
 {
 	self->timestamp = level.time + self->count;
-	self->nextthink = level.time + FRAMETIME;
+	self->nextthink = level.time + TICK_TIME;
 	self->activator = activator;
 	self->last_move_time = 0;
 }
