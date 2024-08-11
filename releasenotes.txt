@@ -30,7 +30,7 @@ NEW FEATURES:
 		the player was in a non-normal camera type
 	* Added the ability to customise the tickrate with the sv_tickrate cvar
 	* The game now runs at 40Hz instead of 10Hz tick rate by default
-			* This should improve hit registration and many other aspects of network play
+		* This should improve hit registration and many other aspects of network play
 	* A dedicated server binary, on Windows as well as Linux...
 	* Added a real-time killfeed
 		* It replaces death strings being printed to the chat
