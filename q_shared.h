@@ -745,6 +745,9 @@ typedef enum
 #define GF_DONT_DROP_DIRECTOR_ITEMS			0x00010000  // 65536
 
 // Gamemodes
+
+#define NETWORK_MAX_GAMEMODE_NAME_LENGTH 32
+
 #define	GAMEMODE_TDM			0		// Team Deathmach
 #define GAMEMODE_HOSTAGE		1		// Hostage rescue???
 #define GAMEMODE_WAVES			2		// Zombono waves
