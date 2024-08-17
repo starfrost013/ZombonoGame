@@ -57,6 +57,7 @@ NEW FEATURES:
 			* svc_loadout_setcurrent
 			* svc_loadout_clear
 			* clc_clientcommand_noconsole
+			* and the Game API export ClientCommand_NoConsole (replaced with ClientEvent)
 	* Implemented localisation into the game
 		* The language is controlled by the language cvar
 		* Strings are loaded from text\<language->value>\strings.txt (max 1024 strings, 64 key length and 512 key value)
@@ -121,6 +122,7 @@ BUG FIXES:
 	* Fixed a bug where UI controls that had not been clicked couild have their UI click events trigger in rare circumstances
 	* Fixed chat text being misaligned with the rest of the chat history
 	* Fixed potential crash with the server WriteIP command 
+	* Fixed stretched UI images being scaled with vid_hudscale...
 	* Fixed 620 compile warnings, 981 to go (most of them are due to the compiler being 64-bit and the default decimal type being DOUBLE instead of float)
 
 REMOVALS:

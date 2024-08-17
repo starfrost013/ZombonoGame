@@ -534,10 +534,6 @@ char* dm_statusbar =
 "	pic	9 "
 "endif "
 
-//  frags
-//"xr	-50 "
-//"yt 2 "
-//"num 3 14 "
 
 // spectator
 "if 13 "
