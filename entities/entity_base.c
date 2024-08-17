@@ -535,9 +535,9 @@ char* dm_statusbar =
 "endif "
 
 //  frags
-"xr	-50 "
-"yt 2 "
-"num 3 14 "
+//"xr	-50 "
+//"yt 2 "
+//"num 3 14 "
 
 // spectator
 "if 13 "

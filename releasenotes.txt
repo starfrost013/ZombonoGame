@@ -82,6 +82,8 @@ NEW FEATURES:
 	* UI: Added an update event, for both UI controls and entire UIs that fires every client frame
 	* UI: Added the ability to set the position and size of a UI control after it's completed
 	* UI: Removed the requirement for `current_ui` to be set for events to be received, the ui only has to be activated
+	* UI: For UI click events, split the identifying of the controls that need to have their click events fired and the actual firing to 
+	 prevent state changes during enumeration / race conditions
 	* Changed game binary name to be EuphoriaEngine.exe as this engine will be used for many games to come (hopefully)
 	* Changed intro graphic
 	* Made the engine version a cvar
@@ -116,6 +118,8 @@ BUG FIXES:
 	* Fixed UI controls not having their size re-evaluated when their font was changed
 	* Fixed UI callback error messages referring to the wrong callback
 	* Fixed UI callback error messages referring to the current UI instead of the UI causing the error
+	* Fixed a bug where UI controls that had not been clicked couild have their UI click events trigger in rare circumstances
+	* Fixed chat text being misaligned with the rest of the chat history
 	* Fixed potential crash with the server WriteIP command 
 	* Fixed 620 compile warnings, 981 to go (most of them are due to the compiler being 64-bit and the default decimal type being DOUBLE instead of float)
 
@@ -127,11 +131,14 @@ REMOVALS:
 		* STAT_SELECTED_ITEM
 		* STAT_HELPICON
 	* The last remnants of the legacy loadout system
+	* Hardcoded optimisation disable on certain functions (probably to work around bugs in old MSVC versions)
+	* Number indicating your score at the top right of the screen
 
 OTHER CHANGES:
 	* Made update prompt game-agnostic
 	* Changed default windowed resolution to 1366*768 (instead of 1024*768), so the game runs in 16:9 widescreen by default
 	* Renamed maxclients cvar to sv_maxclients
+	* Reduced maximum length of a UI name from 256 to 96 characters (was not needed)
 
 * NOTE: con_line_length only has any effect on dedicated servers
 
