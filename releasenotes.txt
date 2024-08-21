@@ -135,6 +135,11 @@ REMOVALS:
 	* The last remnants of the legacy loadout system
 	* Hardcoded optimisation disable on certain functions (probably to work around bugs in old MSVC versions)
 	* Number indicating your score at the top right of the screen
+	* Keyboard look (nobody ever used it) and the following related bindings:
+		* +/-centerview
+		* +/-lookup
+		* +/-lookdown
+		* +/-klook
 
 OTHER CHANGES:
 	* Made update prompt game-agnostic
