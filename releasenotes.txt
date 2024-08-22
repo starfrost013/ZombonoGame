@@ -124,7 +124,8 @@ BUG FIXES:
 	* Fixed potential crash with the server WriteIP command 
 	* Fixed stretched UI images being scaled with vid_hudscale...
 	* Fixed 620 compile warnings, 981 to go (most of them are due to the compiler being 64-bit and the default decimal type being DOUBLE instead of float)
-
+	* Fixed insane song loading code using invalid parameters
+ 
 REMOVALS:
 	* Obsolete Windows-only code
 	* Removed the unused Legacy UI menulist control as first step to removing legacy UI
@@ -146,6 +147,7 @@ OTHER CHANGES:
 	* Changed default windowed resolution to 1366*768 (instead of 1024*768), so the game runs in 16:9 widescreen by default
 	* Renamed maxclients cvar to sv_maxclients
 	* Reduced maximum length of a UI name from 256 to 96 characters (was not needed)
+	* Changed arguments for UI_AddBox from (int32_t r, int32_t g, int32_t b, int32_a) to (color4_t colour) to be consistent with rest of UI engine;
 
 * NOTE: con_line_length only has any effect on dedicated servers
 
