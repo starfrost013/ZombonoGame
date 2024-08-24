@@ -54,12 +54,19 @@ void Weapon_Bamfuslicator_Fire(edict_t* ent)
 	// TEST code
 
 	if (ent->client->ps.camera_type != camera_type_topdown)
+	{
 		ent->client->ps.camera_type = camera_type_topdown;
+		ent->movetype = MOVETYPE_FLY;
+	}
 	else
+	{
 		ent->client->ps.camera_type = camera_type_normal;
+		ent->movetype = MOVETYPE_WALK;
+	}
+
 
 	//todo: audio
-	vec3_t offset, start, forward, right;
+	vec3_t offset = { 0 }, start = { 0 }, forward = { 0 }, right = { 0 };
 
 	// only fire forward
 	AngleVectors(ent->client->v_angle, forward, right, NULL);

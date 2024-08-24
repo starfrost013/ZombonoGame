@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 edict_t* pm_passent;
 
 // pmove doesn't need to know about passent and contentmask
-trace_t	PM_trace(vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end)
+trace_t	PlayerMove_Trace(vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end)
 {
 	if (pm_passent->health > 0)
 		return gi.trace(start, mins, maxs, end, pm_passent, MASK_PLAYERSOLID);
@@ -139,7 +139,7 @@ void Client_Think(edict_t* ent, usercmd_t* ucmd)
 		}
 
 		pm.cmd = *ucmd;
-		pm.trace = PM_trace;	// adds default parms
+		pm.trace = PlayerMove_Trace;	// adds default parms
 		pm.pointcontents = gi.pointcontents;
 
 		VectorCopy3(client->ps.vieworigin, pm.vieworigin);
