@@ -835,7 +835,7 @@ void AI_ChangeYaw(edict_t* ent);
 void ThrowDebris(edict_t* self, char* modelname, float speed, vec3_t origin);
 bool Ammo_Melee(edict_t* self, vec3_t aim, int32_t damage, int32_t kick);
 void Ammo_Bullet(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t mod);
-void Ammo_Bullet_shotgun(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t count, int32_t mod);
+void Ammo_Bullet_Shotgun(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t count, int32_t mod);
 void Ammo_Blaster(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, int32_t effect, bool hyper);
 void Ammo_Grenade(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, float timer, float damage_radius);
 void Ammo_Grenade2(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t speed, float timer, float damage_radius, bool held);

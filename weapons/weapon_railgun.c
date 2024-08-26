@@ -32,7 +32,7 @@ RAILGUN
 ======================================================================
 */
 
-void Weapon_railgun_fire(edict_t* ent)
+void Weapon_Railgun_Fire(edict_t* ent)
 {
 	vec3_t	start;
 	vec3_t	forward, right;
@@ -82,5 +82,5 @@ void Weapon_Railgun(edict_t* ent)
 	static int32_t pause_frames[] = { 56, 0 };
 	static int32_t fire_frames[] = { 4, 0 };
 
-	Weapon_Generic(ent, 3, 18, 56, 61, pause_frames, fire_frames, NULL, Weapon_railgun_fire, NULL);
+	Weapon_Generic(ent, 3, 18, 56, 61, pause_frames, fire_frames, NULL, Weapon_Railgun_Fire, NULL);
 }

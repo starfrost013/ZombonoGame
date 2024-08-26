@@ -1,0 +1,915 @@
+Euphoria Retro Game Engine
+Release Notes:
+
+Version 0.2.0-alpha1
+?????? ??, 2024
+
+NEW FEATURES:
+	* Added a "startserver" command
+		* It takes the form startserver map [gamemode] [maxplayers] [fraglimit] [timelimit] [hostname]
+
+BUG FIXES:
+REMOVALS:
+OTHER CHANGES:
+
+
+Version 0.1.0-pre2
+August 24, 2024
+
+NEW FEATURES:
+	* Renderer API version 13 (12 was used for private test builds)
+		* Renamed Game_Init and Game_Shutdown to Init and Shutdown (as they are intended to be called, I fucked up renaming things)
+		* Exposed Cvar_ForceSet to refresh api
+	* Game API version 10 (9 was used for private test builds)
+		* Renamed import functions to be more consistently named and the same names as the engine when applicable
+		* Exposed Cmd_AddCommand and Cmd_RemoveCommand to the game dll (they were already exposed to the refresh dll)
+		* Exposed MSG_Read* functions to the game to read dll from the current client's network stream
+		* Removed noconsole client commands and replaced with clc_event (event system described below)
+	* Camera system changes:
+		* The camera can now take multiple angles
+		* The game now renders the view from the "vieworigin" field of pmove instead of the player origin
+			* This is set based on the current camera type - camera types are defined in the Game DLL and positions are relative to the player origin
+			* There are currently four camera types
+				* CAMERA_TYPE_NORMAL - Normal firstperson camera
+				* CAMERA_TYPE_CHASE - A third-person camera
+				* CAMERA_TYPE_TOPDOWN - A top-down camera mode :^)
+				* CAMERA_TYPE_FREE - A freecam (presently unimplemented)
+		* Changed the flags for svc_playerinfo from short to int, as more than 16 bits were needed to pack in all of the flags
+	* Refactored gamemodes
+		* Each gamemode now has its own player spawn and update code
+	* Changed client prediction to be based on the camera origin rather than the player's origin	
+		* This is needed because the original prediction system could not distinguish between the player and the camera, leading to extremely choppy gameplay at a 10Hz tick rate when
+		the player was in a non-normal camera type
+	* Added the ability to customise the tickrate with the sv_tickrate cvar
+	* The game now runs at 40Hz instead of 10Hz tick rate by default
+		* This should improve hit registration and many other aspects of network play
+	* A dedicated server binary, on Windows as well as Linux...
+	* Added a real-time killfeed
+		* It replaces death strings being printed to the chat
+		* You can use the ui_killfeed_entry_time cvar (default: 7500 milliseconds) to change the length of a killfeed entry in milliseconds
+	* Renamed host_speeds cvar to profile_all
+		* Improved strings to be more verbose and use fractions of milliseconds
+	* Zone memory allocation changes
+		* Made it use calloc instead of malloc+memset, this is often faster due to operating system memory pooling and allocation behaviour
+		* Removed all non-tracked callocs and changed them to Z_TagMalloc
+		* Added zone memory allocation logging
+		* Gated behind "log_memalloc" cvar (run the game with +set log_memalloc 1)
+	* On debug builds, added the total amount of memory used by zone and hunk to cl_showinfo
+	* Rewrote part of the network protocol (Current protocol version 46)
+		* Added the concept of "svc_event" and "clc_event". An svc_event signifies to the client that something has happened on the game side that needs to be handled.
+		A clc_event is the same but for client to server.
+		* This replaces the following network messages: 
+			* svc_uidraw
+			* svc_uisettext
+			* svc_uisetimage
+			* svc_leaderboard
+			* svc_leaderboarddraw
+			* svc_loadout_add
+			* svc_loadout_remove
+			* svc_loadout_setcurrent
+			* svc_loadout_clear
+			* clc_clientcommand_noconsole
+			* and the Game API export ClientCommand_NoConsole (replaced with ClientEvent)
+	* Implemented localisation into the game
+		* The language is controlled by the language cvar
+		* Strings are loaded from text\<language->value>\strings.txt (max 1024 strings, 64 key length and 512 key value)
+		* They are referred to using the syntax [STRING_KEY] in code. The localisation system will then obtain the value and cache it in case it gets called on again.
+		* A maximum of 1,024 localisation strings can be loaded at any one (this limit is also applied to the cached localised strings)
+			* A list of dynamically allocated localised strings is kept and added to when a string key that has not been previously localised is found. 
+			* Localised strings are cached in memory and returned if the localisation string has already been cached.
+	* Made the engine game-agnostic
+		* Changed references to Zombono to the value of the name field of the gameinfo_t structure (loaded from gameinfo.json)
+	* Changed build output directory from $(SolutionDir)/build/out to $(SolutionDir)/build/$(Configuration)
+		* This was meant to be temporary but took 7 months to change...
+	* Implemented a CPUID subsystem
+		* It stores the name, vendor and some features of cpu in the cpu_name, cpu_vendor and cpu_features cvars respectively.
+		* This is done to detect potentially defective 13th and 14th Gen intel CPUs currently.
+			* For more information: https://alderongames.com/intel-crashes
+	* Massively refactored vector handling code
+		* Split most functions into Vector3 and Vector4 code
+		* Removed obsolete, unused, or only for ancient compiler defines
+	* Netservices Framework: Changed useragent from "Zombono" to "EuphoriaEngine"
+	* Netservices Framework: Added HTTP POST as well as GET support
+	* UI: Added hover and pressed colours for Box controls
+		* Set with the UI_SetColorOnHover and UI_SetColorOnClick functions
+	* UI: Added an update event, for both UI controls and entire UIs that fires every client frame
+	* UI: Added the ability to set the position and size of a UI control after it's completed
+	* UI: Removed the requirement for `current_ui` to be set for events to be received, the ui only has to be activated
+	* UI: For UI click events, split the identifying of the controls that need to have their click events fired and the actual firing to 
+	 prevent state changes during enumeration / race conditions
+	* Changed game binary name to be EuphoriaEngine.exe as this engine will be used for many games to come (hopefully)
+	* Changed intro graphic
+	* Made the engine version a cvar
+	* Added the time of build to the version cvar
+	* Renamed many gamedll functions for consistency
+	* Wrote a tool to generate an updateinfo.json file automatically:
+		* Changed the updater to use automatically generated updateinfo.json files
+	* Made the time text larger, removed "Time: " and moved it downwards
+	* Engine limits: Increased MAX_GLTEXTURES from 1024 to 2048
+	* Added arbitrary colour to text, not just color codes (color codes still override the set text colour if they are found within the text)
+
+BUG FIXES:
+	* Fixed the game crashing on minimise
+		* Don't try and render if resolution width or height are zero
+	* Fixed updater (TODO BEFORE RELEASE: TEST)
+	* Fixed font list not being loaded from pak file
+	* Fixed FUBAR'd Bahnschrift Bold and Regular 18 fonts (their jsons got mixed)
+	* Fixed obtaining the size of multi-line text (all lines were being treated as one)
+	* Fixed a bug where power armor effects were never applied
+	* Fixed server being hardcoded to 10Hz tick rate regardless of the actual tickrate
+	* Fixed ability to press arrow keys in legacy UI fields
+	* Fixed MSBuild warning generated by build path not having a trailing slash
+	* Fixed UI not being reset when disconnecting from server
+	* Fixed the window pointer being used as the GLFW error callback because of inability to read documentation
+	* Fixed incorrect parameters being used for GLFW error callback
+	* Fixed cURL not being properly initialised or deinitialised
+	* Fixed a bug where if an input-capturing UI was running, and the client was disconnected, the client would not send command updates.
+		* This caused an issue where you could not connect to local servers when the main menu UI was running.
+	* Fixed a bug with the code that handled Game DLL changes that would restart the video and sound subsystems even if the game dll had not changed, leading to the renderer 
+	re-initialising every time after the first that the game connected to a server
+	* Fixed crash bug when picking up cells
+	* Fixed UI controls not having their size re-evaluated when their font was changed
+	* Fixed UI callback error messages referring to the wrong callback
+	* Fixed UI callback error messages referring to the current UI instead of the UI causing the error
+	* Fixed a bug where UI controls that had not been clicked couild have their UI click events trigger in rare circumstances
+	* Fixed chat text being misaligned with the rest of the chat history
+	* Fixed potential crash with the server WriteIP command 
+	* Fixed stretched UI images being scaled with vid_hudscale...
+	* Fixed 620 compile warnings, 981 to go (most of them are due to the compiler being 64-bit and the default decimal type being DOUBLE instead of float)
+	* Fixed insane song loading code using invalid parameters
+ 
+REMOVALS:
+	* Obsolete Windows-only code
+	* Removed the unused Legacy UI menulist control as first step to removing legacy UI
+	* No longer used (since 0.0.8 or earlier...) stats (replaced with loadout system)
+		* STAT_SELECTED_ICON
+		* STAT_SELECTED_ITEM
+		* STAT_HELPICON
+	* The last remnants of the legacy loadout system
+	* Hardcoded optimisation disable on certain functions (probably to work around bugs in old MSVC versions)
+	* Number indicating your score at the top right of the screen
+	* Keyboard look (nobody ever used it) and the following related bindings:
+		* +/-centerview
+		* +/-lookup
+		* +/-lookdown
+		* +/-klook
+
+OTHER CHANGES:
+	* Made update prompt game-agnostic
+	* Changed default windowed resolution to 1366*768 (instead of 1024*768), so the game runs in 16:9 widescreen by default
+	* Renamed maxclients cvar to sv_maxclients
+	* Reduced maximum length of a UI name from 256 to 96 characters (was not needed)
+	* Changed arguments for UI_AddBox from (int32_t r, int32_t g, int32_t b, int32_a) to (color4_t colour) to be consistent with rest of UI engine;
+
+* NOTE: con_line_length only has any effect on dedicated servers
+
+Version 0.1.0-pre1 (Build 659)
+June 29, 2024
+
+NEW FEATURES:
+	* The way that game assets get loaded has changed!
+		* The game name and asset path are now loaded from the gameinfo.json file instead of being hardcoded by default
+		* You can still use +set game <name> (or the equivalent alias of +set game_asset_path <name>) to change the name of the game
+	* Made many more physics parameters tunable CVars:
+		* This adds the following CVars:
+			* sv_friction
+			* sv_waterfriction
+			* sv_maxspeed_director
+			* sv_maxspeed_player
+			* sv_accelerate_director
+			* sv_accelerate_player
+			* sv_duckspeed
+			* sv_accelerate
+			* sv_wateraccelerate
+			* sv_friction - default value of 6
+			* sv_waterfriction - default value of 1
+			* sv_stopspeed - default value of 100
+	* UIs are now stackable:
+		* If a UI has its "stackable" field set using the UI_SetStackable function with the stackable parameter set to "true", the UI will enter into a stack.
+			* UI_Push (as well as UI_SetEnabled) pushes the current UI, UI_Pop() pops it
+			* Up to MAX_UIs (32) UIs can be stacked currently
+			* You can't push the same UI to the stack twice in a row (in order to prevent bugs), but you can stack the same UI twice non-consecutively.
+	* Added con_line_length cvar to customise the console line length
+	* Began work on a new main menu to replace the old one
+		* This is not very functional right now but can be toggled using +ui_newmenu 1
+	* Added two new fields to the gitem_t type, "touchable_time" and "disappear_time"
+		* Can be used to override the default one second after dropping before an item is able to be picked up, and the time from when it drops to when it disappears respectively. 
+		* Default behaviour is set when these items are set to 0.
+		* This is not presently intended for use in games but is only intended for the game code to use
+	* Updated PDJSON library to commit 78fe04b820dc8817f540bdd87fb22887e0ef3981 (February 22, 2024, and yes I'm late)
+		* This fixes an issue where position tracking could go beyond the end of the JSON file by adding more checks for EOF characters within the JSON stream
+	* Renderer API version 11:
+		* The renderer now can optionally automatically find scaled assets
+		* This uses the use_scaled_assets parameters of Draw_Pic, Draw_PicStretch and Draw_PicRegion
+		* The default width used for this is controlled by the r_scaled_assets_basewidth cvar
+	* Master server changes:
+		* The master server protocol now sends the number of players in the server directly.
+		* Added an sv_debug_heartbeat cvar that sends the heartbeat every two seconds instead of five minutes. It is only present on debug builds, to remove any outside possibility of spamming the server.
+	* Added the ability for the engine to detect when it is in graphics mode (i.e. if the renderer lib has been initalised yet)
+	* Got rid of viddef in the engine (it's now an internal OpenGL renderer cvar) and used gl_width/gl_height cvars everywhere
+	* Renderer API version 10
+		* Vid_ChangeResolution doesn't have parameters anymore
+	* Added more posters to z_tdm_labrats
+	* Added cvars to control the console
+		* cl_console_disabled - determines if the console is disabled entirely. Default value is 0.
+		* cl_console_fraction - determines how much of the screen the console will take up. The default value is 0.5 (50%)
+			* For the old fullscreen console behaviour, use cl_console_fraction 1.0
+	* The console is now disableable when you aren't doing anything
+	* Massive code reorganisation for client
+	* Added light fixture details to the lights in the bases of z_tdm_subway
+	* Rendering API version 11:
+		* Added "autoscale" parameter to DrawPic, DrawPicStretch and DrawPicRegion
+
+BUG FIXES:
+	* Limited relative velocity gain to the object's velocity so you can't gain velocity forever.
+		* However this does not apply to the tangfuslicator ammo or rockets, so you can boost off of those.
+	* Fixed crash when alt+tabbing out of the game with dedicated fullscreen enabled
+	* Fixed textures still being internally interpreted with a maximum length of 32 characters instead of the intended 80, leading to phantom downloads of textures that really existed, but with longer names
+	* Fixed debug info being printed while not connected to the server
+	* Fixed garbage debug information being printed when the game is running below 30 fps due to non-escaped % sign
+	* Fixed UI initialisation status being set to successful even if it failed
+	* Fixed the constraint of only one UI being activated at a time not actually existing 
+	* Fixed a crash when debug graphs were used
+	* Fixed incorrect path being used if the font engine failed to load
+	* Fixed zombies being persisted in save files and across multiple level transitions
+	* Fixed leaderboard map text being wrong
+
+REMOVALS:
+	* Removed the m_filter cvar - it did nothing
+	* Removed the "Gamedir" cvar due to aforementioned asset changes
+	* Removed the help computer
+	* Removed gl_bitdepth cvar (doesn't work)
+
+OTHER CHANGES:
+	* Gave the tangfuslicator particles a bit of colour
+	* Renamed some cvars:
+		* zombietime -> sv_zombietime
+		* showclamp -> sv_showclamp
+	* Engine sign-on message now matches "Euphoria Retro Game Engine" external branding
+	* Changed quit image
+	* Renamed mouse_input cvar to input_mouse_enabled
+	* Renamed scr_debuggraph to scr_netgraph -- more clearly delineates its purpose
+	* Renamed basically every single source file
+	* Renamed gl_width and gl_height CVars to r_width and r_height due to being renderer independent
+	* Renamed cd_ cvars to s_ because they don't relate to CDs anymore
+	* Renamed tons of functions in the game dll
+
+Version 0.0.10 (Build 558)
+June 8, 2024
+* Fixed numerous horrific crimes against C programming that caused crash bugs
+
+Version 0.0.10 (Build 553)
+June 8, 2024
+
+NEW FEATURES:
+* Major particle system improvements:
+	* Added velocity to generic particle effect
+	* Added the func_particle_effect entity
+		* You can use this to send any tempent over the network.
+		* The main keys to use with this entity are velocity (speed of the particles), particle_effect (type of the particle effect), rate (particles per tick) and for some of them color.
+		* There are two ways to control lifetime: alphavel (will fade by this much) and lifetime (will disappear after this many milliseconds)
+		* Most of the others are intended for specific particle effects and haven't really been tested! 
+		* You can see this feature in action by running "map test_particle_effect" in the editor. It's also in some maps
+* Added the ability to independently disable the keyboard and mouse using the cls.disable_keyboard and cls.disable_mouse properties (overridden by cls.disable_input)
+* Somewhat redesigned z_tdm_labrats to fix choke points
+	* Added clip brushes to 16-unit stairs to reduce view bobbing
+* Added many more details to z_tdm_warehouse
+	* Office chairs
+	* More details in the storage room and bases
+	* You can now see the roof of the SubStop
+* Added the MOD_ZOMBIE and MOD_ZOMBIFIED Methods of Death (MOD) strings
+* Added spin control, entry and slider controls to new UI system
+* Added the EF_LIGHTNING entity effect
+* Added F_VECTOR4 edict field parse type for future use
+* Made hudscale a float, except for text which truncates it to an integer (so text doesn't look weird at non-integer scaling factors)
+* New core engine types:
+	* vec3_t typedef'd as color3_t (RGB format)
+	* vec4_t typedef'd as color4_t (RGBA format)
+* Particle system features:
+	* Added permanent particles that never despawn (optional)
+	* Added a "lifetime" field to cparticle_t that allows particles to despawn without fading away with alphavel
+* cl_showinfo improvements:
+	* Text turns yellow if you are more than 5 FPS below the target fps (60 fps or cl_maxfps, whichever is lower), scaling down linearly with the value of cl_maxfps
+	* Text turns red if you drop below (target_fps)/2
+	* Added the current map you are playing
+* On debug builds (NOT IN PLAYTEST OR RELEASE BUILDS THAT YOU ACTUALLY DOWNLOAD), sv_cheats is now always enabled
+* Game API version 8: 
+	* Added WriteColor
+	* Renamed WritePosition to WritePos for consistency with engine
+
+BUG FIXES:
+* Various map fixes
+	* Fixed a misaligned light switch on z_tdm_subway
+	* Fixed one of the roofs of the bases on z_tdm_subway being 8 units off
+	* Added a clip brush to some of the stairs on z_tdm_labrats
+	* Many minor fixes to z_tdm_warehouse
+		* Added more details to back area
+		* Fixed many misaligned face textures
+		* Fixed many blockout textures remaining from original rushed map
+		* Added even more boxes
+* Fixed the networking of generic, flame, smoke, flash, flashlight and steam particle effects
+* Fixed server crash that could happen in rare cases if the Bamfuslicator failed to spawn a zombie (it was trying to free the zombie edict before creating it)
+* Fixed potential memory corruption and exploit issue involving calling CL_ClearParticles with no particles. You would be able to set the four bytes at [80..76] bytes (cl_particles->next) before the 
+first particle to NULL
+* Fixed sscanf return values not being checked during edict field parsing (F_VECTOR3 and F_VECTOR4)
+* Fixed a bug where particles could never despawn and would always take up particle slots if alphavel was 0 
+* Fixed unusual spacing of "select team" text in TeamUI
+* Fixed insane BUILD_CONFIG and BUILD_PLATFORM bullshittery
+* Fixed armour not working
+* Fixed Newton's First Law of Motion not existing, you now take the relative velocity of objects you jump off
+	* This sucks due to the disastrous collision code (needs to be rewritten)
+* Fixed an immediate crash if the game DLL ever called Sys_Error
+* Fixed mouse being snapped to (0,0) in the intro
+* Fixed the target_laser entity causing a client disconnect
+* Fixed being able to shoot the machine gun forever in automatic mode
+	* Hopefully fixed not picking up bullets from packs
+* Fixed weird spacing and missing background (float was being passed as int32_t to sizing function and then re-interpreted as a float...) in TimeUI
+* Fixed pressing backspace in entry controls
+	* Shift is still fucked...
+
+REMOVALS:
+* gl_saturatelighting cvar (does nothing)
+* Ancient (actually John Carmack's) Head and unused Power Screen items
+* gl_mode cvar (I forgot to remove it)
+
+OTHER CHANGES:
+* Renamed cheats cvar to sv_cheats (because it's classic)
+* Increased console line length from 38 to 128 characters (this will be a CVar in the future)
+* Added more details to one of the intro images
+
+Version 0.0.9 (Build 480)
+May 25, 2024
+
+NEW FEATURES:
+* Added a nice animated intro to the game - you can turn it off with cl_showintro 0
+	* You can change the first and second intro images with the cl_intro1 and cl_intro2 cvars, and change the time (in milliseconds) they take to display with cl_intro1_time and cl_intro2_time cvars
+* GL modes are now removed. The game can run at any resolution, and only destroys the window if switching in or out of fullscreen.
+	* This is controlled with the new gl_width and gl_height cvars
+	* The video menu will display "custom" if a nonstandard height is selected.
+* New machine gun weapon model from JV_726 (as a test, no textures yet)
+* Changed UI coordinate system from pixels to a normalised (base size is 960*480) 0-1 coordinate system. Size is still in pixels for now
+	* This makes the UI system resolution independent
+* Made the game window resizable
+* Added the ability to send 32-bit colour information over the network
+* Particle system changes:
+	* Added ability to network generic, flame, smoke, flash, flashlight and steam particle effects
+		* These use the following TempEnt values:
+		* TE_GENERIC - Generic
+		* TE_FLAME - Flame
+		* TE_SMOKE - Smoke
+		* TE_STEAM - Steam
+		* TE_FLASHLIGHT - Flashlight
+		* TE_FLASH - Flash (always at the player's location)
+	* Removed many obsolete particle effects (see Removals section)
+* Rendering API version 9:
+	* Made the blending capability available to all pic drawing functions - DrawPic, DrawPicStretch, DrawPicRegion and DrawFill now take an optional (can be NULL) "color" parameter (vec4_t)
+	* Remove Vid_GetModeInfo
+	* Rename DrawStretchPic to DrawPicStretch
+	* Rename Vid_NewWindow to Vid_ChangeResolution
+	* The GL renderer now imports Com_Quit, so the window can tell the engine to quit when the user closes the game (using GL_ShutdownEverything)
+* Added disable_input field to client_static_t so the client can disable input whenever it wants
+* Changed the default OpenGL clear colour from eye-searing hot pink to black
+* Added walls to both stations of z_tdm_subway
+* Made some walls in z_tdm_labrats curved
+* Made the dark blue flashing lights room in z_tdm_labrats brighter
+
+BUG FIXES:
+* Fixed super shotgun crashing server on fire
+* Fixed you not being able to move when the leaderboard UI faded out
+* Fixed the numbers in the leaderboard being 0-9 instead of 1-9, followed by a zero
+* Fixed nonexistent Quake2 CTF and monster models being precached
+* Fixed all particle effects having garbage colours
+	* Actually made them work...
+* Fixed default OpenGL clear colour being searingly hot pink instead of just a normal black
+* Fixed pressing non-alpha keys with capslock enabled
+* Fixed pressing backspace in chat
+* Fixed 1600x1200 resolution being skipped (was defined as same mode ID as 1600x900)
+* Fixed the game window not resizing properly
+* Fixed the game not exiting when run as a client
+	* It appeared to be exiting before, but it was actually crashing due to trying to use the window after it was terminated. 
+	* Exiting was terminating OpenGL, but keeping the client and Qcommon running. Oops.
+* Fixed shotguns not working (the classname somehow ended up as "wapon_shotgun" in the item list)
+* (Hopefully) fixed ogres not firing rockets outside of their melee range and instead using their own range
+
+REMOVALS:
+* Removed obsolete/Q2/Q2 Expansion only entity flags:
+	* EF_FLAG1
+	* EF_FLAG2
+	* EF_IONRIPPER
+	* EF_GREENGIB
+	* EF_BLUEHYPERBLASTER
+	* EF_SPINNINGLIGHTS
+	* EF_PLASMA
+	* EF_TRAP
+	* EF_TRACKER
+	* EF_DOUBLE
+	* EF_SPHERETRANS
+	* EF_TAGTRAIL
+	* EF_HALF_DAMAGE
+	* EF_TRACKERTRAIL
+* Removed obsolete/Q2/Q2 Expansion only render flags:
+	* RF_IR_VISIBLE
+	* RF_SHELL_DOUBLE
+	* RF_SHELL_HALF_DAM
+* Removed obsolete muzzle flashes for Quake2 expansion and CTF weapons
+	* MZ_IONRIPPER
+	* MZ_BLUEHYPERBLASTER
+	* MZ_PHALANX
+* Removed obsolete Q2/Q2 Expansion only temp entities:
+	* TE_PARASITE_ATTACK
+	* TE_MEDIC_CABLE_ATTACK
+	* TE_BOSSTPORT
+	* TE_GRAPPLE_CABLE
+	* TE_WELDING_SPARKS
+	* TE_GREENBLOOD
+	* TE_BLUEHYPERBLASTER
+	* TE_PLASMA_EXPLOSION
+	* TE_TUNNEL_SPARKS
+* Removed following particle effect functions (superseded by more generic alternatives)
+	* CL_FlagTrail
+	* CL_IonripperTrail
+	* CL_BlasterParticles2
+	* CL_BlasterTrail2
+	* CL_DebugTrail
+	* CL_SmokeTrail
+	* CL_BubbleTrail2
+	* CL_TrackerTrail
+	* CL_Tracker_Explode
+	* CL_TagTrail
+	* CL_Tracker_Shell
+	* CL_MonsterPlasma_Shell
+	* CL_ColorExplosionParticles
+	* CL_WidowSplash
+	* "Laser" specific effect was removed
+OpenGL legacy code purge #49123712632:
+	* Removed gl_finish cvar (replaced with gl_vsync and simply reduced framerate by stalling until all effects were done)
+	* Removed gl_ztrick cvar and ztrick code
+		* Had no effect on performance, was a method of not clearing the Z-buffer between frames, which made some very old (RIVA 128 and TNT) Nvidia cards faster. Since these GPUs
+		  are not even OpenGL 1.5 compatible, and it can cause problems on other hardware, there is no point keeping this.
+	* Removed more OpenGL cvars that did nothing, or had their functionality otherwise removed
+		* gl_nosubimage
+		* gl_nobind
+		* gl_playermip
+		* r_customwidth and r_customheight (technically renderer-independent but whatever, also nonfunctional))
+	* stdint-ified ref_gl
+	* Renamed TargaHeader to targa_header_t
+	* Got rid of inconsistent syntax
+	* Renamed GL_TextureMode, GL_TextureAlphaMode, and GL_TextureSolidMode to GL_SetTextureMode, GL_SetTextureAlphaMode and GL_SetTextureSolidMode
+	* Removed GL_DrawColoredStereoLinePair (not used, was used for stereoscopic 3D support)
+	* Removed partially implemented ability to set map to a TGA file
+	* Removed gl_mode (see above)
+	* Removed gl_playermip (nonfunctional)
+
+OTHER CHANGES: 
+	* Reorganised effects code
+	* Renamed "pics" folder to "2d"
+	* Renamed "VID" functions in engine to "Vid" to be consistent with OpenGL renderer
+	* Recoloured Tangfuslicator viewmodel to green, made Bamfuslicator pink so they look different
+	* Added more testers to the credits as well as JV_726
+	* Increased engine limitations
+		* MAX_TRIANGLES (MD2) 4096 -> 8192
+		* MAX_VERTS (MD2) 2048 -> 8192
+
+Version 0.0.8.377 (Build 377)
+* Fixed disconnect and reconnect crashing the server
+
+Version 0.0.8.371 (Build 371)
+May 4, 2024
+
+NEW FEATURES:
+* Completely replaced the loadout system:
+	* Weapons are now picked up in the order that you obtain them.
+	* You can scroll through weapons, or press the 1-9 keys to select items.
+	* Added two new cvars:
+		* cl_loadout_fade controls if the loadout UI fades after it is displayed.
+		* cl_loadout_fade_time controls the amount of time (in milliseconds) the loadout UI takes to fade.
+* Added the ability to stretch a user interface's image to its specified size, using the UI_SetImageIsStretched function.
+* Added the ability for the engine to get the total number of nanoseconds since the engine started as well as milliseconds
+	* log_stats now uses more precise frametime measurement for high fps
+* Added an FPS meter to cl_showinfo
+* Increased client-side entity limits:
+	* MAX_ENTITIES 128->2048
+	* MAX_DLIGHTS 32->256
+
+BUG FIXES:
+* Fixed hover and clicked UI images not scaling with the hudscale cvar
+* Fixed maps without skyboxes trying to load a nonexistent skybox by loading a sane defualt
+* Fixed sending unicast data to a non-client not being properly detected
+* Fixed edicts beyond the 128th not rendering on the client
+	* Added warnings for when too many client entities (entity_t), dynamic lights and particles are spawned
+* Fixed train in z_tdm_subway ramming itself into the station
+* Fixed mouse input still being sent to the game when alt+tabbed out
+* Fixed Sys_Error not working with formatted strings
+* Fixed UI_Init return code being ignored, meaning initialisation failed if it continued
+
+OTHER ENHANCEMENTS AND CHANGES:
+* Changed the bamfuslicator texture to have a green tint in order to distinguish it from the supershotgun's model.
+* Play a fail sound when the Bamfuslicator fails to spawn an enemy
+* Renamed S_RegisterSexedModel -> S_RegisterPlayerModel
+* Changed func_team_door from being a point entity to a brush entity
+* Made MSG_WriteChar just call MSG_WriteByte rather than duplicate its functionality
+	* Change some MSG_WriteChar calls to MSG_WriteByte
+* Added the ability for UI controls to be made invisible using the invisible field of ui_control_t and the UI_SetInvisible function.
+* More improvements to cl_showinfo:
+	* Entities split into Server and Client Entities
+	* Maximum number of entities, particles and dynamic lights now shown
+* Force a variety of debug vars (cl_showinfo, developer, log_stats) on on debug builds
+* Added the ability to search for cvars using the cvarlist command and a search string
+
+REMOVALS:
+* Removed ValidateSelectedItem function (doesn't do anything???)
+* Removed the BFG
+	* It's an iconic quake weapon and can't really be used in Zombono
+	* It was broken anyway due to using SP2s (the only thing that used them at all!)
+
+Version 0.0.7.299 (Build 299)
+April 20, 2024
+
+NEW FEATURES:
+* The game now updates automatically! When you start the game, if an update is available, a message box will appear and you will be able to update the game.
+	* The 7zip window while updating is temporary and will be removed in the next release when an actual update utility is written.
+* Renamed cl_showpos to cl_showinfo:
+	* Viewangles (both refdef and client) 
+	* Number of entities being rendered
+	* Number of dynamic lights being rendered
+	* Number of particles being rendered
+* Added option to switch between borderless and dedicated fullscreen to settings
+* Added lighting to z_tdm_warehouse 
+* Added a 50-health medpack (item_health_super) - complements the 2-health (item_health_small), 10-health/stimpack (item_health), 25-health (item_health_large) and 100-health (item_health_mega) entities.
+	* Still uses Q2 assets...
+* Renderer API version 8:
+	* Added SetMouseScrollProc and SetWindowPos
+* Game API version 7:
+	* Renamed WriteLong to WriteInt
+* UI: Allowed Image controls to optionally display a different image when the mouse is clicking on them (ui_control_t->image_path_on_click), set with the UI_SetImageOnClick function
+* UI: Allowed Image controls to optionally display a different image when the mouse is hovering over them (ui_control_t->image_path_on_hover), set with the UI_SetImageOnHover function
+	* Added hover images to team select menu
+* The engine can now deal with texture sizes above 256x256, and can scale textures up to 2048*2048
+* Added the ability to customise your draw distance using the gl_drawdistance cvar:
+	* The default draw distance has been increased from 4096 units on maps without skybox and 2300 without to 8192 on all maps
+		* 725 units is added to this to draw the skybox itself. This can be controlled using the gl_skyboxepsilon cvar.
+	* The skybox now moves with the draw distance and will not become larger than the map
+* Added texture filtering options to the video settings menu for no filtering purists
+	* Trilinear filtering is now the default, none, bilinear and trilinear can be selected.
+BUG FIXES:
+* Fixed lighting (code that replaced raw fullbright textures with textures blended with the lightmap was removed by accident during the GLFW/GLAD port, so I restored it)
+* Fixed saving configuration on playtest builds (was writing to regular debug/release build)
+* Fixed crouching (was bound to the wrong key)
+* Fixed mouse scroll input
+	* This fixes scrolling up and down in the console
+* Fixed being able to have a yaw viewangle outside of the range 180 < y < -180
+* Fixed "stuck shift" bug (only flip case if both capslock and shift are pressed, but not both)
+* Fixed all commands involving a modifier key and the console by exposing modifier key to Key_Console
+	* This means copying, pasting, etc... is fixed!
+* Fixed dedicated fullscreen not working with ALT+ENTER toggle
+* Fixed not being able to define the Windows key as a key
+* Fixed r_fullbright 1 with multitexturing
+* Fixed leaderboard appearance at high resolutions
+* Fixed moving the camera with the leaderboard enabled
+* Fixed incorrect mouse position being used to calculate centering for window panning
+* Fixed no sounds being played for health packs that are less than 25, but not 2 or 10 health
+* Fixed "Pre-release build" text overlapping build and date text at large resolutions
+* Fixed the game trying to open 24 files on drives C: to Z: every time it starts
+* Fixed panning up and down after you die - the viewangles were being modified mid-frame which broke viewangle prediction and led to desync between the client and server viewangles
+	* This means the default m_pitch and m_yaw values are reduced from 20 to 0.05
+* Fixed not being able to jump up to get the big armour on z_tdm_warehouse
+* Fixed bug where players were always upside down or sideways to other players
+* Fixed backtile not working (you don't get prigozhin'd when you reduce screen size)
+* Restored gl_drawbuffer functionality, which was broken in 0.0.6
+* Redrew the default crosshairs to actually be centered
+
+OTHER ENHANCEMENTS AND CHANGES:
+* Moved mouse code from platform specific to platform independent code (because now it is). All input code is now platform independent!
+* Moved code that interfaces with the video DLL from platform specific to independent and removed all Win32/X/etc dependencies. All video code is now platform independent!
+* Renamed in_ cvars to input_ and same for functions
+* Made input shift code slightly less insane
+* Removed almost all relative path includes (one of them is required due to being compiled from two projects...)
+* Scale FOV with aspect ratio
+* Reduced s_mixahead value from 0.2 to 0.1 to reduce sound lag 
+* UI: Renamed UI_SetActive to UI_SetActivated
+	* Renamed the concept of UI "active" to UI activation so that it makes sense
+* Renamed MSG_ReadLong and MSG_WriteLong to MSG_ReadInt and MSG_WriteInt
+* Made the healthbar numbers slightly brighter
+* Refactored fatal error code
+	* Split message box code from error code so the game can call the message box and get back what buttons the user pressed
+* Changed console background
+* Made page up and page down in the console move by 4 rather than 2 lines
+* Changed crouch key from C to Left Ctrl
+
+REMOVALS:
+* Removed v_centerspeed cvar (was already dead)
+* Removed v_centermove cvar (was already dead)
+* Removed viewpos command (cl_showinfo 1 far superior and duplicates functionality)
+* Removed joystick support (code sucks, only obsolete joysticks supported, DirectInput only, non-portable, not even supported on Linux it seems?)
+	* Removed joy_name cvar
+	* Removed joy_advanced cvar
+	* Removed joy_advaxisx cvar
+	* Removed joy_advaxisy cvar
+	* Removed joy_advaxisz cvar
+	* Removed joy_advaxisr cvar
+	* Removed joy_advaxisu cvar
+	* Removed joy_advaxisv cvar
+	* Removed joy_forwardthreshold cvar
+	* Removed joy_sidethreshold cvar
+	* Removed joy_pitchthreshold cvar
+	* Removed joy_yawthreshold cvar
+	* Removed joy_forwardsensitivity cvar
+	* Removed joy_sidesensitivity cvar
+	* Removed joy_pitchsensitivity cvar
+	* Removed joy_yawsensitivity cvar
+	* Removed joy_upthreshold cvar
+	* Removed joy_upsensitivity cvar
+* Removed duplicated vector code
+* Removed cl_stats cvar (replaced with cl_showpos)
+* Removed "test" rendering code:
+	* Removed cl_testblend cvar
+	* Removed cl_testentities cvar
+	* Removed cl_testlights cvar
+	* Removed cl_testparticles cvar
+* Removed svc_nop protocol message (was useless)
+* Removed F2 menu to view hotkeys (was useless)
+	* Removed "inven" command
+	* Removed svc_inventory protocol message
+* Removed maxentities cvar (ignored by client and server)
+	* game->maxentities is now set to MAX_EDICTS
+* Removed DirectSound on Windows, only waveout (Windows) and miniaudio (Linux) are left
+		* Only miniaudio will be left in the future (cross platform etc)
+* Removed the ability to play audio off of the CD as most people don't have CD/DVD-ROM drives anymore
+* Removed vid_front command (makes window always on top)
+* Removed packet command (was dangerous, could send arbitrary packets and was disabled anyway)
+* Removed trigger_key entity (useless as keys were removed long ago)
+* Removed 134 of 137 monster muzzle flashes as they all related to removed monsters and were model specific
+	* Kept 3 for example code purposes
+* Removed the original Quake 2 skyboxes as we don't use them anymore
+* Removed the gl_driver cvar
+
+Version 0.0.6.161 (Build 161)
+April 6, 2024
+* Fixed typing lowercase in chat (workaround)
+* Fixed panning up and down on playtest builds
+* Fixed the game functioning on some computers
+
+Version 0.0.6.152 (Build 152)
+April 6, 2024
+* Zombie rebalancing:
+	* Regular Zombie/Average Joe Zombie
+		* Damage: 10 -> 15
+		* Health: 40 -> 60
+	* Zombie on Speed:
+		* Damage: 80 -> 25
+		* Health: 40 -> 50
+	* Ogre:
+		* Health: 40 -> 105
+		* Damage is still 80 for melee (only idiots can run into it) and 40 for rockets
+* Changed default crouch bind from C to CTRL
+* MAX_TOTAL_ENT_LEAFS 128 -> 256
+* Began working on the game's various attached network services.
+	* Curl is now integrated into the engine. On Windows, this appears to require horrifying hacks.
+	* The game contacts updates.zombono.com for an internet connection check. This is done after config.cfg is run, so you can put "ns_nointernetcheck 1" in your 	
+		config.cfg or default.cfg to not run the check, if you don't like this for whatever reason. If you want to completely cut off all connections to zombono.com, put
+		"ns_disabled 1" in your config.cfg or default.cfg files.
+* The game now has an auto-incrementing build number that increments by one each time the game is compiled.
+	* This is for the updater so that updates can be reissued without changing the game's version number.
+* MAX_MSGLEN 2800 -> 16384 (same as Quake 3)
+* MAX_EDICTS 1024 -> 2048
+* Added a particle effect and sound when you spawn a monster using the Bamfuslicator
+* Fixed a bug where switching from director to player mid game did not disable the Bamfuslicator's UI
+* Fixed ALT+TAB making the game stop running so you would fall through the ground on z_tdm_subway's train.
+* Default FOV changed from 90 -> 100
+* sv_airaccelerate changed from 0 -> 10 (test)
+* Changed healthbar icon
+* Fully reorganised gamedll source code
+* Prevented players in prespawn from killing each other by spawning at the same time
+	* Fixed a potential method of cheating where the client could switch to team unassigned or an invalid team, and become invincible as a result of the previous change
+* Shrunk zombie hitboxes from 32x32x56 to 24x24x48 units
+	* They were too big for the model
+* Rewrote bamfuslicator spawning code
+	* It should be impossible for them or you to get stuck, bar weird geometry like the pipes in subway - working on it!
+* Replaced cl_showposition and cl_showvelocity with cl_showpos that shows both
+	* Is now actually client sided and works while connected (the previous version ran on the server...and tehrefore only worked in SP...)
+* Text engine now has varargs support
+* Remove Quake 2 monster_soldier and soldier models/sounds (was used for basing zombie code off it, but it's mature enough to remove now)
+* Remove z_tdm_ussr (sucks and was never finished)
+* Massively simplify code for svc_centerprint now we have a text engine supporting newlines (fixes 40th character of each lnie only being displayed every other trigger)
+* Remove old textures:
+	* Quake 2 skyboxes
+	* Soldier models/textures
+	* ourpic* textures (pictures of Quake2 devs :P)
+* Massively refactored the OpenGL renderer.
+	* Removed rendering cvars:
+		* gl_log (useless, just logged every time a frame started)
+		* gl_ext_swapinterval (replaced with gl_vsync)
+		* gl_ext_palettedtexture (obsolete)
+		* gl_ext_multitexture (replaced with OpenGL core functionality)
+		* gl_ext_pointparameters (replaced with OpenGL core functionality)
+		* Removed stereoscopic 3D support
+			* Removed cl_stereo, cl_stereo_separation cvars
+	* Added rendering cvars:
+		* gl_vsync cvar added to control VSync (replaced gl_ext_swapinterval)
+			* 0 means the game will render as fast as possible - UNADVISABLE
+			* 1 means the game will render as fast as your monitor's refresh rate
+			* 2 or more means that the number of frames displayed is equal to (monitor refresh rate/value) - UNSUPPORTED
+		* vid_borderless (see below for notes about this)
+	* Upgraded legacy renderer from OpenGL 1.1 + many extensions, some of which never made it into core, to OpenGL 1.5
+		* This breaks GPUs made before 2003 - the oldest supported GPUs are the Radeon 9000 series and GeForce FX series
+	* Removed non-multitexturing code (breaks GPUs without multitexturing support, mostly those made before 1999-2000)
+	* QGL replaced with GLAD for OpenGL bindings
+	* GLFW now used for windowing and input
+		* This should provide Non-QWERTY keyboard support, as virtual keys are used (untested, please test!)
+		* May still be input bugs, please test!
+		* SHIFT, CTRL, ALT, SUPER...keys now only referred to by their individual keys (left shift, right shift...). Yes, it couldn't tell the difference between left and right modifier keys before...
+	* Removed wInput_noalttab cvar
+	* Renderer API version 7:
+		* Windowing events now handled in refresh DLL (for platform-independence reasons)
+			* Might move to separate windowing DLL
+		* Added SetWindowFocusProc, SetWindowIconifyProc, SetKeyPressedProc, SetMousePressedProc, SetMouseMovedProc, EnableCursor, GetCursorPos, SetCursorPos
+		* Removed AppActivate
+		* Init() no longer has any parameters (they were non-portable and Windows specific)
+		* BeginFrame() no longer has any parameters (they were non-portable and Windows specific)
+	* Windowed borderless is now the default fullscreen setting
+		* Can be manually overridden with vid_fullscreen 1 (vid_borderless controls borderless windowed fullscreen)
+* Zombono BSP v2
+	* ACTUALLY increased the texture size limit from 32 to 80 characters
+* Increased maximum length of a Player's name from 16 to 80 characters (it was set as 32 in the client and 16 in the network protocol...)
+* Minor tweaks to z_tdm_labrats, actually texture the sides and tops of the NDEVs
+* Combined cl_drawposition and cl_drawvelocity debugging CVars into the new debugging cvar cl_drawpos, which now actually works when connected to a server
+* Improved lighting in z_tdm_subway, added a trampoline to the director base as well...
+* Added a new map - z_tdm_warehouse!
+	* This map is actually the first map made for the game in August 2023 back when the game used the Quake 1 engine.
+	* It's been entirely remade with many improvements and a completely new style
+
+Version 0.0.5
+March 23, 2024
+* Made the engine and gamex64 compile on GCC and run on Linux. Still working on the renderer...
+* Changed game files directory from "zombono" to "zombonogame" as some(?) linux filesystems can't have a folder named the same name as a file (zombono binary vs zombono folder)
+* Removed qboolean and made the engine use stdbool.
+* Moved from ericw-tools to a custom fork of q2tools-220, "zbsp" (Zombono BSP Compiler) for compiling maps.
+	* This appears to be faster, but means lighting will need to be changed around as the new BSP compiler compiles maps slower
+* Changed the map format from standard Quake 2 BSP38 to a modified Qbism BSP called "ZBSP"
+	* ZBSPv1 changes on top of QBISM (see ZBSPv1.txt for full list of changes):
+		* Magic: QBSP -> ZBSP
+		* Changed texture length limit from 32 to 80
+		* Changed pak filesize limit from 56 to 256
+		* Removed LUMP_POP as it was 1 byte and useless (and a quake 1 left over)
+	* Converted all maps to the new format
+		* Blockout only ones don't have lighting
+* Began a general reorganisation of the source code that will continue throughout the next several releases
+* Split primary and secondary attack animations
+* Split lights into pointlights (light) and spotlights (light_spot). Spotlights are a bit fucked
+	* All light now has a direction!
+	* Far better lighting in all levels with it
+* Split key and mouse events in the UI system into key down and key up and mouse down and mouse up events respectively. 
+	* Fixed mouse events (as they are internally implemented as keys) getting sent to key and mouse event functions
+* Fixed bug where the state of the leaderboard would "invert" - it would only be turned on when TAB WAS pressed.
+	* Made leaderboard explicitly disable on keydown and explicitly enable on key up.
+* Leaderboard updates every 1 second instead of 3
+* You can now move while using the leaderboard by holding TAB
+* Increased default mouse sensitivity from 3 to 6
+* Renamed "Mouse Speed" option to Mouse Sensitivity
+* Fixed Player Options menu spacing
+* Fixed alpha transparency values between 0 and 0.666 for the entire game:
+	* OpenGL was being set to fail alpha testing where the translucency/alpha value was below 0.666f. It has been changed. 
+	* Fonts now don't look like absolute garbage
+* Split cl_system_font into cl_system_font (game text) and cl_consOle_font (the console font)
+	* Changed console font to Cascadia Code
+* Don't send leaderboard during intermission time - fixes victory declaration
+* Fix back to back TDM games not endlessly restarting
+* Halved damage from rocket jumping (from ~45-53 to ~20-25)
+* Made screenshots use 32-bit colour instead of 24-bit and read the screen as RGBA instead of RGB
+* Changed screenshot folder from "scrnshot" to "screenshots", as we aren't in 8.3 land anymore.
+	* The buffer overflow and corrupt screenshot bug when taking screenshots at 16:9 resolutions appears to have magically fixed itself, WTF?
+* Reduced spacing between words (in the text rendering engine)
+* The game should save your chosen resolution now.
+* Fixed a bug where remnants of the old text engine would cause some strings to have the high bit set, leading to gibberish being printed (or not because the characters were not supported in any font).
+
+Version 0.0.4
+March 10, 2024
+* Changed menus to use new text system and colorised them.
+* Rewrote credits code to use text system.
+* New UI system uses modern text engine.
+* Fixed Subway lighting.
+* Fixed Subway skybox not existing on one side.
+* The Bamfuslicator will now take into account distance from the target as well as from the player while spawning zombies. I need to test if this fixes spawning zombies inside of other players.
+* Overhauled Bamfuslicator UI.
+* Renamed Fast Zombies to Zombies on Speed.
+* Added Planfuslicator icon.
+* Added new aiflag: AI_WANDER
+	* Wanders in a direction for a value (represented by the monsterinfo.wander_steps_total value) generated between edict monsterinfo.wander_steps_min and monsterinfo.wander_steps_max, before generating another random direction to wander.
+		* Regular zombies now wander for 20 to 100 steps before changing direction.
+		* Ogres now wander for 30 to 50 steps before changing direction.
+		* Zombies on Speed now wander for 10 to 30 steps before changing direction.
+* Added new entity func_trampoline for trampolines and things that send the player flying:
+	* Keys:
+		* jump_velocity - vertical velocity applied to the player on touch (may add horizontal)
+		* dmg - Damage applied when the player touches the entity. You can also use a trigger_hurt but this is an easier way to do it.
+	* Spawnflags:
+		* 1 - Applies knockback to the player if damage is enabled (off by default to not interfere with the )
+		* 8 - No Protection, same as a trigger_hurt.
+* The Leaderboard now sorts scores.
+* Removed conchars.tga and the old text system entirely.
+	* Converted everything to use the new text system. If this causes bugs, please report them.
+	* Pulled out all the Quake 2 special characters for sliders, textboxes, etc, and made them their own textures.
+	* Check for bugs in old menus, etc
+		* Removed "cstring2" and "string2" for green centered and regular strings respectively from layoutstrings - use color codes instead.
+* Renamed S_RegisterSexedSound to S_RegisterModelSound, because what kind of name is that *sob*
+* Fixed newlines in text rendering.
+* Added some help text to TeamUI.
+
+Version 0.0.4-pre5
+February 22, 2024
+* Fixed Gender option in player setup menu changing handedness instead of gender.
+* Added Load_PicRegion and Draw_Pic to legacy OpenGL renderer, to draw certain sections of pics.
+* Made the leaderboard translucent.
+* Changed GL_FindPic to not always load 2D images from the "pics" folder (for the purposes of loading fonts). Therefore, if you see any Prigozhin's, report them.
+* Ogre changes:
+	* They move a lot slower.
+	* Changed health from 40 to 90.
+* Implemented walk-through walls that work like Quake 1's func_illusionary into the engine. They are toggled by creating a func_wall with spawnflag 32 (FGD description: Walk-Through). They work with triggers.
+* Rename skyboxes
+* Engine Limits:
+	* Max Lightmaps 128 -> 256
+	* Max BSP Mem Allocation (actual maximum filesize will be slightly less) 16MB -> 64MB
+		* Max Map Vis Data Size 4MB (was originally 1MB) -> 16MB
+		* If your visdata is above 8MB a message will be printed if the developer cvar is set to 1
+	* Max MD2 Mem Allocation (actual maximum filesize will be slightly less) 2MB -> 8MB
+	* Max SP2 Mem Allocation (actual maximum filesize will be slightly less) 64KB -> 256KB
+		* This does not increase memory use as the memory is not committed until it is used by the BSP/MD2/SP2 loader.
+	* May increase further, esp. for SP2s (which may just be replaced with UV-mapped TGAs entirely but not sure) but will be considered later
+	* Lightmap Sub-map Block Size 128x128 -> 256x256 (seems to prevent a buffer overflow, only 16x16 lightmap textures per map as well)
+		* This **DOES NOT REDUCE QUALITY**, as mapping is done within each block based on the BSP tree.
+	* QPath 80 -> 256 chars (PAK files won't be compatible with Quake2, and slightly higher mem usage)
+	* Effective number of leafs 32768 -> 65536 
+		* Allow endian swapping of unsigned shorts as well as shorts, ints and longs to make the game not interpret BSP marksurface data as signed when it's really unsigned.
+* MAJOR ENGINE CHANGE:
+	* Positions are now floats rather than fixed-points with 12 bits of mantissa and 3 exponent bits. This means worlds can be larger than 8192 units across, but 			PLEASE TEST FOR MOVEMENT BUGS!
+	* The actual practical limit, owing to issues with lightmap generation, ericw-tools QBSP scalability issues, and long loading times is somewhere between 27000 and 27500 units across.
+* Made some error messages more verbose.
+* Added several debugging cvars.
+	* cl_showposition - Shows your position.
+	* cl_showvelocity - Shows your velocity.	
+	* These will probably be replaced with a more full-featured debug at some point.
+* Fixed bug where pressing X would make you say "score" (it used to bring up the old leaderboard)
+* Don't enforce TDM rules on non-TDM.
+* Complete rewrite of how text is drawn.
+	* Supports arbitrary fonts.
+	* Not used for all text currently. Needs to be ported to the menus currently, used in the console and chat though.
+* Added Quake 3 color codes, with extensions:
+	* Originals: ^0 - Black, ^1 - Red, ^2 - Green, ^3 - Yellow, ^4 - Blue, ^5 - Light Blue, ^6 - Pink, ^7 - White
+	* Extended: ^8 - Grey, ^9 - Light Grey, ^a - Orange, ^b - Brown, ^c - Purple, ^d - Bright pink, ^e - Gold, ^f - Deep blue
+	* Any invalid color codes are printed
+* Added new cl_system_font cvar - it controls the system font. If you set it to an invalid value, it resets to the default.
+* Changed "say" and "say_team" messages to "Chat: " and "Chat (Team): " and made them green and blue respectively.
+* Chat messages (svc_print) no longer have the high bit set on client receive - this was done to make them have the green color in the quake 2 character set, but this is no longer required in the new system and was therefore corrupting the text.
+* Removed already dead CTRL and ALT bindings from default.cfg.
+* Fixed save files being accidentally added to game build.
+
+Version 0.0.4-pre4
+February 10, 2024
+* Fix TDM end screen not displaying.
+* Reset the state of all active UIs on connect and disconnect (should at least mitigate "stuck UI" bugs)
+* Fixed a bug where, on team change, your weapon was not visually switching to the team's spawn weapon and still showed the weapon you had in pre-spawn.
+* Very rough implementation of primary and secondary attack (presently, only attack functions and state are separated, animations and reload time aren't)
+	* Renamed +attack to +attack1
+	* Added +attack2
+* Removed right click to strafe (and therefore +strafe binding).
+* Removed by default CTRL to shoot.
+* Capitalised binding names.
+* Rewrote the way the game version number is handled and drawn.
+* Added cl_drawhud: It determines if UI is drawn.
+* Removed scr_printspeed - it was dummied out and obsolete
+* Added gender option in player setup menu.
+
+Version 0.0.4-pre3
+January 14, 2024
+* Began designing textures for z_tdm_labrats
+* Added total player and director scores to leaderboard UI
+* Leaderboard now updates in real time
+* You don't have to press tab to hide the leaderboard anymore, it just hides itself when you stop holding tab
+* Rewrote how screenshot function generates filenames. Therefore, it doesn't check for the existence of 100 files by fopen()-ing them every single time you take a screenshot, and you can now take more than 100 screenshots. It also now puts the date in the filename as a way to differentiate screenshots from each other.
+* Removed vulkan renderer for now (don't have scope or ability to maintain both renderers, and I have plans to write a GL3 renderer)
+* Fixed zombie animations, changed zombie speed a bit.
+* Ported particle engine to 32-bit colour
+* Changed conback and made a 16*9 widescreen conback.
+* Better integrated new UI - you won't slide around anymore, and you still can't input commands to the player while a UI is active.
+* Changed zombies to be a green colour.
+* Fixed zombie gibs - they were pointing to the wrong model path, and those models were pointing to the wrong textures.
+* Default intensity convar value changed from 2 to 1.2. Is it too dark?
+* Fixed fullscreen mode. As a result of this, the resolution you select in settings will now actually correspond to the resolution that is set.
+* Changed icons.
+* Frags actually show correctly in leaderboard.
+* Increased map vis data size limit from 1mb to 4mb. This is to facilitate map development so maps can be run with -fast vis (slow vis will be under the limit, but will take a very long time to compile on maps with many detailed angles, 15-30 minutes on a modern PC, or even longer)
+* Added "gameversion" command (which was intended to be implemented in Quake 2)
+* Added a prompt on how to use the main menu, someone struggled with this.
+
+Version 0.0.4-pre2
+December 31, 2023
+* Added a new leaderboard!
+* Targa images now have a missing texture targa loaded in their place when they fail to load
+* Changed many more icons
+* Unified drawstring functions
+* Increased maximum controls per UI from 32 to 256. They aren't dynamically allocated yet, sorry for 2 megabytes of your ram.
+* Increase number of messages before the chat scrolls from 4 to 9
+
+Version 0.0.4-pre1
+December 23, 2023
+* Initial release (v0.0.1 - v0.0.3 were based on Quake1)

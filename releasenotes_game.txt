@@ -1,8 +1,6 @@
 Zombono
 Release Notes:
 
-Version 0.1.0-pre2
-August XX, 2024
 
 NEW FEATURES:
 	* Renderer API version 13 (12 was used for private test builds)

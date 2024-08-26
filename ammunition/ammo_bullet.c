@@ -186,7 +186,7 @@ fire_shotgun
 Shoots shotgun pellets.  Used by shotgun and super shotgun.
 =================
 */
-void Ammo_Bullet_shotgun(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t count, int32_t mod)
+void Ammo_Bullet_Shotgun(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t count, int32_t mod)
 {
 	int		i;
 
@@ -210,7 +210,7 @@ void Ammo_Bullet_monster(edict_t* self, vec3_t start, vec3_t dir, int32_t damage
 
 void Ammo_Shotgun_monster(edict_t* self, vec3_t start, vec3_t aimdir, int32_t damage, int32_t kick, int32_t hspread, int32_t vspread, int32_t count, int32_t flashtype)
 {
-	Ammo_Bullet_shotgun(self, start, aimdir, damage, kick, hspread, vspread, count, MOD_UNKNOWN);
+	Ammo_Bullet_Shotgun(self, start, aimdir, damage, kick, hspread, vspread, count, MOD_UNKNOWN);
 
 	gi.WriteByte(svc_muzzleflash2);
 	gi.WriteShort(self - g_edicts);

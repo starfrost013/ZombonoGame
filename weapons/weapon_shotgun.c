@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <game_local.h>
 #include <mobs/mob_player.h>
 
-void Weapon_shotgun_fire(edict_t* ent)
+void Weapon_Shotgun_Fire(edict_t* ent)
 {
 	vec3_t	start;
 	vec3_t	forward, right;
@@ -57,7 +57,7 @@ void Weapon_shotgun_fire(edict_t* ent)
 		kick *= 4;
 	}
 
-	Ammo_Bullet_shotgun(ent, start, forward, damage, kick, 500, 500, DEFAULT_SHOTGUN_COUNT, MOD_SHOTGUN);
+	Ammo_Bullet_Shotgun(ent, start, forward, damage, kick, 500, 500, DEFAULT_SHOTGUN_COUNT, MOD_SHOTGUN);
 	// send muzzle flash
 	gi.WriteByte(svc_muzzleflash);
 	gi.WriteShort(ent - g_edicts);
@@ -78,9 +78,9 @@ void Weapon_shotgun_fire(edict_t* ent)
 
 void Weapon_Shotgun(edict_t* ent)
 {
-	static int	pause_frames[] = { 22, 28, 34, 0 };
-	static int	fire_frames[] = { 8, 9, 0 };
+	static int32_t pause_frames[] = { 22, 28, 34, 0 };
+	static int32_t fire_frames[] = { 8, 9, 0 };
 
-	Weapon_Generic(ent, 7, 18, 36, 39, pause_frames, fire_frames, NULL, Weapon_shotgun_fire, NULL);
+	Weapon_Generic(ent, 7, 18, 36, 39, pause_frames, fire_frames, NULL, Weapon_Shotgun_Fire, NULL);
 }
 
